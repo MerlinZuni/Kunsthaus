@@ -91,3 +91,16 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Static Homepage | 0/2 | Not started | - |
 | 3. Dual-Mode + Animation | 0/3 | Not started | - |
 | 4. Deploy + Present | 0/1 | Not started | - |
+
+## Backlog
+
+Parking lot for unsequenced ideas (999.x) — not in the active milestone sequence until promoted.
+
+### Phase 999.1: A site search in the main navigation (BACKLOG)
+
+**Goal:** Site search surfaced in the main navigation; scope and UX TBD when promoted.
+**Requirements:** TBD
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when ready)
