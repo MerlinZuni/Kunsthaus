@@ -98,7 +98,12 @@ Parking lot for unsequenced ideas (999.x) — not in the active milestone sequen
 
 ### Phase 999.1: A site search in the main navigation (BACKLOG)
 
-**Goal:** Site search surfaced in the main navigation; scope and UX TBD when promoted.
+**Goal:** Let visitors discover exhibitions, people, and visit-related content via a **search entry in the main nav** (desktop + mobile), aligned with the dual-mode shell.
+
+**Description:** Add a clear search affordance in the primary navigation so users are not limited to browsing and footer links. When this phase is scheduled, decide interaction pattern (modal, drawer, or route), what JSON/content is indexed, and how **Planning vs On-site** might bias or label results. For the static prototype, expect **client-side search over mock JSON** or a **UI shell with placeholder results** unless scope adds a backend.
+
+**Context:** See [.planning/phases/999.1-a-site-search-in-the-main-navigation/999.1-CONTEXT.md](phases/999.1-a-site-search-in-the-main-navigation/999.1-CONTEXT.md) for intent, scope candidates, dual-mode notes, constraints, and open questions.
+
 **Requirements:** TBD
 **Plans:** 0 plans
 
