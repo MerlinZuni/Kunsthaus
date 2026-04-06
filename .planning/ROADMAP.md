@@ -28,12 +28,12 @@ Transform three Figma concepts into a single animated, dual-mode homepage protot
   4. CSS custom properties exist for colors/spacing with a `[data-mode]` attribute switching between Planning and On-site themes
   5. Content is visible and page is usable with JavaScript disabled (semantic HTML, no-JS fallback)
   6. A dev-mode grid overlay with GUI controls (Leva/Tweakpane) allows toggling grid visibility and adjusting column/row spacing and sizing
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md -- Astro 6 scaffold, CSS token architecture, Lenis smooth scroll, accessibility foundations
+- [ ] 01-02-PLAN.md -- 48-track proportional grid system with responsive breakpoints and Leva dev overlay
+- [ ] 01-03-PLAN.md -- JSON content collections with Zod schemas, Planning and On-site mock data
 
 ### Phase 2: Static Homepage
 **Goal**: A complete homepage with hero, exhibitions, visit info, and footer -- all sections rendering real mock content in both mode layouts
