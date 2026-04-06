@@ -42,6 +42,14 @@ Astro 6 project scaffold with a 48-track proportional grid system (12 layout col
 - **D-18:** Membership paywall is visual mockup only — no real auth. Non-members see artwork visuals and text freely; audio play buttons show "members only" message when tapped.
 - **D-19:** One JSON file per exhibition containing all artworks (maps to QR-per-room model).
 
+### Shop & Upselling
+- **D-29:** A `src/content/shop/` content collection for museum shop items. Products are linked to exhibitions for contextual upselling moments throughout the site.
+- **D-30:** Shop overlay panel — a slide-in panel (not full-page navigation) triggered by contextual links near exhibition content. Contains: shop hours, phone number, and curated shop items related to the current exhibition. Includes a CTA linking to the full shop page on kunsthaus.ch.
+- **D-31:** Upselling touchpoints placed throughout the site: after exhibition descriptions ("Explore the catalogue"), near artwork images ("Available as print"), in visit info sections, and in On-site mode for physical visitors.
+- **D-32:** No online purchases — shop items are display-only with "Visit our shop" or "Available in-store" messaging. The overlay drives foot traffic to the physical shop.
+- **D-33:** Member discount (10% off) shown in shop overlay — ties into membership upselling from the brief.
+- **D-34:** Two shop locations in data: Design Shop (Chipperfield building) and Art Shop (Moser building), both at Heimplatz, 8001 Zürich. Hours: Tue–Wed, Fri–Sun 10–18, Thu 10–20, Mon closed. Phone: +41 44 253 84 84.
+
 ### Grid System
 - **D-20:** 48-track fine grid as the underlying blueprint. 12 layout columns = every 4th track. 24 half-columns = every 2nd track. Full-bleed, extending to viewport edges.
 - **D-21:** 8 horizontal rows, sparse, tied to type-scale rhythm. Visually distinct from vertical lines.
