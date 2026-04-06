@@ -102,7 +102,9 @@ Parking lot for unsequenced ideas (999.x) — not in the active milestone sequen
 
 **Description:** Add a clear search affordance in the primary navigation so users are not limited to browsing and footer links. When this phase is scheduled, decide interaction pattern (modal, drawer, or route), what JSON/content is indexed, and how **Planning vs On-site** might bias or label results. For the static prototype, expect **client-side search over mock JSON** or a **UI shell with placeholder results** unless scope adds a backend.
 
-**Context:** See [.planning/phases/999.1-a-site-search-in-the-main-navigation/999.1-CONTEXT.md](phases/999.1-a-site-search-in-the-main-navigation/999.1-CONTEXT.md) for intent, scope candidates, dual-mode notes, constraints, and open questions.
+Industry research on **museum-site search** (common intents: visit planning, collection exploration, specialized research; typical query types; pre/post-visit behavior; heavy use of external search for collection discovery) is captured in context to inform prioritization—**Kunsthaus Zürich–specific validation** (content audit, goals of this pitch, optional interviews) is still required before locking scope.
+
+**Context:** See [.planning/phases/999.1-a-site-search-in-the-main-navigation/999.1-CONTEXT.md](phases/999.1-a-site-search-in-the-main-navigation/999.1-CONTEXT.md) for intent, **museum-sector research (generic)**, scope candidates, dual-mode notes, constraints, and open questions.
 
 **Requirements:** TBD
 **Plans:** 0 plans
