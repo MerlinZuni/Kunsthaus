@@ -31,10 +31,10 @@
 
 ### Layout & Grid
 
-- [ ] **GRID-01**: Principled grid system based on classical proportional design (Obys/Van de Graaf inspired)
-- [ ] **GRID-02**: Responsive breakpoint adaptations (desktop, tablet, mobile)
-- [ ] **GRID-03**: Modular composition supporting flexible content arrangement
-- [ ] **GRID-04**: Dev-mode grid overlay (columns + rows) with toggle visibility and GUI controls (Leva/Tweakpane) for adjusting spacing, sizing, and rhythm settings
+- [x] **GRID-01**: Principled grid system based on classical proportional design (Obys/Van de Graaf inspired)
+- [x] **GRID-02**: Responsive breakpoint adaptations (desktop, tablet, mobile)
+- [x] **GRID-03**: Modular composition supporting flexible content arrangement
+- [x] **GRID-04**: Dev-mode grid overlay (columns + rows) with toggle visibility and GUI controls (Leva/Tweakpane) for adjusting spacing, sizing, and rhythm settings
 
 ### Technical Foundation
 
@@ -99,10 +99,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ANIM-04 | Phase 3 | Pending |
 | ANIM-05 | Phase 3 | Pending |
 | ANIM-06 | Phase 3 | Pending |
-| GRID-01 | Phase 1 | Pending |
-| GRID-02 | Phase 1 | Pending |
-| GRID-03 | Phase 1 | Pending |
-| GRID-04 | Phase 1 | Pending |
+| GRID-01 | Phase 1 | Complete |
+| GRID-02 | Phase 1 | Complete |
+| GRID-03 | Phase 1 | Complete |
+| GRID-04 | Phase 1 | Complete |
 | TECH-01 | Phase 1 | Complete |
 | TECH-02 | Phase 1 | Pending |
 | TECH-03 | Phase 1 | Complete |
