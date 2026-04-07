@@ -1,0 +1,20 @@
+@layer tokens {
+  /* Planning mode (default) -- per D-04 */
+  :root,
+  html[data-mode="planning"] {
+    --color-surface: var(--color-offwhite);
+    --color-text: var(--color-softblack);
+    --color-accent: var(--color-concrete-warm);
+    --color-decorative: var(--color-concrete-light);
+    --color-decorative-shadow: var(--color-concrete-shadow);
+  }
+
+  /* On-site mode -- per D-05 */
+  html[data-mode="onsite"] {
+    --color-surface: var(--color-softblack);
+    --color-text: var(--color-offwhite);
+    --color-accent: var(--color-concrete-warm);
+    --color-decorative: var(--color-concrete-shadow);
+    --color-decorative-shadow: var(--color-concrete-light);
+  }
+}

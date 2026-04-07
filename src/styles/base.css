@@ -1,0 +1,37 @@
+@layer base {
+  body {
+    font-family: var(--font-primary);
+    font-size: var(--type-base);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: var(--leading-tight);
+    font-weight: var(--weight-bold);
+  }
+
+  h1 { font-size: var(--type-4xl); }
+  h2 { font-size: var(--type-3xl); }
+  h3 { font-size: var(--type-2xl); }
+  h4 { font-size: var(--type-xl); }
+
+  a {
+    color: inherit;
+    text-decoration-skip-ink: auto;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+}

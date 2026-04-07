@@ -1,0 +1,7 @@
+@layer tokens {
+  /* Component-level tokens -- populated as components are built in Phase 2 */
+  :root {
+    --hero-bg: var(--color-surface);
+    --hero-text: var(--color-text);
+  }
+}
