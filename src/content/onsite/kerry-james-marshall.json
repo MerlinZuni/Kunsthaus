@@ -1,0 +1,72 @@
+[
+  {
+    "id": "kerry-james-marshall",
+    "title": {
+      "de": "Kerry James Marshall: Retrospektive",
+      "en": "Kerry James Marshall: Retrospective"
+    },
+    "artist": "Kerry James Marshall",
+    "dates": {
+      "start": "2026-03-15",
+      "end": "2026-06-22"
+    },
+    "description": {
+      "de": "Kerry James Marshall (*1955, Birmingham, Alabama) ist einer der bedeutendsten zeitgen\u00f6ssischen K\u00fcnstler Amerikas. Seine Werke untersuchen die Geschichte und Erfahrung der afroamerikanischen Gemeinschaft durch monumentale Malerei.",
+      "en": "Kerry James Marshall (*1955, Birmingham, Alabama) is one of the most important contemporary American artists. His works examine the history and experience of the African American community through monumental painting."
+    },
+    "artworks": [
+      {
+        "id": "better-homes",
+        "title": { "de": "Better Homes, Better Gardens", "en": "Better Homes, Better Gardens" },
+        "description": { "de": "Monumentales Gem\u00e4lde, das das Leben in den Chicagoer Sozialsiedlungen darstellt.", "en": "Monumental painting depicting life in Chicago public housing projects." },
+        "image": "/images/artworks/better-homes.jpg",
+        "room": "Saal 2.3",
+        "year": "1994",
+        "medium": { "de": "Acryl und Collage auf Leinwand", "en": "Acrylic and collage on canvas" },
+        "audioGuide": true,
+        "membersOnly": false
+      },
+      {
+        "id": "de-style",
+        "title": { "de": "De Style", "en": "De Style" },
+        "description": { "de": "Marshall verbindet afroamerikanische Kultur mit europ\u00e4ischer Kunstgeschichte.", "en": "Marshall connects African American culture with European art history." },
+        "image": "/images/artworks/de-style.jpg",
+        "room": "Saal 2.3",
+        "year": "1993",
+        "medium": { "de": "Acryl auf Leinwand", "en": "Acrylic on canvas" },
+        "audioGuide": true,
+        "membersOnly": true
+      },
+      {
+        "id": "untitled-studio",
+        "title": { "de": "Untitled (Studio)", "en": "Untitled (Studio)" },
+        "description": { "de": "Eine kraftvolle Darstellung des K\u00fcnstlerateliers als Ort der Selbstbehauptung.", "en": "A powerful depiction of the artist's studio as a place of self-assertion." },
+        "image": "/images/artworks/untitled-studio.jpg",
+        "room": "Saal 2.4",
+        "year": "2014",
+        "medium": { "de": "Acryl auf PVC-Platte", "en": "Acrylic on PVC panel" },
+        "audioGuide": false,
+        "membersOnly": false
+      },
+      {
+        "id": "past-times",
+        "title": { "de": "Past Times", "en": "Past Times" },
+        "description": { "de": "Idyllische Szene, die stereotype Darstellungen von Freizeit und Zugeh\u00f6rigkeit hinterfragt.", "en": "Idyllic scene questioning stereotypical representations of leisure and belonging." },
+        "image": "/images/artworks/past-times.jpg",
+        "room": "Saal 2.5",
+        "year": "1997",
+        "medium": { "de": "Acryl auf Leinwand", "en": "Acrylic on canvas" },
+        "audioGuide": true,
+        "membersOnly": true
+      }
+    ],
+    "practicalInfo": {
+      "rooms": ["Saal 2.3", "Saal 2.4", "Saal 2.5"],
+      "audioGuideAvailable": true,
+      "estimatedDuration": {
+        "de": "Ca. 60\u201390 Minuten",
+        "en": "Approx. 60\u201390 minutes"
+      }
+    }
+  }
+]

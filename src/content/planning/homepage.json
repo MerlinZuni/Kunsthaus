@@ -1,0 +1,113 @@
+[
+  {
+    "id": "hero",
+    "section": "hero",
+    "priority": 1,
+    "title": {
+      "de": "Willkommen im Kunsthaus Z\u00fcrich",
+      "en": "Welcome to Kunsthaus Zurich"
+    },
+    "subtitle": {
+      "de": "Eines der bedeutendsten Kunstmuseen der Schweiz",
+      "en": "One of the most important art museums in Switzerland"
+    },
+    "body": {
+      "de": "Entdecken Sie Meisterwerke vom 13. Jahrhundert bis zur Gegenwart in einem der gr\u00f6ssten Kunstmuseen der Schweiz.",
+      "en": "Discover masterpieces from the 13th century to the present in one of Switzerland's largest art museums."
+    },
+    "image": "/images/hero-kunsthaus.jpg"
+  },
+  {
+    "id": "key-info",
+    "section": "key-info",
+    "priority": 2,
+    "title": {
+      "de": "Besucherinformationen",
+      "en": "Visitor Information"
+    },
+    "items": [
+      {
+        "id": "hours",
+        "title": { "de": "\u00d6ffnungszeiten", "en": "Opening Hours" },
+        "description": { "de": "Di/Mi/Fr/Sa/So 10\u201318 Uhr, Do 10\u201320 Uhr, Mo geschlossen", "en": "Tue/Wed/Fri/Sat/Sun 10am\u20136pm, Thu 10am\u20138pm, Mon closed" }
+      },
+      {
+        "id": "tickets",
+        "title": { "de": "Eintritt", "en": "Admission" },
+        "description": { "de": "CHF 23.\u2013 / Reduziert CHF 18.\u2013 / Unter 17 gratis", "en": "CHF 23.\u2013 / Reduced CHF 18.\u2013 / Under 17 free" }
+      },
+      {
+        "id": "location",
+        "title": { "de": "Anreise", "en": "Getting Here" },
+        "description": { "de": "Heimplatz 1, 8001 Z\u00fcrich. Tram 3, 5, 8, 9 bis Kunsthaus", "en": "Heimplatz 1, 8001 Zurich. Tram 3, 5, 8, 9 to Kunsthaus" }
+      }
+    ]
+  },
+  {
+    "id": "exhibitions",
+    "section": "exhibitions",
+    "priority": 3,
+    "title": {
+      "de": "Aktuelle Ausstellungen",
+      "en": "Current Exhibitions"
+    },
+    "items": [
+      {
+        "id": "kerry-james-marshall",
+        "title": { "de": "Kerry James Marshall", "en": "Kerry James Marshall" },
+        "description": { "de": "Eine umfassende Retrospektive des einflussreichen amerikanischen K\u00fcnstlers", "en": "A comprehensive retrospective of the influential American artist" },
+        "image": "/images/exhibitions/kerry-james-marshall.jpg",
+        "date": "15.03.2026 \u2013 22.06.2026"
+      },
+      {
+        "id": "sammlung-highlights",
+        "title": { "de": "Sammlung Highlights", "en": "Collection Highlights" },
+        "description": { "de": "Meisterwerke aus der st\u00e4ndigen Sammlung neu entdecken", "en": "Rediscover masterpieces from the permanent collection" },
+        "image": "/images/exhibitions/collection-highlights.jpg"
+      }
+    ]
+  },
+  {
+    "id": "offerings",
+    "section": "offerings",
+    "priority": 4,
+    "title": {
+      "de": "Unser Angebot",
+      "en": "Our Offerings"
+    },
+    "items": [
+      {
+        "id": "membership",
+        "title": { "de": "Mitgliedschaft", "en": "Membership" },
+        "description": { "de": "Werden Sie Mitglied und geniessen Sie exklusive Vorteile", "en": "Become a member and enjoy exclusive benefits" },
+        "link": "/membership"
+      },
+      {
+        "id": "shop",
+        "title": { "de": "Kunsthaus Shop", "en": "Kunsthaus Shop" },
+        "description": { "de": "Kunstb\u00fccher, Poster und einzigartige Geschenke", "en": "Art books, posters and unique gifts" },
+        "link": "/shop"
+      }
+    ]
+  },
+  {
+    "id": "events",
+    "section": "events",
+    "priority": 5,
+    "title": {
+      "de": "Veranstaltungen & Programme",
+      "en": "Events & Programs"
+    },
+    "body": {
+      "de": "F\u00fchrungen, Workshops und Vortragsreihen f\u00fcr alle Altersgruppen.",
+      "en": "Guided tours, workshops and lecture series for all ages."
+    },
+    "items": [
+      {
+        "id": "guided-tours",
+        "title": { "de": "\u00d6ffentliche F\u00fchrungen", "en": "Public Guided Tours" },
+        "description": { "de": "Jeden Samstag und Sonntag um 11 Uhr", "en": "Every Saturday and Sunday at 11am" }
+      }
+    ]
+  }
+]
