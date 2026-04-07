@@ -3,17 +3,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Kunsthaus Zurich">
-  <section style="padding: var(--space-16) var(--space-8);">
-    <h1>Kunsthaus Zurich</h1>
-    <p style="font-size: var(--type-lg); margin-top: var(--space-4);">
-      Foundation phase -- CSS tokens, typography, and smooth scroll active.
-    </p>
-    <p style="margin-top: var(--space-8); color: var(--color-accent);">
-      This text uses the accent color token.
-    </p>
-  </section>
-  <section style="height: 200vh; padding: var(--space-16) var(--space-8);">
-    <h2>Scroll Test</h2>
-    <p>Scroll down to verify Lenis smooth scrolling is active.</p>
-  </section>
+  <div class="grid-page">
+    <section class="col-full" style="padding: var(--space-16) var(--space-8);">
+      <h1>Kunsthaus Zurich</h1>
+      <p style="font-size: var(--type-lg); margin-top: var(--space-4);">
+        Foundation phase -- grid system, CSS tokens, and smooth scroll active.
+      </p>
+    </section>
+    <div class="col-start-2 col-6" style="padding: var(--space-8); background: var(--color-decorative);">
+      <h3>Grid Demo: 6 columns starting at column 2</h3>
+      <p>Toggle the Leva panel to see grid lines overlay.</p>
+    </div>
+    <div class="col-start-9 col-4" style="padding: var(--space-8); background: var(--color-decorative-shadow);">
+      <h3>Grid Demo: 4 columns starting at column 9</h3>
+      <p>Content aligns freely to any column.</p>
+    </div>
+    <section class="col-full" style="height: 100vh; padding: var(--space-16) var(--space-8);">
+      <h2>Scroll Test</h2>
+      <p>Scroll down to verify Lenis smooth scrolling.</p>
+    </section>
+  </div>
 </BaseLayout>

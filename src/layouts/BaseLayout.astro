@@ -10,12 +10,14 @@ import '../styles/base.css';
 
 import SkipNav from '../components/SkipNav.astro';
 import Head from '../components/Head.astro';
+import GridOverlay from '../components/GridOverlay.tsx';
 
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
+const isDev = import.meta.env.DEV;
 ---
 
 <html lang="de" data-mode="planning">
@@ -33,7 +35,7 @@ const { title } = Astro.props;
   <body>
     <SkipNav />
 
-    <!-- GridOverlay (dev-only) added by Plan 02 -->
+    {isDev && <GridOverlay client:only="react" />}
 
     <main id="main" role="main">
       <slot />
