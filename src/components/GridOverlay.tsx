@@ -1,6 +1,24 @@
 import { useControls } from 'leva';
+import { useState, useEffect } from 'react';
+
+function useGridColor() {
+  const [color, setColor] = useState('#222222');
+  useEffect(() => {
+    const update = () => {
+      const mode = document.documentElement.getAttribute('data-mode');
+      setColor(mode === 'onsite' ? '#fbf8f7' : '#222222');
+    };
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-mode'] });
+    return () => observer.disconnect();
+  }, []);
+  return color;
+}
 
 export default function GridOverlay() {
+  const modeColor = useGridColor();
+
   const {
     visible,
     density,
@@ -13,7 +31,7 @@ export default function GridOverlay() {
     density: { value: 12, options: [12, 24, 48], label: 'Column Density' },
     fullViewport: { value: true, label: 'Full Viewport' },
     showRows: { value: false, label: 'Show Rows' },
-    color: { value: '#222222', label: 'Line Color' },
+    color: { value: modeColor, label: 'Line Color' },
     opacity: { value: 0.20, min: 0, max: 1, step: 0.01, label: 'Opacity' },
   });
 
