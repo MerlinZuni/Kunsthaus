@@ -20,6 +20,13 @@ Astro 6 project scaffold with a 48-track proportional grid system (12 layout col
 - **D-04:** Planning mode palette — Background: #fbf8f7 (warm off-white), Text: #272523 (soft black). Concrete tones: #EBEBEB (light), #C1BFB2 (warm), #A4A197 (shadow). CSS noise/grain texture on concrete-colored elements to evoke physical concrete.
 - **D-05:** On-site mode palette — Warm dark inverse: #272523 background, #fbf8f7 text. Keep warm tones throughout, not cold/clinical. Inspired by Cursor's warm dark palette feel.
 - **D-06:** Concrete mid-tones (#C1BFB2, #A4A197) only for decorative elements, not text — they won't meet AA contrast ratios against either background.
+- **D-35:** Tileable transparent texture overlays on colored surfaces to evoke physical museum materials. Each concrete/asphalt tone has a paired texture file (saved in `.planning/assets/textures/`, to be copied to `public/textures/` during build):
+  - **Concrete Light 1:** `#EBEBEB` + `concrete-wall.png` — fine concrete grain
+  - **Concrete Light 2:** `#EBEBEB` + `concrete-wall-2.png` — coarser concrete grain (alternate)
+  - **Concrete Warm:** `#C1BFB2` + `asfalt-dark.png` — warm tactile surface
+  - **Concrete Shadow:** `#A4A197` + `dark-wall.png` — shadowed concrete
+  - **Dark Asphalt (On-site bg):** `#272523` + `asfalt-light.png` — subtle grain on dark mode background
+- **D-36:** Texture application via CSS: `background-color` + `background-image: url()` with `repeat`. Textures are transparent PNGs that layer over the base color. Keep opacity subtle — the texture should be felt, not seen.
 
 ### Typography
 - **D-07:** Single typeface system: DINNextW1G. Weights: Light (300), Regular (400), Medium (500), Bold (700).
