@@ -39,7 +39,7 @@
 ### Technical Foundation
 
 - [x] **TECH-01**: Astro 6 project with GSAP 3.14 and Lenis smooth scroll
-- [ ] **TECH-02**: JSON content layer for all page text and data (CMS-ready)
+- [x] **TECH-02**: JSON content layer for all page text and data (CMS-ready)
 - [x] **TECH-03**: CSS custom properties architecture with mode-based theming (`[data-mode]` attribute)
 - [x] **TECH-04**: Accessible -- reduced-motion support, semantic HTML, content visible without JS
 - [ ] **TECH-05**: Deployed to Cloudflare Pages as live prototype
@@ -104,7 +104,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GRID-03 | Phase 1 | Complete |
 | GRID-04 | Phase 1 | Complete |
 | TECH-01 | Phase 1 | Complete |
-| TECH-02 | Phase 1 | Pending |
+| TECH-02 | Phase 1 | Complete |
 | TECH-03 | Phase 1 | Complete |
 | TECH-04 | Phase 1 | Complete |
 | TECH-05 | Phase 4 | Pending |
