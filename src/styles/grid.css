@@ -1,0 +1,66 @@
+@layer layout {
+  .grid-page {
+    display: grid;
+    grid-template-columns: repeat(48, 1fr);
+    width: 100%;
+    /* No aspect-ratio constraint on content grid -- content flows naturally */
+    /* Row height derived from content, not forced 8-row structure */
+  }
+
+  /* === Layout column helpers === */
+  /* 1 layout column = 4 tracks. These are convenience classes. */
+  /* Content placement is fully flexible per D-23 -- use grid-column directly for custom spans */
+
+  .col-1   { grid-column: span 4; }
+  .col-2   { grid-column: span 8; }
+  .col-3   { grid-column: span 12; }
+  .col-4   { grid-column: span 16; }
+  .col-5   { grid-column: span 20; }
+  .col-6   { grid-column: span 24; }
+  .col-7   { grid-column: span 28; }
+  .col-8   { grid-column: span 32; }
+  .col-9   { grid-column: span 36; }
+  .col-10  { grid-column: span 40; }
+  .col-11  { grid-column: span 44; }
+  .col-12  { grid-column: span 48; }
+
+  /* Start position helpers (1-based layout columns) */
+  .col-start-1  { grid-column-start: 1; }
+  .col-start-2  { grid-column-start: 5; }
+  .col-start-3  { grid-column-start: 9; }
+  .col-start-4  { grid-column-start: 13; }
+  .col-start-5  { grid-column-start: 17; }
+  .col-start-6  { grid-column-start: 21; }
+  .col-start-7  { grid-column-start: 25; }
+  .col-start-8  { grid-column-start: 29; }
+  .col-start-9  { grid-column-start: 33; }
+  .col-start-10 { grid-column-start: 37; }
+  .col-start-11 { grid-column-start: 41; }
+  .col-start-12 { grid-column-start: 45; }
+
+  /* Full-bleed: content can span all 48 tracks */
+  .col-full { grid-column: 1 / -1; }
+
+  /* === Responsive breakpoints per D-24 === */
+  @media (max-width: 1024px) {
+    .grid-page {
+      grid-template-columns: repeat(32, 1fr); /* 8 layout columns */
+    }
+
+    /* Remap spans for tablet */
+    .col-12 { grid-column: span 32; }
+    .col-6  { grid-column: span 16; }
+    .col-4  { grid-column: span 12; } /* ~3 of 8 */
+    .col-3  { grid-column: span 8; }  /* 2 of 8 */
+  }
+
+  @media (max-width: 640px) {
+    .grid-page {
+      grid-template-columns: repeat(16, 1fr); /* 4 layout columns */
+    }
+
+    /* Remap spans for mobile -- most content goes full width */
+    .col-12, .col-6, .col-8 { grid-column: span 16; }
+    .col-4, .col-3 { grid-column: span 8; }  /* 2 of 4 */
+  }
+}
