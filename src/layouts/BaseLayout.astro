@@ -1,0 +1,73 @@
+---
+import '../styles/layers.css';
+import '../styles/reset.css';
+import '../styles/tokens/primitives.css';
+import '../styles/tokens/semantic.css';
+import '../styles/tokens/components.css';
+import '../styles/typography.css';
+import '../styles/base.css';
+
+import SkipNav from '../components/SkipNav.astro';
+import Head from '../components/Head.astro';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="de" data-mode="planning">
+  <head>
+    <Head title={title} />
+    <noscript>
+      <style>
+        /* Ensure all content is visible without JS */
+        [data-js-only] { display: none !important; }
+        /* Remove smooth scroll dependency */
+        html { scroll-behavior: auto; }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <SkipNav />
+
+    <!-- GridOverlay (dev-only) added by Plan 02 -->
+
+    <main id="main" role="main">
+      <slot />
+    </main>
+
+    <script>
+      import Lenis from 'lenis';
+      import 'lenis/dist/lenis.css';
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const lenis = new Lenis({
+        duration: 1.2,
+        smoothWheel: true,
+      });
+
+      // Sync Lenis with GSAP ScrollTrigger
+      lenis.on('scroll', ScrollTrigger.update);
+
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+
+      gsap.ticker.lagSmoothing(0);
+
+      // Respect reduced motion -- per D-10
+      const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (motionQuery.matches) {
+        lenis.destroy();
+      }
+      motionQuery.addEventListener('change', (e) => {
+        if (e.matches) lenis.destroy();
+      });
+    </script>
+  </body>
+</html>

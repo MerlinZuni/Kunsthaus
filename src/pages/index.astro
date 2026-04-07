@@ -1,17 +1,19 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Kunsthaus Zurich">
+  <section style="padding: var(--space-16) var(--space-8);">
+    <h1>Kunsthaus Zurich</h1>
+    <p style="font-size: var(--type-lg); margin-top: var(--space-4);">
+      Foundation phase -- CSS tokens, typography, and smooth scroll active.
+    </p>
+    <p style="margin-top: var(--space-8); color: var(--color-accent);">
+      This text uses the accent color token.
+    </p>
+  </section>
+  <section style="height: 200vh; padding: var(--space-16) var(--space-8);">
+    <h2>Scroll Test</h2>
+    <p>Scroll down to verify Lenis smooth scrolling is active.</p>
+  </section>
+</BaseLayout>
