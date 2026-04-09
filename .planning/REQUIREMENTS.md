@@ -7,7 +7,7 @@
 
 ### Navigation & Mode System
 
-- [ ] **NAV-01**: Responsive main navigation with mobile hamburger menu
+- [x] **NAV-01**: Responsive main navigation with mobile hamburger menu
 - [ ] **NAV-02**: Dual-mode toggle (Planning / On-site) visible in navigation
 - [ ] **NAV-03**: Mode-aware navigation that changes content/links based on active mode
 - [ ] **NAV-04**: QR code URL parameters trigger On-site mode for specific exhibits
@@ -15,10 +15,10 @@
 
 ### Homepage Content
 
-- [ ] **HOME-01**: Hero section with featured exhibition (both mode variants)
-- [ ] **HOME-02**: Current exhibitions listing with mode-dependent detail level
-- [ ] **HOME-03**: Visit information section (hours, location, tickets)
-- [ ] **HOME-04**: Footer with contact, social links, and museum info
+- [x] **HOME-01**: Hero section with featured exhibition (both mode variants)
+- [x] **HOME-02**: Current exhibitions listing with mode-dependent detail level
+- [x] **HOME-03**: Visit information section (hours, location, tickets)
+- [x] **HOME-04**: Footer with contact, social links, and museum info
 
 ### Animation & Interaction
 
@@ -84,15 +84,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAV-01 | Phase 2 | Pending |
+| NAV-01 | Phase 2 | Complete |
 | NAV-02 | Phase 3 | Pending |
 | NAV-03 | Phase 3 | Pending |
 | NAV-04 | Phase 3 | Pending |
 | NAV-05 | Phase 3 | Pending |
-| HOME-01 | Phase 2 | Pending |
-| HOME-02 | Phase 2 | Pending |
-| HOME-03 | Phase 2 | Pending |
-| HOME-04 | Phase 2 | Pending |
+| HOME-01 | Phase 2 | Complete |
+| HOME-02 | Phase 2 | Complete |
+| HOME-03 | Phase 2 | Complete |
+| HOME-04 | Phase 2 | Complete |
 | ANIM-01 | Phase 3 | Pending |
 | ANIM-02 | Phase 3 | Pending |
 | ANIM-03 | Phase 3 | Pending |

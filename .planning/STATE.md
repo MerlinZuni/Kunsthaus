@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 2 context gathered
-last_updated: "2026-04-09T10:49:25.311Z"
-last_activity: 2026-04-07
+status: executing
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-04-09T11:25:46.655Z"
+last_activity: 2026-04-09
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 100
+  total_plans: 7
+  completed_plans: 4
+  percent: 57
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** The dual-mode experience -- a single website that transforms based on whether you're planning your visit or standing in front of the art
-**Current focus:** Phase 01 — Foundation
+**Current focus:** Phase 02 — static-homepage
 
 ## Current Position
 
-Phase: 999.1
-Plan: Not started
-Status: Phase complete — ready for verification
-Last activity: 2026-04-07
+Phase: 02 (static-homepage) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
+Last activity: 2026-04-09
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-foundation P01 | 6min | 3 tasks | 23 files |
 | Phase 01-foundation P02 | 2min | 3 tasks | 4 files |
 | Phase 01-foundation P03 | 2min | 2 tasks | 5 files |
+| Phase 02-01 P01 | 3min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: CSS @layer cascade order: reset, tokens, base, layout, components, utilities
 - [Phase 01-foundation]: Grid overlay defaults: #222222, 0.20 opacity, visible by default, z-index 1, solid horizontal lines
 - [Phase 01-foundation]: Content collections use file() loader with JSON arrays; localizedText schema: de+en required, fr optional
+- [Phase 02-01]: Hero slides stored as optional array within hero section entry for data co-location
+- [Phase 02-01]: CSS component files in src/styles/components/ imported via BaseLayout.astro
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-09T10:49:25.284Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-static-homepage/02-CONTEXT.md
+Last session: 2026-04-09T11:25:46.636Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None
