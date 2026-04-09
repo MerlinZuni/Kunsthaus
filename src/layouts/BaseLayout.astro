@@ -38,7 +38,7 @@ const isDev = import.meta.env.DEV;
   <body>
     <SkipNav />
 
-    {isDev && <GridOverlay client:only="react" />}
+    <GridOverlay client:only="react" />
 
     <main id="main" role="main">
       <slot />
