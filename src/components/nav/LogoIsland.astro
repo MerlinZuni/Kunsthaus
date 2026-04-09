@@ -1,0 +1,51 @@
+---
+// LogoIsland.astro -- D-10: Persistent floating logo when nav dissolves on scroll
+---
+
+<div class="logo-island" id="logo-island" aria-hidden="true">
+  <a href="/" class="logo-island__link" tabindex="-1">
+    Kunsthaus Zurich
+  </a>
+</div>
+
+<style>
+  .logo-island {
+    position: fixed;
+    top: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 65;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .logo-island.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .logo-island.is-visible .logo-island__link {
+    tabindex: 0;
+  }
+
+  .logo-island__link {
+    font-size: var(--type-md);
+    font-weight: var(--weight-bold);
+    text-decoration: none;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    mix-blend-mode: exclusion;
+    white-space: nowrap;
+    padding: var(--space-2) var(--space-4);
+    display: block;
+  }
+
+  /* Desktop only */
+  @media (max-width: 767px) {
+    .logo-island {
+      display: none;
+    }
+  }
+</style>

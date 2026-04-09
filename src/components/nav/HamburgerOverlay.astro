@@ -1,0 +1,245 @@
+---
+// HamburgerOverlay.astro -- D-13: Full-screen mobile menu overlay
+
+interface Props {
+  navItems: Array<{ id: string; label: { de: string; en: string }; href: string }>;
+  lang: 'en' | 'de';
+  searchLabel: string;
+}
+
+const { navItems, lang, searchLabel } = Astro.props;
+const languages = [
+  { code: 'en', label: 'EN' },
+  { code: 'de', label: 'DE' },
+  { code: 'fr', label: 'FR' },
+];
+---
+
+<div class="hamburger-overlay" id="hamburger-overlay" aria-hidden="true" role="dialog" aria-label="Navigation menu">
+  <div class="hamburger-overlay__inner">
+    {/* Close button */}
+    <button class="hamburger-overlay__close touch-target" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    {/* Logo at top */}
+    <div class="hamburger-overlay__logo">
+      <a href="/">Kunsthaus Zurich</a>
+    </div>
+
+    {/* Navigation links */}
+    <nav class="hamburger-overlay__nav" aria-label="Main navigation">
+      <ul>
+        {navItems.map(item => (
+          <li>
+            <a href={item.href} class="hamburger-overlay__link hover-wipe touch-pulse">
+              <span>{item.label[lang]}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {/* Language options */}
+    <div class="hamburger-overlay__lang" role="group" aria-label="Language selection">
+      {languages.map(l => (
+        <button
+          class:list={['hamburger-overlay__lang-btn', 'touch-target', { 'is-active': l.code === lang }]}
+          data-lang={l.code}
+        >
+          {l.label}
+        </button>
+      ))}
+    </div>
+
+    {/* Search field at bottom */}
+    <div class="hamburger-overlay__search">
+      <label for="hamburger-search-input" class="sr-only">{searchLabel}</label>
+      <input
+        type="text"
+        id="hamburger-search-input"
+        class="hamburger-overlay__search-input"
+        placeholder={`${searchLabel}...`}
+        autocomplete="off"
+      />
+    </div>
+  </div>
+</div>
+
+<style>
+  .hamburger-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: var(--color-surface);
+    display: none;
+    overflow-y: auto;
+  }
+
+  .hamburger-overlay.is-open {
+    display: block;
+  }
+
+  .hamburger-overlay__inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: var(--space-6);
+  }
+
+  .hamburger-overlay__close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    z-index: 2;
+  }
+
+  .hamburger-overlay__logo {
+    text-align: center;
+    padding: var(--space-6) 0 var(--space-8);
+  }
+
+  .hamburger-overlay__logo a {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-bold);
+    text-decoration: none;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .hamburger-overlay__nav {
+    flex: 1;
+  }
+
+  .hamburger-overlay__nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .hamburger-overlay__link {
+    display: block;
+    padding: var(--space-4) 0;
+    font-size: var(--type-2xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .hamburger-overlay__lang {
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--color-decorative);
+  }
+
+  .hamburger-overlay__lang-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-decorative-shadow);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .hamburger-overlay__lang-btn.is-active {
+    font-weight: var(--weight-bold);
+    color: var(--color-text);
+  }
+
+  .hamburger-overlay__search {
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--color-decorative);
+  }
+
+  .hamburger-overlay__search-input {
+    width: 100%;
+    background: none;
+    border: none;
+    border-bottom: 2px solid var(--color-text);
+    padding: var(--space-3) 0;
+    font-size: var(--type-lg);
+    color: var(--color-text);
+    font-family: inherit;
+    outline: none;
+  }
+
+  .hamburger-overlay__search-input::placeholder {
+    color: var(--color-decorative-shadow);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>
+
+<script>
+  function initHamburgerOverlay() {
+    const overlay = document.getElementById('hamburger-overlay');
+    const closeBtn = overlay?.querySelector('.hamburger-overlay__close');
+    const langBtns = overlay?.querySelectorAll('.hamburger-overlay__lang-btn');
+
+    function open() {
+      if (!overlay) return;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      (window as any).__lenis?.stop?.();
+    }
+
+    function close() {
+      if (!overlay) return;
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      (window as any).__lenis?.start?.();
+    }
+
+    closeBtn?.addEventListener('click', close);
+
+    // Language buttons
+    langBtns?.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = (btn as HTMLElement).dataset.lang;
+        if (lang) {
+          document.documentElement.setAttribute('lang', lang);
+          localStorage.setItem('kunsthaus-lang', lang);
+          langBtns.forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+        }
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
+        close();
+      }
+    });
+
+    // Expose open/close
+    (window as any).__hamburgerOverlay = { open, close };
+  }
+
+  document.addEventListener('DOMContentLoaded', initHamburgerOverlay);
+</script>

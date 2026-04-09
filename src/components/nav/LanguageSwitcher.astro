@@ -1,0 +1,143 @@
+---
+// LanguageSwitcher.astro -- D-08: Language dropdown (EN/DE/FR)
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang } = Astro.props;
+const languages = [
+  { code: 'en', label: 'EN' },
+  { code: 'de', label: 'DE' },
+  { code: 'fr', label: 'FR' },
+];
+const current = languages.find(l => l.code === lang) || languages[0];
+---
+
+<div class="lang-switcher">
+  <button
+    class="lang-switcher__trigger touch-target"
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-label={`Language: ${current.label}`}
+  >
+    <span>{current.label}</span>
+    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+      <path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <ul class="lang-switcher__dropdown" role="listbox" aria-label="Select language">
+    {languages.map(l => (
+      <li role="option" aria-selected={l.code === lang ? 'true' : 'false'}>
+        <button
+          class="lang-switcher__option touch-target"
+          data-lang={l.code}
+          aria-current={l.code === lang ? 'true' : undefined}
+        >
+          {l.label}
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .lang-switcher {
+    position: relative;
+    z-index: 2;
+  }
+
+  .lang-switcher__trigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2);
+  }
+
+  .lang-switcher__dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--color-decorative);
+    list-style: none;
+    padding: var(--space-2) 0;
+    margin: var(--space-1) 0 0;
+    min-width: 60px;
+    z-index: 2;
+  }
+
+  .lang-switcher.is-open .lang-switcher__dropdown {
+    display: block;
+  }
+
+  .lang-switcher__option {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    padding: var(--space-2) var(--space-4);
+    width: 100%;
+    text-align: left;
+  }
+
+  .lang-switcher__option[aria-current="true"] {
+    font-weight: var(--weight-bold);
+  }
+
+  @media (hover: hover) {
+    .lang-switcher__option:hover {
+      background: var(--color-surface);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.lang-switcher').forEach(switcher => {
+      const trigger = switcher.querySelector('.lang-switcher__trigger') as HTMLButtonElement;
+      const options = switcher.querySelectorAll('.lang-switcher__option');
+
+      trigger?.addEventListener('click', () => {
+        const isOpen = switcher.classList.toggle('is-open');
+        trigger.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          const lang = (option as HTMLElement).dataset.lang;
+          if (lang) {
+            document.documentElement.setAttribute('lang', lang);
+            localStorage.setItem('kunsthaus-lang', lang);
+            // Update trigger text
+            trigger.querySelector('span')!.textContent = lang.toUpperCase();
+          }
+          switcher.classList.remove('is-open');
+          trigger.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      // Close on click outside
+      document.addEventListener('click', (e) => {
+        if (!switcher.contains(e.target as Node)) {
+          switcher.classList.remove('is-open');
+          trigger?.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+
+    // Restore language from localStorage
+    const saved = localStorage.getItem('kunsthaus-lang');
+    if (saved && ['en', 'de', 'fr'].includes(saved)) {
+      document.documentElement.setAttribute('lang', saved);
+    }
+  });
+</script>

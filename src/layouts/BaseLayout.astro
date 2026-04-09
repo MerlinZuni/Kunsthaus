@@ -14,6 +14,12 @@ import SkipNav from '../components/SkipNav.astro';
 import Head from '../components/Head.astro';
 import GridOverlay from '../components/GridOverlay.tsx';
 import HeroTextControls from '../components/hero/HeroTextControls.tsx';
+import NavBar from '../components/nav/NavBar.astro';
+import LogoIsland from '../components/nav/LogoIsland.astro';
+import SearchOverlay from '../components/nav/SearchOverlay.astro';
+import HamburgerOverlay from '../components/nav/HamburgerOverlay.astro';
+import navItemsJson from '../content/shared/navigation.json';
+import uiStringsJson from '../content/shared/ui-strings.json';
 
 interface Props {
   title: string;
@@ -22,6 +28,16 @@ interface Props {
 
 const { title, lang = 'en' } = Astro.props;
 const isDev = import.meta.env.DEV;
+
+// Navigation data from JSON
+const navItems = navItemsJson;
+const uiStrings = uiStringsJson;
+const getString = (key: string) => {
+  const entry = uiStrings.find((s: any) => s.key === key);
+  return entry?.value?.[lang] || key;
+};
+const searchLabel = getString('search-label');
+const menuLabel = getString('menu-label');
 ---
 
 <html lang={lang} data-mode="planning">
@@ -40,6 +56,12 @@ const isDev = import.meta.env.DEV;
     <SkipNav />
 
     <GridOverlay client:only="react" />
+
+    {/* Navigation (z-index: 60) */}
+    <NavBar navItems={navItems} lang={lang} searchLabel={searchLabel} menuLabel={menuLabel} />
+    <LogoIsland />
+    <SearchOverlay searchLabel={searchLabel} />
+    <HamburgerOverlay navItems={navItems} lang={lang} searchLabel={searchLabel} />
 
     <main id="main" role="main">
       <slot />
@@ -66,6 +88,9 @@ const isDev = import.meta.env.DEV;
       });
 
       gsap.ticker.lagSmoothing(0);
+
+      // Expose lenis instance for overlays to pause/resume
+      (window as any).__lenis = lenis;
 
       // Respect reduced motion -- per D-10
       const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');

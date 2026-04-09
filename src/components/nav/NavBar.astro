@@ -1,0 +1,274 @@
+---
+// NavBar.astro -- D-07 through D-13: Responsive floating navigation bar
+// Velocity-aware scroll behavior on desktop, simplified always-visible bar on mobile
+
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  navItems: Array<{ id: string; label: { de: string; en: string }; href: string }>;
+  lang: 'en' | 'de';
+  searchLabel: string;
+  menuLabel: string;
+}
+
+const { navItems, lang, searchLabel, menuLabel } = Astro.props;
+---
+
+<header class="navbar" id="navbar">
+  <div class="navbar__inner">
+    {/* Left: Search icon */}
+    <button
+      class="navbar__search touch-target touch-pulse"
+      aria-label={searchLabel}
+      data-action="search"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </button>
+
+    {/* Center: Logo */}
+    <a href="/" class="navbar__logo">
+      Kunsthaus Zurich
+    </a>
+
+    {/* Right: Desktop nav links + language switcher */}
+    <nav class="navbar__links" aria-label="Main navigation">
+      {navItems.map(item => (
+        <a href={item.href} class="navbar__link hover-wipe touch-pulse">
+          <span>{item.label[lang]}</span>
+        </a>
+      ))}
+      <LanguageSwitcher lang={lang} />
+    </nav>
+
+    {/* Right: Mobile hamburger */}
+    <button
+      class="navbar__hamburger touch-target touch-pulse"
+      aria-label={menuLabel}
+      data-action="hamburger"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+{/* Migrated search icon -- visible when nav is hidden on scroll */}
+<button
+  class="navbar__search-migrated touch-target touch-pulse"
+  id="search-migrated"
+  aria-label={searchLabel}
+  data-action="search"
+>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="8"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+</button>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 60;
+    padding: var(--space-3);
+    pointer-events: none;
+  }
+
+  .navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-concrete-light);
+    padding: var(--space-2) var(--space-4);
+    pointer-events: auto;
+  }
+
+  /* Search button */
+  .navbar__search {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-2);
+  }
+
+  /* Logo center */
+  .navbar__logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--type-md);
+    font-weight: var(--weight-bold);
+    text-decoration: none;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    mix-blend-mode: exclusion;
+    white-space: nowrap;
+  }
+
+  /* Desktop nav links */
+  .navbar__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .navbar__link {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    text-decoration: none;
+    padding: var(--space-2) var(--space-3);
+    white-space: nowrap;
+  }
+
+  /* Hamburger -- mobile only */
+  .navbar__hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-2);
+  }
+
+  /* Migrated search icon -- shown when nav hides on scroll */
+  .navbar__search-migrated {
+    position: fixed;
+    top: var(--space-4);
+    left: var(--space-4);
+    z-index: 60;
+    background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-2);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .navbar__search-migrated.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Mobile: simplified bar */
+  @media (max-width: 767px) {
+    .navbar__links {
+      display: none;
+    }
+
+    .navbar__hamburger {
+      display: inline-flex;
+    }
+
+    .navbar__search-migrated {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initNavBar() {
+    const navbar = document.getElementById('navbar');
+    const logoIsland = document.getElementById('logo-island');
+    const searchMigrated = document.getElementById('search-migrated');
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+    if (!navbar) return;
+
+    // Search button handlers
+    document.querySelectorAll('[data-action="search"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        (window as any).__searchOverlay?.open();
+      });
+    });
+
+    // Hamburger button handler
+    document.querySelectorAll('[data-action="hamburger"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        (window as any).__hamburgerOverlay?.open();
+      });
+    });
+
+    // Desktop velocity-aware scroll behavior (D-10)
+    if (isMobile) return;
+
+    let navHidden = false;
+
+    ScrollTrigger.create({
+      start: 'top -100',
+      onUpdate: (self) => {
+        const velocity = Math.abs(self.getVelocity());
+        const direction = self.direction; // 1 = down, -1 = up
+        const scrollY = window.scrollY;
+
+        // Above threshold: always show nav
+        if (scrollY < 100) {
+          if (navHidden) {
+            showNav();
+          }
+          return;
+        }
+
+        // Fast scroll down (velocity > 1500): hide nav instantly
+        if (velocity > 1500 && direction === 1 && !navHidden) {
+          hideNav();
+        }
+        // Slow scroll up or micro-pause: reveal nav
+        else if (velocity < 300 && direction === -1 && navHidden) {
+          showNav();
+        }
+      },
+    });
+
+    function hideNav() {
+      navHidden = true;
+      gsap.to(navbar, { opacity: 0, duration: 0.15, ease: 'power2.in' });
+      if (logoIsland) {
+        logoIsland.classList.add('is-visible');
+        gsap.to(logoIsland, { opacity: 1, duration: 0.3 });
+      }
+      if (searchMigrated) {
+        searchMigrated.classList.add('is-visible');
+      }
+    }
+
+    function showNav() {
+      navHidden = false;
+      gsap.to(navbar, {
+        opacity: 1,
+        filter: 'blur(0px)',
+        duration: 0.4,
+        ease: 'power2.out',
+      });
+      if (logoIsland) {
+        logoIsland.classList.remove('is-visible');
+        gsap.to(logoIsland, { opacity: 0, duration: 0.2 });
+      }
+      if (searchMigrated) {
+        searchMigrated.classList.remove('is-visible');
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initNavBar);
+</script>
