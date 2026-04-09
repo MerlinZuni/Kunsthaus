@@ -1,0 +1,104 @@
+---
+// CinematicReveal.astro -- D-28: Full-bleed image with cinematic scroll reveal
+// Animation via GSAP ScrollTrigger will be added in Phase 3
+// Static layout for Phase 2
+
+interface Props {
+  contentType: string;
+  data: {
+    title?: { de: string; en: string };
+    subtitle?: { de: string; en: string };
+    image?: string;
+    description?: { de: string; en: string };
+    cta?: { label: string; href: string };
+  };
+  lang: 'en' | 'de';
+}
+
+const { contentType, data, lang } = Astro.props;
+---
+
+<div class="cinematic-reveal" data-content-type={contentType}>
+  {data.image && (
+    <div class="cinematic-reveal__image">
+      <img src={data.image} alt={data.title?.[lang] || ''} loading="lazy" />
+    </div>
+  )}
+  <div class="cinematic-reveal__content">
+    {data.title && (
+      <h2 class="cinematic-reveal__title">{data.title[lang]}</h2>
+    )}
+    {data.subtitle && (
+      <p class="cinematic-reveal__subtitle">{data.subtitle[lang]}</p>
+    )}
+    {data.description && (
+      <p class="cinematic-reveal__description">{data.description[lang]}</p>
+    )}
+    {data.cta && (
+      <a href={data.cta.href} class="cinematic-reveal__cta hover-wipe-inverse touch-pulse touch-target">
+        <span>{data.cta.label}</span>
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .cinematic-reveal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+    min-height: 60vh;
+  }
+
+  .cinematic-reveal__image {
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+  }
+
+  .cinematic-reveal__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cinematic-reveal__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .cinematic-reveal__title {
+    font-size: var(--type-2xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  .cinematic-reveal__subtitle {
+    font-size: var(--type-lg);
+    color: var(--color-decorative-shadow);
+  }
+
+  .cinematic-reveal__description {
+    font-size: var(--type-md);
+    line-height: var(--leading-normal);
+    max-width: 50ch;
+  }
+
+  .cinematic-reveal__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-6);
+    text-decoration: none;
+    font-size: var(--type-md);
+    align-self: flex-start;
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 767px) {
+    .cinematic-reveal {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+  }
+</style>

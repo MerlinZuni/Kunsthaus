@@ -1,45 +1,122 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroCarousel from '../components/hero/HeroCarousel.astro';
+import SectionWrapper from '../components/sections/SectionWrapper.astro';
+import CinematicReveal from '../components/sections/CinematicReveal.astro';
+import PinnedNarrative from '../components/sections/PinnedNarrative.astro';
+import StandardGrid from '../components/sections/StandardGrid.astro';
+import StickyCTA from '../components/ui/StickyCTA.astro';
+import SectionProgress from '../components/ui/SectionProgress.tsx';
+import Footer from '../components/footer/Footer.astro';
 import { getCollection } from 'astro:content';
 
+const lang = 'en';
 const planningContent = await getCollection('planning');
-const sorted = planningContent.sort((a, b) => a.data.priority - b.data.priority);
+const uiStrings = await getCollection('uiStrings');
 
-const lang = 'de'; // Default language, Phase 2 will add switching
+// Extract hero and content sections
+const hero = planningContent.find(s => s.data.section === 'hero');
+const sections = planningContent
+  .filter(s => s.data.section !== 'hero')
+  .sort((a, b) => a.data.priority - b.data.priority);
+
+// Helper: get ui string value by key
+const getString = (key: string) => {
+  const entry = uiStrings.find(s => s.data.key === key);
+  return entry?.data.value?.[lang] || key;
+};
+
+// D-29: Section to component type mapping
+const sectionComponent: Record<string, string> = {
+  'exhibitions': 'mixed',
+  'offerings': 'pinned-narrative',
+  'education': 'pinned-narrative',
+  'key-info': 'standard-grid',
+  'events': 'standard-grid',
+  'planning-details': 'standard-grid',
+};
+
+// D-26: Background rotation - 4 step cycle
+const bgSteps = [1, 2, 3, 4] as const;
+
+// Section names for progress indicator
+const sectionNames = sections.map(s => s.data.title[lang]);
 ---
-<BaseLayout title="Kunsthaus Zurich">
-  <div class="grid-page">
-    {sorted.map((section) => (
-      <section class="col-full" style={`padding: var(--space-12) var(--space-8);`}>
-        <h2 style="font-size: var(--type-2xl); margin-bottom: var(--space-4);">
-          {section.data.title[lang]}
-        </h2>
-        {section.data.subtitle && (
-          <p style="font-size: var(--type-lg); color: var(--color-accent); margin-bottom: var(--space-4);">
-            {section.data.subtitle[lang]}
-          </p>
+
+<BaseLayout title="Kunsthaus Zurich" lang={lang}>
+  {/* Hero (fixed, z-index: 10) */}
+  <HeroCarousel slides={hero?.data.slides || []} lang={lang} uiStrings={uiStrings} />
+
+  {/* Spacer: pushes stacking sections below fixed hero */}
+  <div class="hero-spacer"></div>
+
+  {/* Content sections with stacking scroll effect */}
+  {sections.map((section, i) => {
+    const bgStep = bgSteps[i % 4];
+    const componentType = sectionComponent[section.data.section] || 'standard-grid';
+
+    return (
+      <SectionWrapper
+        index={i}
+        bgStep={bgStep}
+        sectionName={section.data.title[lang]}
+        sectionId={section.data.section}
+      >
+        {componentType === 'mixed' && (
+          <>
+            <CinematicReveal
+              contentType="exhibition"
+              data={{
+                title: section.data.title,
+                subtitle: section.data.subtitle,
+                image: section.data.items?.[0]?.image,
+                description: section.data.items?.[0]?.description,
+                cta: { label: getString('explore-exhibition'), href: `/exhibitions/${section.data.items?.[0]?.id}` }
+              }}
+              lang={lang}
+            />
+            <PinnedNarrative
+              contentType="exhibition"
+              items={section.data.items?.slice(1) || []}
+              lang={lang}
+            />
+          </>
         )}
-        {section.data.body && (
-          <p style="font-size: var(--type-md); max-width: 60ch; line-height: var(--leading-relaxed);">
-            {section.data.body[lang]}
-          </p>
+        {componentType === 'pinned-narrative' && (
+          <PinnedNarrative
+            contentType={section.data.section}
+            items={section.data.items || []}
+            lang={lang}
+          />
         )}
-        {section.data.items && (
-          <ul style="list-style: none; margin-top: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4);">
-            {section.data.items.map((item) => (
-              <li style="padding: var(--space-4); background: var(--color-decorative); border-radius: 2px;">
-                <strong>{item.title[lang]}</strong>
-                {item.description && <p style="margin-top: var(--space-2);">{item.description[lang]}</p>}
-                {item.date && <span style="font-size: var(--type-sm); color: var(--color-decorative-shadow);">{item.date}</span>}
-              </li>
-            ))}
-          </ul>
+        {componentType === 'standard-grid' && (
+          <StandardGrid
+            title={section.data.title}
+            body={section.data.body}
+            items={section.data.items || []}
+            lang={lang}
+            columns={3}
+          />
         )}
-      </section>
-    ))}
-    <!-- Content source indicator -->
-    <footer class="col-full" style="padding: var(--space-8); font-size: var(--type-sm); color: var(--color-decorative-shadow);">
-      Content loaded from JSON content collections. {planningContent.length} sections rendered.
-    </footer>
-  </div>
+      </SectionWrapper>
+    );
+  })}
+
+  {/* Footer */}
+  <Footer lang={lang} />
+
+  {/* Fixed UI elements (outside main content flow) */}
+  <StickyCTA
+    modeLabels={{
+      planning: getString('mode-planning'),
+      onsite: getString('mode-onsite'),
+    }}
+    ticketsLabel={getString('tickets')}
+    lang={lang}
+  />
+  <SectionProgress
+    client:visible
+    totalSections={sections.length}
+    sectionNames={sectionNames}
+  />
 </BaseLayout>

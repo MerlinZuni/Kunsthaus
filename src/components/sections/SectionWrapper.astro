@@ -1,0 +1,41 @@
+---
+// SectionWrapper.astro -- D-25, D-26: Section with stacking scroll and background rotation
+// Full implementation with GSAP ScrollTrigger will come in Phase 3
+
+interface Props {
+  index: number;
+  bgStep: 1 | 2 | 3 | 4;
+  sectionName: string;
+  sectionId: string;
+}
+
+const { index, bgStep, sectionName, sectionId } = Astro.props;
+const zIndex = 20 + index;
+---
+
+<section
+  class="stacking-section section-spacing"
+  data-bg-step={bgStep}
+  data-section={sectionId}
+  id={`section-${sectionId}`}
+  style={`z-index: ${zIndex}; position: relative;`}
+  aria-label={sectionName}
+>
+  <div class="section-inner">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-8);
+  }
+
+  @media (max-width: 767px) {
+    .section-inner {
+      padding: 0 var(--space-4);
+    }
+  }
+</style>

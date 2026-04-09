@@ -16,13 +16,14 @@ import GridOverlay from '../components/GridOverlay.tsx';
 
 interface Props {
   title: string;
+  lang?: 'en' | 'de';
 }
 
-const { title } = Astro.props;
+const { title, lang = 'en' } = Astro.props;
 const isDev = import.meta.env.DEV;
 ---
 
-<html lang="de" data-mode="planning">
+<html lang={lang} data-mode="planning">
   <head>
     <Head title={title} />
     <noscript>

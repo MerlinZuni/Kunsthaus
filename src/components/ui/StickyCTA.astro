@@ -1,0 +1,150 @@
+---
+// StickyCTA.astro -- D-18, D-19: Floating buttons (desktop) / sticky bottom bar (mobile)
+// Mode toggle + Tickets button
+
+interface Props {
+  modeLabels: {
+    planning?: string;
+    onsite?: string;
+  };
+  ticketsLabel?: string;
+  lang: 'en' | 'de';
+  ticketsHref?: string;
+}
+
+const { modeLabels, ticketsLabel = 'Tickets', lang, ticketsHref = 'https://www.kunsthaus.ch/tickets' } = Astro.props;
+---
+
+{/* Desktop: floating buttons bottom-right */}
+<div class="sticky-cta sticky-cta--desktop">
+  <button
+    class="sticky-cta__mode-toggle hover-wipe touch-pulse touch-target"
+    data-mode-toggle
+    aria-label={modeLabels.planning || 'Plan a visit'}
+  >
+    <span class="sticky-cta__mode-label" data-mode-label="planning">{modeLabels.planning || 'Plan a visit'}</span>
+    <span class="sticky-cta__mode-label sticky-cta__mode-label--hidden" data-mode-label="onsite">{modeLabels.onsite || "I'm here"}</span>
+  </button>
+  <a
+    href={ticketsHref}
+    target="_blank"
+    rel="noopener"
+    class="sticky-cta__tickets hover-wipe-inverse touch-pulse touch-target"
+  >
+    <span>{ticketsLabel}</span>
+  </a>
+</div>
+
+{/* Mobile: sticky bottom bar */}
+<div class="sticky-cta sticky-cta--mobile">
+  <a
+    href={ticketsHref}
+    target="_blank"
+    rel="noopener"
+    class="sticky-cta__tickets hover-wipe-inverse touch-pulse touch-target"
+  >
+    <span>{ticketsLabel}</span>
+  </a>
+  <button
+    class="sticky-cta__mode-toggle hover-wipe touch-pulse touch-target"
+    data-mode-toggle
+    aria-label={modeLabels.planning || 'Plan a visit'}
+  >
+    <span class="sticky-cta__mode-label" data-mode-label="planning">{modeLabels.planning || 'Plan a visit'}</span>
+    <span class="sticky-cta__mode-label sticky-cta__mode-label--hidden" data-mode-label="onsite">{modeLabels.onsite || "I'm here"}</span>
+  </button>
+</div>
+
+<script>
+  // Mode toggle: switches data-mode attribute on <html>
+  document.querySelectorAll('[data-mode-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-mode');
+      const next = current === 'planning' ? 'onsite' : 'planning';
+      html.setAttribute('data-mode', next);
+
+      // Toggle label visibility
+      document.querySelectorAll('[data-mode-label]').forEach((label) => {
+        const el = label as HTMLElement;
+        const mode = el.dataset.modeLabel;
+        el.classList.toggle('sticky-cta__mode-label--hidden', mode !== next);
+      });
+
+      // Update aria-label
+      document.querySelectorAll('[data-mode-toggle]').forEach((b) => {
+        const labels = b.querySelectorAll('[data-mode-label]');
+        labels.forEach((l) => {
+          const el = l as HTMLElement;
+          if (el.dataset.modeLabel === next) {
+            (b as HTMLElement).setAttribute('aria-label', el.textContent || '');
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Desktop floating buttons */
+  .sticky-cta--desktop {
+    position: fixed;
+    bottom: var(--space-8);
+    right: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    z-index: 50;
+  }
+
+  .sticky-cta--mobile {
+    display: none;
+  }
+
+  .sticky-cta__mode-toggle {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 2px solid var(--color-text);
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--type-md);
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .sticky-cta__tickets {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    text-decoration: none;
+    font-size: var(--type-md);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+  }
+
+  .sticky-cta__mode-label--hidden {
+    display: none;
+  }
+
+  /* Mobile: sticky bottom bar */
+  @media (max-width: 767px) {
+    .sticky-cta--desktop {
+      display: none;
+    }
+
+    .sticky-cta--mobile {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-decorative);
+      z-index: 50;
+    }
+  }
+</style>

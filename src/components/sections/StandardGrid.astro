@@ -1,0 +1,135 @@
+---
+// StandardGrid.astro -- D-29: Standard grid layout for informational sections
+// Used by: key-info, events, planning-details
+
+interface Props {
+  title: { de: string; en: string };
+  body?: { de: string; en: string };
+  items: Array<{
+    id: string;
+    title: { de: string; en: string };
+    description?: { de: string; en: string };
+    image?: string;
+    date?: string;
+    link?: string;
+  }>;
+  lang: 'en' | 'de';
+  columns?: 2 | 3 | 4;
+}
+
+const { title, body, items, lang, columns = 3 } = Astro.props;
+---
+
+<div class="standard-grid">
+  <div class="standard-grid__header">
+    <h2 class="standard-grid__title">{title[lang]}</h2>
+    {body && (
+      <p class="standard-grid__body">{body[lang]}</p>
+    )}
+  </div>
+
+  <div class="standard-grid__items" style={`--grid-columns: ${columns};`}>
+    {items.map((item) => (
+      <article class="standard-grid__item">
+        {item.image && (
+          <div class="standard-grid__item-image">
+            <img src={item.image} alt={item.title[lang]} loading="lazy" />
+          </div>
+        )}
+        <h3 class="standard-grid__item-title">{item.title[lang]}</h3>
+        {item.description && (
+          <p class="standard-grid__item-desc">{item.description[lang]}</p>
+        )}
+        {item.date && (
+          <span class="standard-grid__item-date">{item.date}</span>
+        )}
+        {item.link && (
+          <a href={item.link} class="standard-grid__item-link link-underline hover-wipe touch-pulse">
+            <span>{lang === 'de' ? 'Mehr erfahren' : 'Learn more'}</span>
+          </a>
+        )}
+      </article>
+    ))}
+  </div>
+</div>
+
+<style>
+  .standard-grid__header {
+    margin-bottom: var(--space-12);
+  }
+
+  .standard-grid__title {
+    font-size: var(--type-2xl);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+  }
+
+  .standard-grid__body {
+    font-size: var(--type-md);
+    line-height: var(--leading-normal);
+    max-width: 60ch;
+    color: var(--color-text);
+  }
+
+  .standard-grid__items {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns, 3), 1fr);
+    gap: var(--space-8);
+  }
+
+  .standard-grid__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .standard-grid__item-image {
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    margin-bottom: var(--space-2);
+  }
+
+  .standard-grid__item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .standard-grid__item-title {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  .standard-grid__item-desc {
+    font-size: var(--type-md);
+    line-height: var(--leading-normal);
+  }
+
+  .standard-grid__item-date {
+    font-size: var(--type-sm);
+    color: var(--color-decorative-shadow);
+  }
+
+  .standard-grid__item-link {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: var(--space-2) 0;
+    font-size: var(--type-md);
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 1023px) {
+    .standard-grid__items {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .standard-grid__items {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

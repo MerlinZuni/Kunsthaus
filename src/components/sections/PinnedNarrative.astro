@@ -1,0 +1,127 @@
+---
+// PinnedNarrative.astro -- D-28: Pinned narrative sequence with scrolling cards
+// GSAP ScrollTrigger pinning will be added in Phase 3
+// Static card list for Phase 2
+
+interface Props {
+  contentType: string;
+  items: Array<{
+    id: string;
+    title: { de: string; en: string };
+    description?: { de: string; en: string };
+    image?: string;
+    date?: string;
+    link?: string;
+  }>;
+  lang: 'en' | 'de';
+}
+
+const { contentType, items, lang } = Astro.props;
+---
+
+<div class="pinned-narrative" data-content-type={contentType}>
+  <div class="pinned-narrative__cards">
+    {items.map((item, i) => (
+      <article
+        class:list={['pinned-narrative__card', { 'pinned-narrative__card--even': i % 2 === 0, 'pinned-narrative__card--odd': i % 2 === 1 }]}
+      >
+        {item.image && (
+          <div class="pinned-narrative__card-image">
+            <img src={item.image} alt={item.title[lang]} loading="lazy" />
+          </div>
+        )}
+        <div class="pinned-narrative__card-content">
+          <h3 class="pinned-narrative__card-title">{item.title[lang]}</h3>
+          {item.date && (
+            <span class="pinned-narrative__card-date">{item.date}</span>
+          )}
+          {item.description && (
+            <p class="pinned-narrative__card-desc">{item.description[lang]}</p>
+          )}
+          {item.link && (
+            <a href={item.link} class="pinned-narrative__card-link link-underline hover-wipe touch-pulse">
+              <span>{lang === 'de' ? 'Mehr erfahren' : 'Learn more'}</span>
+            </a>
+          )}
+        </div>
+      </article>
+    ))}
+  </div>
+</div>
+
+<style>
+  .pinned-narrative__cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .pinned-narrative__card {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .pinned-narrative__card--odd {
+    grid-template-columns: 2fr 3fr;
+  }
+
+  .pinned-narrative__card--odd .pinned-narrative__card-image {
+    order: 2;
+  }
+
+  .pinned-narrative__card-image {
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+  }
+
+  .pinned-narrative__card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pinned-narrative__card-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .pinned-narrative__card-title {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  .pinned-narrative__card-date {
+    font-size: var(--type-sm);
+    color: var(--color-decorative-shadow);
+  }
+
+  .pinned-narrative__card-desc {
+    font-size: var(--type-md);
+    line-height: var(--leading-normal);
+    max-width: 45ch;
+  }
+
+  .pinned-narrative__card-link {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: var(--space-2) 0;
+    font-size: var(--type-md);
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 767px) {
+    .pinned-narrative__card,
+    .pinned-narrative__card--odd {
+      grid-template-columns: 1fr;
+    }
+
+    .pinned-narrative__card--odd .pinned-narrative__card-image {
+      order: unset;
+    }
+  }
+</style>
