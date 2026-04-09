@@ -8,7 +8,7 @@ export default function HeroTextControls() {
     textOpacity,
   } = useControls('Hero Title', {
     blendMode: {
-      value: 'difference',
+      value: 'multiply',
       options: [
         'normal',
         'multiply',

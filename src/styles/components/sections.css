@@ -30,6 +30,11 @@
     background-blend-mode: luminosity;
   }
 
+  /* Onsite mode: hero title — screen makes dark text visible on dark bg */
+  html[data-mode="onsite"] .hero-carousel__text {
+    mix-blend-mode: screen !important;
+  }
+
   /* Section stacking base styles — sticky cards scroll over each other */
   .stacking-section {
     position: sticky;
