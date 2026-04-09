@@ -71,6 +71,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     {activeSlide?.cta && (
       <a href={activeSlide.cta.href} class="hero-carousel__cta hover-wipe-inverse touch-pulse touch-target">
         <span>{activeSlide.cta.label[lang]}</span>
+        <span class="icon">chevron_right</span>
       </a>
     )}
   </div>

@@ -1,0 +1,135 @@
+---
+// EventsList.astro — Events & programs list with same row styling as ExhibitionList
+
+import exhibitionsJson from '../../content/planning/exhibitions.json';
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang } = Astro.props;
+const data = exhibitionsJson[0];
+---
+
+<div class="events-list">
+  <ul class="events-list__items">
+    {data.events.map((event) => (
+      <li class="events-list__row">
+        <span class="events-list__row-title">{event.title[lang]}</span>
+        <span class="events-list__row-meta">
+          <span>{event.dateLabel[lang]}</span>
+          <span class="events-list__row-time">{event.time}</span>
+        </span>
+        <span class="events-list__row-info">
+          <span>{event.type[lang]}</span>
+          {event.places !== null && (
+            <span class="events-list__row-places">
+              {lang === 'de' ? `${event.places} Plätze frei` : `${event.places} places left`}
+            </span>
+          )}
+          {event.tags.includes('members-only') && (
+            <span class="events-list__tag">
+              <span class="icon" style="font-size: 16px;">lock</span>
+              {lang === 'de' ? 'Nur Mitglieder' : 'Members Only'}
+            </span>
+          )}
+        </span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .events-list__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .events-list__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-8);
+    align-items: center;
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .events-list__row:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .events-list__row:hover {
+    background: var(--color-text);
+    color: var(--color-surface);
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .events-list__row:hover .events-list__row-meta,
+  .events-list__row:hover .events-list__row-info {
+    color: var(--color-surface);
+  }
+
+  .events-list__row:hover .events-list__row-time,
+  .events-list__row:hover .events-list__row-places {
+    opacity: 0.7;
+  }
+
+  .events-list__row-title {
+    font-size: var(--type-md);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-normal);
+  }
+
+  .events-list__row-meta {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .events-list__row-time {
+    opacity: 0.5;
+  }
+
+  .events-list__row-info {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    align-items: flex-end;
+  }
+
+  .events-list__row-places {
+    opacity: 0.5;
+  }
+
+  .events-list__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-medium);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    white-space: nowrap;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 767px) {
+    .events-list__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .events-list__row-info {
+      align-items: flex-start;
+    }
+  }
+</style>

@@ -5,6 +5,8 @@ import SectionWrapper from '../components/sections/SectionWrapper.astro';
 import CinematicReveal from '../components/sections/CinematicReveal.astro';
 import PinnedNarrative from '../components/sections/PinnedNarrative.astro';
 import StandardGrid from '../components/sections/StandardGrid.astro';
+import ExhibitionList from '../components/sections/ExhibitionList.astro';
+import EventsList from '../components/sections/EventsList.astro';
 import StickyCTA from '../components/ui/StickyCTA.astro';
 import SectionProgress from '../components/ui/SectionProgress.tsx';
 import Footer from '../components/footer/Footer.astro';
@@ -34,7 +36,7 @@ const sectionComponent: Record<string, string> = {
   'offerings': 'pinned-narrative',
   'education': 'pinned-narrative',
   'key-info': 'standard-grid',
-  'events': 'standard-grid',
+  'events': 'events-list',
   'planning-details': 'standard-grid',
 };
 
@@ -68,24 +70,7 @@ const slideNames = (hero?.slides || []).map(s => s.title[lang]);
         sectionId={section.section}
       >
         {componentType === 'mixed' && (
-          <>
-            <CinematicReveal
-              contentType="exhibition"
-              data={{
-                title: section.title,
-                subtitle: section.subtitle,
-                image: section.items?.[0]?.image,
-                description: section.items?.[0]?.description,
-                cta: { label: getString('explore-exhibition'), href: `/exhibitions/${section.items?.[0]?.id}` }
-              }}
-              lang={lang}
-            />
-            <PinnedNarrative
-              contentType="exhibition"
-              items={section.items?.slice(1) || []}
-              lang={lang}
-            />
-          </>
+          <ExhibitionList lang={lang} />
         )}
         {componentType === 'pinned-narrative' && (
           <PinnedNarrative
@@ -93,6 +78,9 @@ const slideNames = (hero?.slides || []).map(s => s.title[lang]);
             items={section.items || []}
             lang={lang}
           />
+        )}
+        {componentType === 'events-list' && (
+          <EventsList lang={lang} />
         )}
         {componentType === 'standard-grid' && (
           <StandardGrid

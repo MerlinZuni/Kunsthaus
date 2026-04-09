@@ -45,6 +45,16 @@
     will-change: transform, opacity;
   }
 
+  /* Long-content sections: disable sticky so all content is scrollable */
+  .stacking-section[data-section="exhibitions"],
+  .stacking-section[data-section="offerings"],
+  .stacking-section[data-section="education"],
+  .stacking-section[data-section="events"],
+  .stacking-section[data-section="key-info"],
+  .stacking-section[data-section="planning-details"] {
+    position: relative;
+  }
+
   /* D-24: Section vertical spacing */
   .section-spacing {
     padding-top: var(--space-32);    /* 128px desktop */

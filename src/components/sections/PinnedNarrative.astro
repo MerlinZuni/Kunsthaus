@@ -31,7 +31,7 @@ const { contentType, items, lang } = Astro.props;
           </div>
         )}
         <div class="pinned-narrative__card-content">
-          <h3 class="pinned-narrative__card-title">{item.title[lang]}</h3>
+          <h3 class="pinned-narrative__card-title sub-heading">{item.title[lang]}</h3>
           {item.date && (
             <span class="pinned-narrative__card-date">{item.date}</span>
           )}
@@ -93,9 +93,7 @@ const { contentType, items, lang } = Astro.props;
   }
 
   .pinned-narrative__card-title {
-    font-size: var(--type-lg);
-    font-weight: var(--weight-bold);
-    line-height: var(--leading-tight);
+    margin-bottom: var(--space-1);
   }
 
   .pinned-narrative__card-date {

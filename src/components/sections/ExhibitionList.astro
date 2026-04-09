@@ -1,0 +1,322 @@
+---
+// ExhibitionList.astro — Three-group exhibition list with hover/scroll reveal
+// Groups: Collection, Current Exhibitions, Upcoming Exhibitions
+// Rollover: inverts colors + shows image preview
+
+import exhibitionsJson from '../../content/planning/exhibitions.json';
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const data = exhibitionsJson[0];
+const memberLabel = lang === 'de' ? 'Mitglieder-Preview' : 'Members Preview';
+const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
+---
+
+<div class="exhibition-list">
+  {/* Intro */}
+  <div class="exhibition-list__intro">
+    <p class="exhibition-list__description">{data.intro.description[lang]}</p>
+  </div>
+
+  {/* Group 1: Collection */}
+  <div class="exhibition-list__group">
+    <h3 class="exhibition-list__group-title sub-heading">
+      {lang === 'de' ? 'Sammlung' : 'Collection'}
+    </h3>
+    <ul class="exhibition-list__items">
+      {data.collection.map((item) => (
+        <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
+          <span class="exhibition-list__row-title">{item.title[lang]}</span>
+          <span class="exhibition-list__row-meta">{item.period}</span>
+          <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Group 2: Current Exhibitions */}
+  <div class="exhibition-list__group">
+    <h3 class="exhibition-list__group-title sub-heading">
+      {lang === 'de' ? 'Aktuelle Ausstellungen' : 'Current Exhibitions'}
+    </h3>
+    <ul class="exhibition-list__items">
+      {data.currentExhibitions.map((item) => (
+        <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
+          <span class="exhibition-list__row-title">{item.title[lang]}</span>
+          <span class="exhibition-list__row-meta">
+            <span>{item.dateLabel[lang]}</span>
+            <span style="opacity: 0.5;">{item.location.building}, {item.location.floor}</span>
+          </span>
+          <span class="exhibition-list__row-location">
+            {item.tags.map((tag) => (
+              <span class="exhibition-list__tag">{tag}</span>
+            ))}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Group 3: Upcoming Exhibitions */}
+  <div class="exhibition-list__group">
+    <h3 class="exhibition-list__group-title sub-heading">
+      {lang === 'de' ? 'Vorschau' : 'Upcoming Exhibitions'}
+    </h3>
+    <ul class="exhibition-list__items">
+      {data.upcomingExhibitions.map((item) => (
+        <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
+          <span class="exhibition-list__row-title">{item.title[lang]}</span>
+          <span class="exhibition-list__row-meta">{item.dateLabel[lang]}</span>
+          <span class="exhibition-list__row-location">
+            {item.tags.includes('members-preview') && (
+              <span class="exhibition-list__tag exhibition-list__tag--members">
+                <span class="icon" style="font-size: 16px;">lock</span>
+                {memberLabel}
+              </span>
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+    <div class="exhibition-list__member-cta">
+      <a href="/membership" class="exhibition-list__member-link hover-wipe-inverse touch-pulse touch-target">
+        <span>{memberCta}</span>
+        <span class="icon">chevron_right</span>
+      </a>
+    </div>
+  </div>
+
+  {/* Floating image preview */}
+  <div class="exhibition-list__preview" aria-hidden="true">
+    <img class="exhibition-list__preview-img" src="" alt="" />
+  </div>
+</div>
+
+<script>
+  // Hover/scroll image preview for exhibition rows
+  const list = document.querySelector('.exhibition-list');
+  const preview = document.querySelector('.exhibition-list__preview') as HTMLElement;
+  const previewImg = document.querySelector('.exhibition-list__preview-img') as HTMLImageElement;
+  const rows = document.querySelectorAll('.exhibition-list__row');
+
+  if (list && preview && previewImg) {
+    // Desktop: mouseover
+    rows.forEach((row) => {
+      row.addEventListener('mouseenter', () => {
+        const src = (row as HTMLElement).dataset.image;
+        if (src) {
+          previewImg.src = src;
+          preview.classList.add('exhibition-list__preview--visible');
+        }
+        row.classList.add('exhibition-list__row--active');
+      });
+
+      row.addEventListener('mouseleave', () => {
+        preview.classList.remove('exhibition-list__preview--visible');
+        row.classList.remove('exhibition-list__row--active');
+      });
+
+      row.addEventListener('mousemove', (e) => {
+        const ev = e as MouseEvent;
+        const rect = list.getBoundingClientRect();
+        preview.style.left = `${ev.clientX - rect.left + 20}px`;
+        preview.style.top = `${ev.clientY - rect.top - 80}px`;
+      });
+    });
+
+    // Mobile: scroll-based activation via IntersectionObserver
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const row = entry.target as HTMLElement;
+            if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+              row.classList.add('exhibition-list__row--active');
+              const src = row.dataset.image;
+              if (src && previewImg) {
+                previewImg.src = src;
+                preview.classList.add('exhibition-list__preview--visible');
+                preview.style.left = '50%';
+                preview.style.top = `${row.offsetTop + row.offsetHeight}px`;
+                preview.style.transform = 'translateX(-50%)';
+              }
+            } else {
+              row.classList.remove('exhibition-list__row--active');
+            }
+          });
+          // Hide preview if no row is active
+          const anyActive = document.querySelector('.exhibition-list__row--active');
+          if (!anyActive) {
+            preview.classList.remove('exhibition-list__preview--visible');
+          }
+        },
+        { threshold: 0.6, rootMargin: '-20% 0px -20% 0px' }
+      );
+      rows.forEach((row) => observer.observe(row));
+    }
+  }
+</script>
+
+<style>
+  .exhibition-list {
+    position: relative;
+  }
+
+  .exhibition-list__intro {
+    margin-bottom: var(--space-16);
+  }
+
+  .exhibition-list__description {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-relaxed);
+    max-width: 60ch;
+  }
+
+  /* Group spacing */
+  .exhibition-list__group {
+    margin-bottom: var(--space-16);
+  }
+
+  .exhibition-list__group-title {
+    margin-bottom: var(--space-6);
+  }
+
+  /* Row list */
+  .exhibition-list__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .exhibition-list__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-8);
+    align-items: center;
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .exhibition-list__row:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  /* Hover: invert colors */
+  .exhibition-list__row--active {
+    background: var(--color-text);
+    color: var(--color-surface);
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .exhibition-list__row--active .exhibition-list__row-meta,
+  .exhibition-list__row--active .exhibition-list__row-location {
+    color: var(--color-surface);
+    opacity: 0.7;
+  }
+
+  .exhibition-list__row-title {
+    font-size: var(--type-md);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-normal);
+  }
+
+  .exhibition-list__row-meta {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .exhibition-list__row-location {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-decorative-shadow);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    justify-content: flex-end;
+  }
+
+  /* Tags */
+  .exhibition-list__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-medium);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .exhibition-list__tag--members {
+    color: var(--color-accent);
+  }
+
+  /* Member CTA */
+  .exhibition-list__member-cta {
+    margin-top: var(--space-8);
+  }
+
+  .exhibition-list__member-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    text-decoration: none;
+    font-size: var(--type-md);
+    font-weight: var(--weight-medium);
+  }
+
+  /* Floating image preview */
+  .exhibition-list__preview {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    width: 240px;
+    height: 160px;
+    overflow: hidden;
+  }
+
+  .exhibition-list__preview--visible {
+    opacity: 1;
+  }
+
+  .exhibition-list__preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .exhibition-list__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .exhibition-list__row-location {
+      justify-content: flex-start;
+    }
+
+    .exhibition-list__preview {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      margin-top: var(--space-4);
+    }
+  }
+</style>

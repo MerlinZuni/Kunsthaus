@@ -25,6 +25,12 @@
   h3 { font-size: var(--type-2xl); }
   h4 { font-size: var(--type-xl); }
 
+  /* sub-heading overrides any heading element defaults */
+  h1.sub-heading, h2.sub-heading, h3.sub-heading, h4.sub-heading {
+    font-size: var(--type-md);
+    font-weight: var(--weight-medium);
+  }
+
   a {
     color: inherit;
     text-decoration-skip-ink: auto;
@@ -33,5 +39,15 @@
   :focus-visible {
     outline: 2px solid var(--color-text);
     outline-offset: 2px;
+  }
+
+  /* Reusable sub-heading style — group titles, table headers, label headings */
+  .sub-heading {
+    font-size: var(--type-md);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text);
+    line-height: var(--leading-tight);
   }
 }

@@ -22,8 +22,14 @@ const zIndex = 20 + index;
   aria-label={sectionName}
 >
   <div class="section-inner">
-    <h2 class="section-title">{sectionName}</h2>
-    <slot />
+    <div class="section-layout">
+      <div class="section-title-col">
+        <h2 class="section-title">{sectionName}</h2>
+      </div>
+      <div class="section-content-col">
+        <slot />
+      </div>
+    </div>
   </div>
 </section>
 
@@ -34,13 +40,40 @@ const zIndex = 20 + index;
     padding: 0 var(--space-8);
   }
 
+  .section-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-12);
+  }
+
+  .section-title-col {
+    position: sticky;
+    top: var(--space-32);
+    align-self: start;
+  }
+
   .section-title {
     font-size: var(--type-xl);
     font-weight: var(--weight-light);
     line-height: var(--leading-tight);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    margin-bottom: var(--space-24);
+    max-width: 200px;
+  }
+
+  .section-content-col {
+    min-width: 0;
+  }
+
+  @media (max-width: 1023px) {
+    .section-layout {
+      grid-template-columns: 160px 1fr;
+      gap: var(--space-8);
+    }
+
+    .section-title {
+      max-width: 160px;
+    }
   }
 
   @media (max-width: 767px) {
@@ -48,8 +81,19 @@ const zIndex = 20 + index;
       padding: 0 var(--space-4);
     }
 
+    .section-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+
+    .section-title-col {
+      position: relative;
+      top: auto;
+    }
+
     .section-title {
-      margin-bottom: var(--space-16);
+      max-width: none;
+      margin-bottom: 0;
     }
   }
 </style>

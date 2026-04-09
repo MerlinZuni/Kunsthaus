@@ -34,6 +34,7 @@ const { contentType, data, lang } = Astro.props;
     {data.cta && (
       <a href={data.cta.href} class="cinematic-reveal__cta hover-wipe-inverse touch-pulse touch-target">
         <span>{data.cta.label}</span>
+        <span class="icon">chevron_right</span>
       </a>
     )}
   </div>

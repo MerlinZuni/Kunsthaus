@@ -40,7 +40,7 @@ const newsletterHeading = 'NEWSLETTER';
 <div class="footer-columns">
   {/* Column 1: Address */}
   <div class="footer-col">
-    <h3 class="footer-col__heading">KUNSTHAUS ZURICH</h3>
+    <h3 class="footer-col__heading sub-heading">KUNSTHAUS ZURICH</h3>
     <address class="footer-col__address">
       <p>{footerData.address.street}</p>
       <p>{footerData.address.zip} {footerData.address.city[lang]}</p>
@@ -67,13 +67,13 @@ const newsletterHeading = 'NEWSLETTER';
 
   {/* Column 3: Quick Links + Media */}
   <div class="footer-col">
-    <h3 class="footer-col__heading">{quickLinksHeading}</h3>
+    <h3 class="footer-col__heading sub-heading">{quickLinksHeading}</h3>
     <ul class="footer-col__link-list">
       {footerData.quickLinks.map((link) => (
         <li><a href={link.href} class="link-underline hover-wipe touch-pulse">{link.label[lang]}</a></li>
       ))}
     </ul>
-    <h3 class="footer-col__heading footer-col__heading--spaced">{mediaHeading}</h3>
+    <h3 class="footer-col__heading sub-heading footer-col__heading--spaced">{mediaHeading}</h3>
     <ul class="footer-col__link-list">
       {footerData.media.map((link) => (
         <li><a href={link.href} class="link-underline hover-wipe touch-pulse">{link.label[lang]}</a></li>
@@ -83,13 +83,14 @@ const newsletterHeading = 'NEWSLETTER';
 
   {/* Column 4: Newsletter */}
   <div class="footer-col">
-    <h3 class="footer-col__heading">{newsletterHeading}</h3>
+    <h3 class="footer-col__heading sub-heading">{newsletterHeading}</h3>
     <p class="footer-col__text">{footerData.newsletter.description[lang]}</p>
     <a
       href={footerData.newsletter.href}
       class="footer-col__subscribe hover-wipe-inverse touch-pulse touch-target"
     >
       <span>{footerData.newsletter.linkLabel[lang]}</span>
+      <span class="icon">chevron_right</span>
     </a>
 
     <div class="footer-col__mode-toggle" role="radiogroup" aria-label="Site mode">
@@ -128,13 +129,7 @@ const newsletterHeading = 'NEWSLETTER';
     line-height: var(--leading-normal);
   }
 
-  /* D-39: Section headers */
   .footer-col__heading {
-    font-size: var(--type-md);
-    font-weight: var(--weight-bold);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text);
     margin-bottom: var(--space-4);
   }
 

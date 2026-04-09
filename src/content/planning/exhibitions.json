@@ -1,0 +1,253 @@
+[
+  {
+    "id": "exhibitions-section",
+    "intro": {
+      "title": { "de": "In unserer Sammlung", "en": "In Our Collection" },
+      "description": {
+        "de": "Entdecken Sie Meisterwerke vom Mittelalter bis zur Gegenwart in einem der grössten Kunstmuseen der Schweiz.",
+        "en": "Discover masterpieces from the medieval period to the present in one of Switzerland's largest art museums."
+      }
+    },
+    "collection": [
+      {
+        "id": "old-masters",
+        "title": { "de": "Alte Meister", "en": "Old Masters" },
+        "period": "13th–18th Century",
+        "location": { "building": "Moser Building", "floor": "1st Floor" },
+        "image": "/images/collection/old-masters.jpg"
+      },
+      {
+        "id": "impressionism",
+        "title": { "de": "Impressionismus", "en": "Impressionism" },
+        "period": "19th Century",
+        "location": { "building": "Chipperfield Building", "floor": "2nd Floor" },
+        "image": "/images/collection/impressionism.jpg"
+      },
+      {
+        "id": "swiss-art",
+        "title": { "de": "Schweizer Kunst", "en": "Swiss Art" },
+        "period": "18th–20th Century",
+        "location": { "building": "Moser Building", "floor": "2nd Floor" },
+        "image": "/images/collection/swiss-art.png"
+      },
+      {
+        "id": "classical-modern",
+        "title": { "de": "Klassische Moderne", "en": "Classical Modern" },
+        "period": "Early 20th Century",
+        "location": { "building": "Chipperfield Building", "floor": "1st Floor" },
+        "image": "/images/collection/classical-modern.jpg"
+      },
+      {
+        "id": "private-collections",
+        "title": { "de": "Privatsammlungen", "en": "Private Collections" },
+        "period": "Various",
+        "location": { "building": "Chipperfield Building", "floor": "Ground Floor" },
+        "image": "/images/collection/giacometti.jpg"
+      },
+      {
+        "id": "art-after-1945",
+        "title": { "de": "Kunst ab 1945", "en": "Art after 1945" },
+        "period": "1945–Present",
+        "location": { "building": "Chipperfield Building", "floor": "1st Floor" },
+        "image": "/images/collection/art-after-1945.png"
+      },
+      {
+        "id": "contemporary",
+        "title": { "de": "Zeitgenössische Kunst", "en": "Contemporary Art" },
+        "period": "Contemporary",
+        "location": { "building": "Chipperfield Building", "floor": "Ground Floor" },
+        "image": "/images/collection/contemporary.jpg"
+      },
+      {
+        "id": "prints-drawings",
+        "title": { "de": "Grafische Sammlung", "en": "Prints and Drawings" },
+        "period": "15th Century–Present",
+        "location": { "building": "Moser Building", "floor": "Ground Floor" },
+        "image": "/images/collection/prints-drawings.jpg"
+      },
+      {
+        "id": "recollect",
+        "title": { "de": "ReCollect!", "en": "ReCollect!" },
+        "period": "Contemporary Interventions",
+        "location": { "building": "Both Buildings", "floor": "Various" },
+        "image": "/images/collection/recollect.png"
+      }
+    ],
+    "currentExhibitions": [
+      {
+        "id": "kerry-james-marshall",
+        "title": { "de": "Kerry James Marshall. The Histories", "en": "Kerry James Marshall. The Histories" },
+        "dates": { "start": "2026-02-14", "end": "2026-08-16" },
+        "dateLabel": { "de": "Bis 16.08.2026", "en": "Until 16.08.2026" },
+        "location": { "building": "Chipperfield Building", "floor": "1st Floor" },
+        "image": "/images/exhibitions/kerry-james-marshall-1.jpg",
+        "tags": []
+      },
+      {
+        "id": "felicien-rops",
+        "title": { "de": "Félicien Rops: Laboratorium der Lüste", "en": "Félicien Rops: Laboratory of Desires" },
+        "dates": { "start": "2026-01-20", "end": "2026-05-31" },
+        "dateLabel": { "de": "Bis 31.05.2026", "en": "Until 31.05.2026" },
+        "location": { "building": "Moser Building", "floor": "Ground Floor" },
+        "image": "/images/exhibitions/felicien-rops.jpg",
+        "tags": []
+      },
+      {
+        "id": "wolfgang-laib",
+        "title": { "de": "Wolfgang Laib und die Sammlung", "en": "Wolfgang Laib and the Collection" },
+        "dates": { "start": "2026-03-01", "end": "2026-10-31" },
+        "dateLabel": { "de": "Bis Herbst 2026", "en": "Until Fall 2026" },
+        "location": { "building": "Chipperfield Building", "floor": "2nd Floor" },
+        "image": "/images/exhibitions/wolfgang-laib.jpg",
+        "tags": ["ReCollect!"]
+      },
+      {
+        "id": "wu-tsang",
+        "title": { "de": "Wu Tsang: La montaña invertida", "en": "Wu Tsang: La montaña invertida" },
+        "dates": { "start": "2026-02-01", "end": "2026-09-30" },
+        "dateLabel": { "de": "Bis Sommer 2026", "en": "Until Summer 2026" },
+        "location": { "building": "Chipperfield Building", "floor": "Dome Hall" },
+        "image": "/images/exhibitions/wu-tsang.jpg",
+        "tags": ["ReCollect!"]
+      }
+    ],
+    "upcomingExhibitions": [
+      {
+        "id": "marisol",
+        "title": { "de": "Marisol", "en": "Marisol" },
+        "dates": { "start": "2026-04-17", "end": "2026-08-23" },
+        "dateLabel": { "de": "17.04 – 23.08.2026", "en": "17 Apr – 23 Aug 2026" },
+        "image": "/images/exhibitions/marisol.jpg",
+        "tags": []
+      },
+      {
+        "id": "hammershoi",
+        "title": { "de": "Vilhelm Hammershøi: Maler des stillen Klangs", "en": "Vilhelm Hammershøi: Painter of Silent Sound" },
+        "dates": { "start": "2026-07-03", "end": "2026-10-25" },
+        "dateLabel": { "de": "03.07 – 25.10.2026", "en": "3 Jul – 25 Oct 2026" },
+        "image": "/images/exhibitions/hammershoi.jpg",
+        "tags": ["members-preview"]
+      },
+      {
+        "id": "lassnig-munch",
+        "title": { "de": "Maria Lassnig und Edvard Munch", "en": "Maria Lassnig and Edvard Munch" },
+        "dates": { "start": "2026-10-02", "end": "2027-02-21" },
+        "dateLabel": { "de": "02.10.2026 – 21.02.2027", "en": "2 Oct 2026 – 21 Feb 2027" },
+        "image": "/images/exhibitions/lassnig-munch.jpg",
+        "tags": ["members-preview"]
+      }
+    ],
+    "events": [
+      {
+        "id": "architektur-chipperfield",
+        "title": { "de": "Architekturführung «Chipperfield»", "en": "Architecture Tour: Chipperfield" },
+        "date": "2026-04-09",
+        "dateLabel": { "de": "Do 9.4.", "en": "Thu 9 Apr" },
+        "time": "18:00–19:00",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 17,
+        "tags": []
+      },
+      {
+        "id": "temps-forts-moser",
+        "title": { "de": "Temps forts bâtiment Moser", "en": "Highlights: Moser Building" },
+        "date": "2026-04-11",
+        "dateLabel": { "de": "Sa 11.4.", "en": "Sat 11 Apr" },
+        "time": "11:00–12:00",
+        "type": { "de": "Führung (FR)", "en": "Guided Tour (French)" },
+        "places": 28,
+        "tags": []
+      },
+      {
+        "id": "der-entblosste-blick",
+        "title": { "de": "Der entblösste Blick", "en": "The Uncovered Gaze" },
+        "date": "2026-04-11",
+        "dateLabel": { "de": "Sa 11.4.", "en": "Sat 11 Apr" },
+        "time": "11:00–15:00",
+        "type": { "de": "Workshop", "en": "Workshop" },
+        "places": 8,
+        "tags": []
+      },
+      {
+        "id": "sammlungsfuehrung",
+        "title": { "de": "Sammlungsführung", "en": "Collection Tour" },
+        "date": "2026-04-11",
+        "dateLabel": { "de": "Sa 11.4.", "en": "Sat 11 Apr" },
+        "time": "15:00–16:00",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 19,
+        "tags": []
+      },
+      {
+        "id": "atelier-am-sonntag",
+        "title": { "de": "Atelier am Sonntag", "en": "Sunday Studio" },
+        "date": "2026-04-12",
+        "dateLabel": { "de": "So 12.4.", "en": "Sun 12 Apr" },
+        "time": "10:30–12:00",
+        "type": { "de": "Workshop (ab 5 J.)", "en": "Workshop (Ages 5+)" },
+        "places": 5,
+        "tags": []
+      },
+      {
+        "id": "kinderworkshop-filz",
+        "title": { "de": "Kinderworkshop: Filz", "en": "Kids Workshop: Felt" },
+        "date": "2026-04-15",
+        "dateLabel": { "de": "Mi 15.4.", "en": "Wed 15 Apr" },
+        "time": "14:00–16:00",
+        "type": { "de": "Workshop (ab 6 J.)", "en": "Workshop (Ages 6+)" },
+        "places": 7,
+        "tags": []
+      },
+      {
+        "id": "chagall-tour",
+        "title": { "de": "Auf den Spuren von Marc Chagall", "en": "In the Footsteps of Marc Chagall" },
+        "date": "2026-04-16",
+        "dateLabel": { "de": "Do 16.4.", "en": "Thu 16 Apr" },
+        "time": "14:00–15:30",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 6,
+        "tags": []
+      },
+      {
+        "id": "marisol-preview",
+        "title": { "de": "Marisol – Eröffnung Mitglieder", "en": "Marisol – Members Preview" },
+        "date": "2026-04-16",
+        "dateLabel": { "de": "Do 16.4.", "en": "Thu 16 Apr" },
+        "time": "17:00–21:00",
+        "type": { "de": "Mitglieder-Preview", "en": "Members Preview" },
+        "places": null,
+        "tags": ["members-only"]
+      },
+      {
+        "id": "impressionismus-tour",
+        "title": { "de": "Kunst-Stück: Impressionismus", "en": "Art Piece: Impressionism" },
+        "date": "2026-04-16",
+        "dateLabel": { "de": "Do 16.4.", "en": "Thu 16 Apr" },
+        "time": "18:00–19:45",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 22,
+        "tags": []
+      },
+      {
+        "id": "marisol-intro",
+        "title": { "de": "Marisol – Einführung", "en": "Marisol – Introduction" },
+        "date": "2026-04-17",
+        "dateLabel": { "de": "Fr 17.4.", "en": "Fri 17 Apr" },
+        "time": "15:00–16:00",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 20,
+        "tags": []
+      },
+      {
+        "id": "recollect-laib",
+        "title": { "de": "ReCollect! Wolfgang Laib", "en": "ReCollect! Wolfgang Laib" },
+        "date": "2026-04-18",
+        "dateLabel": { "de": "Sa 18.4.", "en": "Sat 18 Apr" },
+        "time": "11:00–12:00",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 24,
+        "tags": []
+      }
+    ]
+  }
+]
