@@ -1,6 +1,10 @@
 ---
-// HeroCarousel.astro -- Stub: will be fully implemented in Plan 02-02
-// D-01 through D-06: Hero carousel with right-aligned typography and scattered images
+// HeroCarousel.astro -- D-01 through D-06, D-41: Hero section with carousel
+// Monumental right-aligned KUNST/HAUS/ZURICH typography, scattered images,
+// auto-play with progress tabs, pause/play toggle, ARIA carousel pattern
+
+import HeroSlide from './HeroSlide.astro';
+import CarouselTabs from './CarouselTabs.astro';
 
 interface Props {
   slides: Array<{
@@ -19,26 +23,36 @@ interface Props {
   uiStrings: any;
 }
 
-const { slides, lang } = Astro.props;
-const activeSlide = slides[0];
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { slides, lang, uiStrings } = Astro.props;
+
+// Get pause/play labels from ui-strings
+const getString = (key: string) => {
+  const entry = uiStrings.find((s: any) => s.key === key);
+  return entry?.value?.[lang] || key;
+};
+const pauseLabel = getString('carousel-pause');
+const playLabel = getString('carousel-play');
 ---
 
 <section class="hero-pinned" aria-roledescription="carousel" aria-label="Featured exhibitions">
   <div class="hero-carousel">
-    {/* Exhibition images -- scattered behind text */}
-    <div class="hero-carousel__images">
-      {activeSlide?.images.map((img, i) => {
-        const grays = ['#b0b0b0', '#8a8a8a', '#c8c8c8', '#9e9e9e', '#d4d4d4'];
-        return (
-          <div class="hero-carousel__image-slot" style={`grid-column: ${img.gridCol}; grid-row: ${img.gridRow}; background: ${grays[i % grays.length]};`}>
-            <img src={`${base}${img.src}`} alt={img.alt[lang]} loading="eager" />
-          </div>
-        );
-      })}
+    {/* Slides container */}
+    <div class="hero-carousel__slides">
+      {slides.map((slide, i) => (
+        <HeroSlide
+          images={slide.images}
+          subtitle={slide.subtitle}
+          cta={slide.cta}
+          lang={lang}
+          index={i}
+          total={slides.length}
+          title={slide.title}
+          isActive={i === 0}
+        />
+      ))}
     </div>
 
-    {/* Large right-aligned typography */}
+    {/* Large right-aligned typography -- topmost z-index within hero */}
     <div class="hero-carousel__text">
       <h1 class="hero-carousel__title">
         <span>KUNST</span>
@@ -47,33 +61,32 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </h1>
     </div>
 
-    {/* Gradient scrim for tab/CTA legibility over images */}
+    {/* Gradient scrim for tab/CTA legibility */}
     <div class="hero-carousel__scrim" aria-hidden="true"></div>
 
     {/* Carousel progress tabs */}
-    <nav class="hero-carousel__tabs" aria-label="Exhibition slides">
-      {slides.map((slide, i) => (
-        <button
-          class:list={['hero-carousel__tab', { 'hero-carousel__tab--active': i === 0 }]}
-          role="group"
-          aria-roledescription="slide"
-          aria-label={`${i + 1} of ${slides.length}: ${slide.title[lang]}`}
-        >
-          <span class="hero-carousel__tab-title">{slide.title[lang]}</span>
-          <div class="hero-carousel__tab-progress">
-            <div class="hero-carousel__tab-fill" />
-          </div>
-        </button>
-      ))}
-    </nav>
+    <CarouselTabs slides={slides} lang={lang} />
 
-    {/* CTA -- positioned in the image area, left side */}
-    {activeSlide?.cta && (
-      <a href={activeSlide.cta.href} class="hero-carousel__cta hover-wipe-inverse touch-pulse touch-target">
-        <span>{activeSlide.cta.label[lang]}</span>
-        <span class="icon">chevron_right</span>
-      </a>
-    )}
+    {/* Pause/play toggle -- WCAG 2.2.2 */}
+    <button
+      class="hero-carousel__pause touch-target"
+      id="carousel-pause-btn"
+      aria-label={pauseLabel}
+      data-pause-label={pauseLabel}
+      data-play-label={playLabel}
+    >
+      <svg class="hero-carousel__pause-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <rect x="4" y="3" width="4" height="14" rx="1"/>
+        <rect x="12" y="3" width="4" height="14" rx="1"/>
+      </svg>
+      <svg class="hero-carousel__play-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display:none">
+        <polygon points="5,3 17,10 5,17"/>
+      </svg>
+    </button>
+
+    {/* Live region for screen readers */}
+    <div class="sr-only" aria-live="polite" aria-atomic="true" id="carousel-live-region">
+    </div>
   </div>
 </section>
 
@@ -87,48 +100,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     background: var(--color-surface);
   }
 
-  .hero-carousel__images {
+  .hero-carousel__slides {
     position: absolute;
     inset: 0;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: 80px 80px 160px 160px 160px 80px 80px 160px;
-    z-index: 1;
   }
 
-  .hero-carousel__image-slot {
-    overflow: hidden;
-    align-self: start;
-  }
-
-  .hero-carousel__image-slot img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .hero-carousel__image-slot img[src=""],
-  .hero-carousel__image-slot img:not([src]) {
-    display: none;
-  }
-
-  /* Placeholder aspect ratios — width driven by grid columns, height by ratio */
-  .hero-carousel__image-slot:nth-child(1) {
-    aspect-ratio: 3 / 2;
-  }
-  .hero-carousel__image-slot:nth-child(2) {
-    aspect-ratio: 3 / 2;
-    margin-top: 80px;
-  }
-  .hero-carousel__image-slot:nth-child(3) {
-    aspect-ratio: 2 / 3;
-  }
-
-  .hero-carousel__scrim {
-    display: none;
-  }
-
+  /* Typography (D-01): right-aligned, three lines, topmost layer */
   .hero-carousel__text {
     position: absolute;
     inset: 0;
@@ -138,124 +115,221 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     mix-blend-mode: multiply;
     padding-right: var(--space-12);
     z-index: 5;
+    pointer-events: none;
   }
-
 
   .hero-carousel__title {
     display: flex;
     flex-direction: column;
     text-align: right;
-    font-size: clamp(var(--type-4xl), 10vw, 7rem);
+    font-size: clamp(var(--type-3xl), 8vw, var(--type-4xl));
     font-weight: var(--weight-bold);
     line-height: var(--leading-tight);
     text-transform: uppercase;
     color: var(--color-text);
   }
 
-  .hero-carousel__tabs {
+  /* Onsite mode: screen blend for dark bg */
+  html[data-mode="onsite"] .hero-carousel__text {
+    mix-blend-mode: screen !important;
+  }
+
+  .hero-carousel__scrim {
+    display: none;
+  }
+
+  /* Pause/play button */
+  .hero-carousel__pause {
     position: absolute;
     bottom: var(--space-4);
-    left: var(--space-8);
-    display: inline-flex;
-    width: fit-content;
-    gap: var(--space-4);
-    z-index: 3;
+    right: var(--space-8);
+    z-index: 4;
     background: color-mix(in srgb, var(--color-surface) 70%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding: var(--space-3) var(--space-4);
-    border-radius: 2px;
-  }
-
-  .hero-carousel__tab {
-    background: none;
     border: none;
     cursor: pointer;
     color: var(--color-text);
-    padding: var(--space-2) 0;
-    min-width: 120px;
+    padding: var(--space-2);
+    border-radius: 2px;
   }
 
-  .hero-carousel__tab-title {
+  .hero-carousel__pause.is-paused .hero-carousel__pause-icon {
+    display: none;
+  }
+  .hero-carousel__pause.is-paused .hero-carousel__play-icon {
     display: block;
-    font-size: var(--type-sm);
-    font-weight: var(--weight-regular);
-    text-align: left;
-    margin-bottom: var(--space-1);
-    opacity: 0.5;
   }
 
-  .hero-carousel__tab--active .hero-carousel__tab-title {
-    opacity: 1;
-    font-weight: var(--weight-bold);
-  }
-
-  .hero-carousel__tab-progress {
-    height: 2px;
-    background: var(--color-decorative);
-    width: 100%;
-  }
-
-  .hero-carousel__tab-fill {
-    height: 100%;
-    background: var(--color-text);
-    width: 0%;
-  }
-
-  .hero-carousel__tab--active .hero-carousel__tab-fill {
-    width: 100%;
-  }
-
-  .hero-carousel__cta {
+  .sr-only {
     position: absolute;
-    bottom: 40%;
-    left: var(--space-8);
-    z-index: 3;
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-3) var(--space-6);
-    text-decoration: none;
-    font-size: var(--type-md);
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 
   @media (max-width: 767px) {
-    .hero-carousel__images {
-      grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: 60px 60px 120px 120px 120px 60px 60px 120px;
-      left: -10vw;
-      right: -10vw;
-      width: 120vw;
-    }
-
-    .hero-carousel__image-slot {
-      aspect-ratio: auto;
-    }
-
-    /* Mobile: reposition images — !important overrides inline grid styles */
-    .hero-carousel__image-slot:nth-child(1) {
-      grid-column: 1 / 5 !important;
-      grid-row: 2 / 5 !important;
-    }
-    .hero-carousel__image-slot:nth-child(2) {
-      grid-column: 2 / 6 !important;
-      grid-row: 4 / 7 !important;
-    }
-    .hero-carousel__image-slot:nth-child(3) {
-      grid-column: 4 / 7 !important;
-      grid-row: 3 / 7 !important;
-    }
-
     .hero-carousel__text {
       padding-right: var(--space-4);
     }
 
-    .hero-carousel__tabs {
-      display: none;
-    }
-
-    .hero-carousel__cta {
-      bottom: calc(var(--space-16) + 50px);
-      left: var(--space-4);
+    .hero-carousel__pause {
+      right: var(--space-4);
     }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initHeroCarousel() {
+    const carousel = document.querySelector('[aria-roledescription="carousel"]');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('[data-slide-index]');
+    const tabs = carousel.querySelectorAll('[data-tab]');
+    const fills = carousel.querySelectorAll('[data-tab-fill]');
+    const pauseBtn = document.getElementById('carousel-pause-btn');
+    const liveRegion = document.getElementById('carousel-live-region');
+    const slideCount = slides.length;
+
+    if (slideCount <= 1) return;
+
+    const SLIDE_DURATION = 5; // seconds per slide
+    let currentIndex = 0;
+    let isPaused = false;
+
+    // Build GSAP timeline for auto-play
+    const tl = gsap.timeline({ repeat: -1 });
+
+    for (let i = 0; i < slideCount; i++) {
+      const fill = fills[i] as HTMLElement;
+
+      // Show slide i
+      tl.call(() => activateSlide(i), [], i === 0 ? 0 : undefined);
+
+      // Animate fill bar from 0 to 1
+      tl.fromTo(
+        fill,
+        { scaleX: 0 },
+        { scaleX: 1, duration: SLIDE_DURATION, ease: 'none' },
+      );
+
+      // Reset fill after transition
+      if (i < slideCount - 1) {
+        tl.call(() => {
+          gsap.set(fill, { scaleX: 0 });
+        });
+      }
+    }
+
+    // Reset last fill at repeat
+    tl.call(() => {
+      const lastFill = fills[slideCount - 1] as HTMLElement;
+      gsap.set(lastFill, { scaleX: 0 });
+    });
+
+    function activateSlide(index: number) {
+      currentIndex = index;
+
+      // Toggle slides
+      slides.forEach((slide, i) => {
+        const el = slide as HTMLElement;
+        if (i === index) {
+          el.classList.add('hero-slide--active');
+          el.style.opacity = '1';
+          el.style.pointerEvents = 'auto';
+        } else {
+          el.classList.remove('hero-slide--active');
+          el.style.opacity = '0';
+          el.style.pointerEvents = 'none';
+        }
+      });
+
+      // Toggle tabs
+      tabs.forEach((tab, i) => {
+        if (i === index) {
+          tab.classList.add('carousel-tabs__tab--active');
+        } else {
+          tab.classList.remove('carousel-tabs__tab--active');
+          // Reset inactive fills
+          const fill = fills[i] as HTMLElement;
+          gsap.set(fill, { scaleX: 0 });
+        }
+      });
+
+      // Update live region
+      if (liveRegion) {
+        const title = tabs[index]?.querySelector('.carousel-tabs__title')?.textContent || '';
+        liveRegion.textContent = `Slide ${index + 1} of ${slideCount}: ${title}`;
+      }
+    }
+
+    // Tab click: jump to slide
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        // Seek timeline to the start of this slide
+        const seekTime = i * SLIDE_DURATION;
+        tl.seek(seekTime);
+        activateSlide(i);
+        if (isPaused) {
+          // Stay paused but show correct slide
+          tl.pause();
+        }
+      });
+    });
+
+    // Pause/play toggle (D-05, WCAG 2.2.2)
+    if (pauseBtn) {
+      const pauseLabel = pauseBtn.dataset.pauseLabel || 'Pause slideshow';
+      const playLabel = pauseBtn.dataset.playLabel || 'Play slideshow';
+
+      pauseBtn.addEventListener('click', () => {
+        isPaused = !isPaused;
+        if (isPaused) {
+          tl.pause();
+          pauseBtn.classList.add('is-paused');
+          pauseBtn.setAttribute('aria-label', playLabel);
+        } else {
+          tl.resume();
+          pauseBtn.classList.remove('is-paused');
+          pauseBtn.setAttribute('aria-label', pauseLabel);
+        }
+      });
+    }
+
+    // Auto-pause on prefers-reduced-motion
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motionQuery.matches) {
+      tl.pause();
+      isPaused = true;
+      pauseBtn?.classList.add('is-paused');
+      pauseBtn?.setAttribute('aria-label', pauseBtn?.dataset.playLabel || 'Play slideshow');
+    }
+    motionQuery.addEventListener('change', (e) => {
+      if (e.matches && !isPaused) {
+        tl.pause();
+        isPaused = true;
+        pauseBtn?.classList.add('is-paused');
+        pauseBtn?.setAttribute('aria-label', pauseBtn?.dataset.playLabel || 'Play slideshow');
+      }
+    });
+
+    // Auto-pause on keyboard focus within carousel
+    carousel.addEventListener('focusin', () => {
+      if (!isPaused) {
+        tl.pause();
+        isPaused = true;
+        pauseBtn?.classList.add('is-paused');
+        pauseBtn?.setAttribute('aria-label', pauseBtn?.dataset.playLabel || 'Play slideshow');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initHeroCarousel);
+</script>

@@ -1,0 +1,171 @@
+---
+// HeroSlide.astro -- D-02: Individual carousel slide with scattered images and CTA
+
+interface Props {
+  images: Array<{
+    src: string;
+    alt: { de: string; en: string };
+    gridCol: string;
+    gridRow: string;
+  }>;
+  subtitle?: { de: string; en: string };
+  cta: { label: { de: string; en: string }; href: string };
+  lang: 'en' | 'de';
+  index: number;
+  total: number;
+  title: { de: string; en: string };
+  isActive: boolean;
+}
+
+const { images, subtitle, cta, lang, index, total, title, isActive } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const grays = ['#b0b0b0', '#8a8a8a', '#c8c8c8', '#9e9e9e', '#d4d4d4'];
+---
+
+<div
+  class:list={['hero-slide', { 'hero-slide--active': isActive }]}
+  role="group"
+  aria-roledescription="slide"
+  aria-label={`${index + 1} of ${total}: ${title[lang]}`}
+  data-slide-index={index}
+>
+  {/* Scattered images */}
+  <div class="hero-slide__images">
+    {images.map((img, i) => (
+      <div
+        class="hero-slide__image-slot"
+        style={`grid-column: ${img.gridCol}; grid-row: ${img.gridRow}; background: ${grays[i % grays.length]};`}
+      >
+        <img
+          src={`${base}${img.src}`}
+          alt={img.alt[lang]}
+          loading="eager"
+        />
+      </div>
+    ))}
+  </div>
+
+  {/* Subtitle */}
+  {subtitle && (
+    <p class="hero-slide__subtitle">{subtitle[lang]}</p>
+  )}
+
+  {/* CTA button */}
+  <a href={cta.href} class="hero-slide__cta hover-wipe-inverse touch-pulse touch-target">
+    <span>{cta.label[lang]}</span>
+    <span class="icon">chevron_right</span>
+  </a>
+</div>
+
+<style>
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+
+  .hero-slide--active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hero-slide__images {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 80px 80px 160px 160px 160px 80px 80px 160px;
+    z-index: 1;
+  }
+
+  .hero-slide__image-slot {
+    overflow: hidden;
+    align-self: start;
+  }
+
+  .hero-slide__image-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Hide broken image placeholders */
+  .hero-slide__image-slot img[src=""],
+  .hero-slide__image-slot img:not([src]) {
+    display: none;
+  }
+
+  /* Varied aspect ratios for scattered look */
+  .hero-slide__image-slot:nth-child(1) {
+    aspect-ratio: 3 / 2;
+  }
+  .hero-slide__image-slot:nth-child(2) {
+    aspect-ratio: 3 / 2;
+    margin-top: 80px;
+  }
+  .hero-slide__image-slot:nth-child(3) {
+    aspect-ratio: 2 / 3;
+  }
+
+  .hero-slide__subtitle {
+    position: absolute;
+    bottom: 35%;
+    left: var(--space-8);
+    z-index: 2;
+    font-size: var(--type-lg);
+    color: var(--color-text);
+    max-width: 300px;
+  }
+
+  .hero-slide__cta {
+    position: absolute;
+    bottom: 40%;
+    left: var(--space-8);
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-6);
+    text-decoration: none;
+    font-size: var(--type-md);
+  }
+
+  @media (max-width: 767px) {
+    .hero-slide__images {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: 60px 60px 120px 120px 120px 60px 60px 120px;
+      left: -10vw;
+      right: -10vw;
+      width: 120vw;
+    }
+
+    .hero-slide__image-slot {
+      aspect-ratio: auto;
+    }
+
+    .hero-slide__image-slot:nth-child(1) {
+      grid-column: 1 / 5 !important;
+      grid-row: 2 / 5 !important;
+    }
+    .hero-slide__image-slot:nth-child(2) {
+      grid-column: 2 / 6 !important;
+      grid-row: 4 / 7 !important;
+    }
+    .hero-slide__image-slot:nth-child(3) {
+      grid-column: 4 / 7 !important;
+      grid-row: 3 / 7 !important;
+    }
+
+    .hero-slide__subtitle {
+      bottom: calc(var(--space-16) + 100px);
+      left: var(--space-4);
+    }
+
+    .hero-slide__cta {
+      bottom: calc(var(--space-16) + 50px);
+      left: var(--space-4);
+    }
+  }
+</style>

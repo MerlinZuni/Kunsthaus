@@ -1,0 +1,120 @@
+---
+// CarouselTabs.astro -- D-04: Progress tabs with animated fill bars for carousel
+
+interface Props {
+  slides: Array<{
+    id: string;
+    title: { de: string; en: string };
+  }>;
+  lang: 'en' | 'de';
+}
+
+const { slides, lang } = Astro.props;
+---
+
+<nav class="carousel-tabs" aria-label="Exhibition slides">
+  {slides.map((slide, i) => (
+    <button
+      class:list={['carousel-tabs__tab', { 'carousel-tabs__tab--active': i === 0 }]}
+      data-tab={i}
+      aria-label={`Go to slide ${i + 1}: ${slide.title[lang]}`}
+    >
+      <span class="carousel-tabs__title">{slide.title[lang]}</span>
+      <div class="carousel-tabs__progress">
+        <div class="carousel-tabs__tab-fill" data-tab-fill={i} />
+      </div>
+    </button>
+  ))}
+</nav>
+
+<style>
+  .carousel-tabs {
+    position: absolute;
+    bottom: var(--space-4);
+    left: var(--space-8);
+    display: inline-flex;
+    width: fit-content;
+    gap: var(--space-4);
+    z-index: 3;
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: var(--space-3) var(--space-4);
+    border-radius: 2px;
+  }
+
+  .carousel-tabs__tab {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-2) 0;
+    min-width: 120px;
+    text-align: left;
+  }
+
+  .carousel-tabs__title {
+    display: block;
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    margin-bottom: var(--space-1);
+    opacity: 0.5;
+    white-space: nowrap;
+  }
+
+  .carousel-tabs__tab--active .carousel-tabs__title {
+    opacity: 1;
+    font-weight: var(--weight-bold);
+  }
+
+  .carousel-tabs__progress {
+    height: 2px;
+    background: var(--color-decorative);
+    width: 100%;
+  }
+
+  .carousel-tabs__tab-fill {
+    height: 100%;
+    background: var(--color-text);
+    transform-origin: left;
+    transform: scaleX(0);
+    will-change: transform;
+  }
+
+  .carousel-tabs__tab--active .carousel-tabs__tab-fill {
+    transform: scaleX(1);
+  }
+
+  /* Mobile: active title visible, inactive as dots */
+  @media (max-width: 767px) {
+    .carousel-tabs {
+      left: var(--space-4);
+      right: var(--space-4);
+      bottom: var(--space-4);
+      gap: var(--space-2);
+      justify-content: center;
+    }
+
+    .carousel-tabs__tab {
+      min-width: auto;
+      padding: var(--space-2);
+    }
+
+    .carousel-tabs__title {
+      display: none;
+    }
+
+    .carousel-tabs__tab--active .carousel-tabs__title {
+      display: block;
+      font-size: var(--type-sm);
+    }
+
+    .carousel-tabs__progress {
+      width: 40px;
+    }
+
+    .carousel-tabs__tab--active .carousel-tabs__progress {
+      width: 80px;
+    }
+  }
+</style>
