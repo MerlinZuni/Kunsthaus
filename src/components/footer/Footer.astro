@@ -1,0 +1,46 @@
+---
+// Footer.astro -- D-35 through D-39: Complete footer component
+// Composes: FooterMarquee, FooterColumns, FooterBottomBar
+// Includes ReduceMotionToggle per D-40
+
+import FooterMarquee from './FooterMarquee.astro';
+import FooterColumns from './FooterColumns.astro';
+import FooterBottomBar from './FooterBottomBar.astro';
+import ReduceMotionToggle from '../ui/ReduceMotionToggle.astro';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang } = Astro.props;
+
+// Load footer content from JSON collection
+const footerEntries = await getCollection('footer');
+const footerData = footerEntries[0]?.data;
+---
+
+<footer class="site-footer">
+  <FooterMarquee />
+
+  <FooterColumns footerData={footerData} lang={lang} />
+
+  <div class="site-footer__motion-toggle">
+    <ReduceMotionToggle />
+  </div>
+
+  <FooterBottomBar footerData={footerData} lang={lang} />
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    border-top: 4px solid var(--color-text);
+    background: #ffffff;
+    z-index: 30;
+  }
+
+  .site-footer__motion-toggle {
+    padding: 0 var(--space-8) var(--space-4);
+  }
+</style>

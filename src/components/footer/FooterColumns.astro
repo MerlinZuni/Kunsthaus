@@ -1,0 +1,202 @@
+---
+// FooterColumns.astro -- D-37, D-39: Four-column footer content layout
+// Address, hours, links/media, newsletter
+
+interface Props {
+  footerData: {
+    address: {
+      street: string;
+      zip: string;
+      city: { de: string; en: string };
+      mapsUrl: string;
+      email: string;
+      phone: string;
+    };
+    schedule: Array<{
+      day: { de: string; en: string };
+      hours: { de: string; en: string };
+      closed: boolean;
+    }>;
+    openStatus: { de: string; en: string };
+    quickLinks: Array<{ id: string; label: { de: string; en: string }; href: string }>;
+    media: Array<{ id: string; label: { de: string; en: string }; href: string }>;
+    newsletter: {
+      description: { de: string; en: string };
+      linkLabel: { de: string; en: string };
+      href: string;
+    };
+  };
+  lang: 'en' | 'de';
+}
+
+const { footerData, lang } = Astro.props;
+
+const quickLinksHeading = lang === 'de' ? 'SCHNELLZUGRIFF' : 'QUICK LINKS';
+const mediaHeading = 'MEDIA';
+const newsletterHeading = 'NEWSLETTER';
+---
+
+<div class="footer-columns">
+  {/* Column 1: Address */}
+  <div class="footer-col">
+    <h3 class="footer-col__heading">KUNSTHAUS ZURICH</h3>
+    <address class="footer-col__address">
+      <p>{footerData.address.street}</p>
+      <p>{footerData.address.zip} {footerData.address.city[lang]}</p>
+    </address>
+    <div class="footer-col__links">
+      <a href={footerData.address.mapsUrl} class="link-underline" target="_blank" rel="noopener">Google Maps</a>
+      <a href={`mailto:${footerData.address.email}`} class="link-underline">{footerData.address.email}</a>
+      <a href={`tel:${footerData.address.phone}`} class="link-underline">{footerData.address.phone}</a>
+    </div>
+  </div>
+
+  {/* Column 2: Hours */}
+  <div class="footer-col">
+    <p class="footer-col__open-status">{footerData.openStatus[lang]}</p>
+    <ul class="footer-col__schedule">
+      {footerData.schedule.map((entry) => (
+        <li class:list={['footer-col__schedule-item', { 'footer-col__schedule-item--closed': entry.closed }]}>
+          <span class="footer-col__day">{entry.day[lang]}</span>
+          <span class="footer-col__hours">{entry.hours[lang]}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Column 3: Quick Links + Media */}
+  <div class="footer-col">
+    <h3 class="footer-col__heading">{quickLinksHeading}</h3>
+    <ul class="footer-col__link-list">
+      {footerData.quickLinks.map((link) => (
+        <li><a href={link.href} class="link-underline hover-wipe touch-pulse">{link.label[lang]}</a></li>
+      ))}
+    </ul>
+    <h3 class="footer-col__heading footer-col__heading--spaced">{mediaHeading}</h3>
+    <ul class="footer-col__link-list">
+      {footerData.media.map((link) => (
+        <li><a href={link.href} class="link-underline hover-wipe touch-pulse">{link.label[lang]}</a></li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Column 4: Newsletter */}
+  <div class="footer-col">
+    <h3 class="footer-col__heading">{newsletterHeading}</h3>
+    <p class="footer-col__text">{footerData.newsletter.description[lang]}</p>
+    <a
+      href={footerData.newsletter.href}
+      class="footer-col__subscribe hover-wipe-inverse touch-pulse touch-target"
+    >
+      <span>{footerData.newsletter.linkLabel[lang]}</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-12);
+    padding: var(--space-12) var(--space-8);
+  }
+
+  .footer-col {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    line-height: var(--leading-normal);
+  }
+
+  /* D-39: Section headers */
+  .footer-col__heading {
+    font-size: var(--type-md);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .footer-col__heading--spaced {
+    margin-top: var(--space-8);
+  }
+
+  .footer-col__address {
+    font-style: normal;
+    margin-bottom: var(--space-4);
+  }
+
+  .footer-col__address p {
+    margin: 0;
+  }
+
+  .footer-col__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer-col__links a {
+    display: inline-block;
+  }
+
+  .footer-col__open-status {
+    font-weight: var(--weight-bold);
+    margin-bottom: var(--space-4);
+  }
+
+  .footer-col__schedule {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .footer-col__schedule-item {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .footer-col__schedule-item--closed {
+    color: var(--color-decorative-shadow);
+  }
+
+  .footer-col__link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer-col__text {
+    margin-bottom: var(--space-6);
+  }
+
+  .footer-col__subscribe {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-6);
+    text-decoration: none;
+  }
+
+  /* Responsive: 2 columns tablet, 1 column mobile */
+  @media (max-width: 1023px) {
+    .footer-columns {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-8);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .footer-columns {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

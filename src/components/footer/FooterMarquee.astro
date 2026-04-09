@@ -1,0 +1,51 @@
+---
+// FooterMarquee.astro -- D-36: Infinite scrolling marquee banner
+// Decorative element: "KUNSTHAUS ZURICH" scrolling right-to-left
+// Pauses on hover, disabled on prefers-reduced-motion
+---
+
+<div class="footer-marquee" aria-hidden="true">
+  <div class="footer-marquee__track">
+    <span>KUNSTHAUS ZURICH &mdash; </span>
+    <span>KUNSTHAUS ZURICH &mdash; </span>
+    <span>KUNSTHAUS ZURICH &mdash; </span>
+    <span>KUNSTHAUS ZURICH &mdash; </span>
+  </div>
+</div>
+
+<style>
+  .footer-marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    padding: var(--space-8) 0;
+  }
+
+  .footer-marquee__track {
+    display: inline-flex;
+    animation: marquee-scroll 20s linear infinite;
+    will-change: transform;
+  }
+
+  .footer-marquee__track span {
+    font-size: var(--type-3xl);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    color: var(--color-text);
+    padding-right: var(--space-4);
+  }
+
+  .footer-marquee:hover .footer-marquee__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-marquee__track {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+// FooterBottomBar.astro -- D-38: Dark bottom bar with social icons, legal links, copyright
+
+interface Props {
+  footerData: {
+    social: Array<{ id: string; platform: string; url: string; icon: string }>;
+    legal: Array<{ id: string; label: { de: string; en: string }; href: string }>;
+    copyright: { de: string; en: string };
+  };
+  lang: 'en' | 'de';
+}
+
+const { footerData, lang } = Astro.props;
+---
+
+<div class="footer-bottom-bar">
+  {/* Social icons */}
+  <div class="footer-bottom-bar__social">
+    {footerData.social.map((social) => (
+      <a
+        href={social.url}
+        target="_blank"
+        rel="noopener"
+        aria-label={social.platform}
+        class="touch-target footer-bottom-bar__icon"
+      >
+        {social.icon === 'facebook' && (
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M18.9 0H1.1C.5 0 0 .5 0 1.1v17.8c0 .6.5 1.1 1.1 1.1h9.6v-7.7H8.1V9.4h2.6V7.1c0-2.6 1.6-4 3.9-4 1.1 0 2.1.1 2.3.1v2.7h-1.6c-1.3 0-1.5.6-1.5 1.5v1.9h3l-.4 2.9h-2.6V20h5.1c.6 0 1.1-.5 1.1-1.1V1.1c0-.6-.5-1.1-1.1-1.1z"/>
+          </svg>
+        )}
+        {social.icon === 'instagram' && (
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 1.8c2.7 0 3 0 4 .1 1 0 1.5.2 1.9.3.5.2.8.4 1.1.7.3.3.5.7.7 1.1.1.4.3.9.3 1.9.1 1.1.1 1.4.1 4s0 3-.1 4c0 1-.2 1.5-.3 1.9-.2.5-.4.8-.7 1.1-.3.3-.7.5-1.1.7-.4.1-.9.3-1.9.3-1.1.1-1.4.1-4 .1s-3 0-4-.1c-1 0-1.5-.2-1.9-.3-.5-.2-.8-.4-1.1-.7-.3-.3-.5-.7-.7-1.1-.1-.4-.3-.9-.3-1.9-.1-1.1-.1-1.4-.1-4s0-3 .1-4c0-1 .2-1.5.3-1.9.2-.5.4-.8.7-1.1.3-.3.7-.5 1.1-.7.4-.1.9-.3 1.9-.3 1.1-.1 1.4-.1 4-.1zM10 0C7.3 0 6.9 0 5.9.1 4.8.1 4.1.3 3.5.5c-.7.3-1.2.6-1.8 1.2C1.2 2.3.8 2.8.5 3.5.3 4 .1 4.8.1 5.9 0 6.9 0 7.3 0 10s0 3.1.1 4.1c0 1.1.2 1.8.5 2.4.3.7.6 1.2 1.2 1.8.5.5 1.1.9 1.8 1.2.6.2 1.4.4 2.4.5C6.9 20 7.3 20 10 20s3.1 0 4.1-.1c1.1 0 1.8-.2 2.4-.5.7-.3 1.2-.6 1.8-1.2.5-.5.9-1.1 1.2-1.8.2-.6.4-1.4.5-2.4C20 13.1 20 12.7 20 10s0-3.1-.1-4.1c0-1.1-.2-1.8-.5-2.4-.3-.7-.6-1.2-1.2-1.8C17.7 1.2 17.2.8 16.5.5 15.9.3 15.1.1 14.1.1 13.1 0 12.7 0 10 0z"/>
+            <path d="M10 4.9a5.1 5.1 0 100 10.2 5.1 5.1 0 000-10.2zm0 8.4a3.3 3.3 0 110-6.6 3.3 3.3 0 010 6.6z"/>
+            <circle cx="14.4" cy="5.6" r="1.2"/>
+          </svg>
+        )}
+      </a>
+    ))}
+  </div>
+
+  {/* Legal links */}
+  <div class="footer-bottom-bar__legal">
+    {footerData.legal.map((item, i) => (
+      <>
+        <a href={item.href} class="link-underline footer-bottom-bar__legal-link">{item.label[lang]}</a>
+        {i < footerData.legal.length - 1 && <span class="footer-bottom-bar__separator" aria-hidden="true">&middot;</span>}
+      </>
+    ))}
+  </div>
+
+  {/* Copyright */}
+  <div class="footer-bottom-bar__copyright">
+    {footerData.copyright[lang]}
+  </div>
+</div>
+
+<style>
+  .footer-bottom-bar {
+    background: #0f0f0f;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4) var(--space-8);
+  }
+
+  .footer-bottom-bar__social {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .footer-bottom-bar__icon {
+    color: #ffffff;
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+
+  .footer-bottom-bar__icon:hover {
+    opacity: 0.7;
+  }
+
+  .footer-bottom-bar__legal {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer-bottom-bar__legal-link {
+    font-size: var(--type-sm);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .footer-bottom-bar__separator {
+    color: #ffffff;
+    opacity: 0.5;
+  }
+
+  .footer-bottom-bar__copyright {
+    font-size: var(--type-sm);
+    color: #ffffff;
+    opacity: 0.8;
+  }
+
+  /* Responsive: stack vertically on mobile */
+  @media (max-width: 767px) {
+    .footer-bottom-bar {
+      flex-direction: column;
+      gap: var(--space-4);
+      text-align: center;
+      padding: var(--space-6) var(--space-4);
+    }
+  }
+</style>

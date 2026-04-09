@@ -1,0 +1,100 @@
+---
+// ReduceMotionToggle.astro -- D-40: Manual reduce-motion toggle
+// Respects OS prefers-reduced-motion as default, user can override via localStorage
+---
+
+<div class="reduce-motion-toggle">
+  <label class="reduce-motion-toggle__label touch-target">
+    <input
+      type="checkbox"
+      class="reduce-motion-toggle__input"
+      id="reduce-motion-toggle"
+      aria-label="Reduce motion"
+    />
+    <span class="reduce-motion-toggle__switch" aria-hidden="true"></span>
+    <span class="reduce-motion-toggle__text">Reduce motion</span>
+  </label>
+</div>
+
+<script>
+  const toggle = document.getElementById('reduce-motion-toggle') as HTMLInputElement;
+  if (toggle) {
+    // Check localStorage first, then OS preference
+    const stored = localStorage.getItem('reduce-motion');
+    const osPrefers = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shouldReduce = stored !== null ? stored === 'true' : osPrefers;
+
+    toggle.checked = shouldReduce;
+    if (shouldReduce) {
+      document.documentElement.classList.add('reduce-motion');
+    }
+
+    toggle.addEventListener('change', () => {
+      const reduced = toggle.checked;
+      localStorage.setItem('reduce-motion', String(reduced));
+      document.documentElement.classList.toggle('reduce-motion', reduced);
+    });
+  }
+</script>
+
+<style>
+  .reduce-motion-toggle {
+    padding: var(--space-4) 0;
+  }
+
+  .reduce-motion-toggle__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    font-size: var(--type-sm);
+    color: var(--color-text);
+  }
+
+  .reduce-motion-toggle__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .reduce-motion-toggle__switch {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: var(--color-decorative);
+    border-radius: 10px;
+    transition: background 200ms ease;
+    flex-shrink: 0;
+  }
+
+  .reduce-motion-toggle__switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: transform 200ms ease;
+  }
+
+  .reduce-motion-toggle__input:checked + .reduce-motion-toggle__switch {
+    background: var(--color-text);
+  }
+
+  .reduce-motion-toggle__input:checked + .reduce-motion-toggle__switch::after {
+    transform: translateX(16px);
+  }
+
+  .reduce-motion-toggle__input:focus-visible + .reduce-motion-toggle__switch {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+</style>
