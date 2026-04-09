@@ -1,0 +1,134 @@
+---
+// ExhibitionCard.astro -- D-31, D-32: Exhibition card with 60/40 image-text split
+// Used inside PinnedNarrative for exhibition content
+
+interface Props {
+  title: { de: string; en: string };
+  description?: { de: string; en: string };
+  image?: string;
+  date?: string;
+  cta?: { label: { de: string; en: string }; href: string };
+  lang: 'en' | 'de';
+}
+
+const { title, description, image, date, cta, lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const imageSrc = image ? `${base}${image}` : '';
+---
+
+<article class="exhibition-card touch-pulse">
+  <div class="exhibition-card__image-area">
+    {imageSrc ? (
+      <img
+        src={imageSrc}
+        alt={title[lang]}
+        class="exhibition-card__img"
+        loading="lazy"
+      />
+    ) : (
+      <div class="exhibition-card__placeholder" aria-label={title[lang]}>
+        <span class="icon" style="font-size: 48px; opacity: 0.3;">image</span>
+      </div>
+    )}
+  </div>
+  <div class="exhibition-card__text-area">
+    <h3 class="exhibition-card__title">{title[lang]}</h3>
+    {date && (
+      <span class="exhibition-card__date">{date}</span>
+    )}
+    {description && (
+      <p class="exhibition-card__description">{description[lang]}</p>
+    )}
+    {cta && (
+      <a href={cta.href} class="exhibition-card__cta hover-wipe-inverse touch-pulse touch-target">
+        <span>{typeof cta.label === 'object' ? cta.label[lang] : cta.label}</span>
+        <span class="icon">chevron_right</span>
+      </a>
+    )}
+  </div>
+</article>
+
+<style>
+  .exhibition-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--color-surface);
+    height: 100%;
+  }
+
+  .exhibition-card__image-area {
+    flex: 0 0 60vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .exhibition-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 3 / 2;
+  }
+
+  .exhibition-card__placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 40vh;
+    background: var(--color-decorative);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 3 / 2;
+  }
+
+  .exhibition-card__text-area {
+    flex: 1;
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .exhibition-card__title {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-tight);
+  }
+
+  .exhibition-card__date {
+    font-size: var(--type-sm);
+    color: var(--color-decorative-shadow);
+  }
+
+  .exhibition-card__description {
+    font-size: var(--type-md);
+    line-height: var(--leading-normal);
+    max-width: 45ch;
+  }
+
+  .exhibition-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    text-decoration: none;
+    font-size: var(--type-md);
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  @media (max-width: 767px) {
+    .exhibition-card__image-area {
+      flex: 0 0 auto;
+    }
+
+    .exhibition-card__img {
+      aspect-ratio: 4 / 3;
+    }
+
+    .exhibition-card__placeholder {
+      min-height: 30vh;
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

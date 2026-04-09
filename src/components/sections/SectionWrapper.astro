@@ -1,6 +1,6 @@
 ---
-// SectionWrapper.astro -- D-25, D-26: Section with stacking scroll and background rotation
-// Full implementation with GSAP ScrollTrigger will come in Phase 3
+// SectionWrapper.astro -- D-25, D-26, D-27: Section with stacking scroll and background rotation
+// GSAP ScrollTrigger stacking effect: pin, scale, rotate (desktop), scale+opacity (tablet), fade-up (mobile)
 
 interface Props {
   index: number;
@@ -17,6 +17,8 @@ const zIndex = 20 + index;
   class="stacking-section section-spacing"
   data-bg-step={bgStep}
   data-section={sectionId}
+  data-section-index={index}
+  data-section-name={sectionName}
   id={`section-${sectionId}`}
   style={`z-index: ${zIndex};`}
   aria-label={sectionName}
@@ -32,6 +34,136 @@ const zIndex = 20 + index;
     </div>
   </div>
 </section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initSectionStacking() {
+    // Kill existing ScrollTriggers for stacking sections
+    ScrollTrigger.getAll()
+      .filter(st => (st.vars as any)._stackingSection)
+      .forEach(st => st.kill());
+
+    const sections = gsap.utils.toArray<HTMLElement>('.stacking-section');
+    if (!sections.length) return;
+
+    // Check reduced motion preference
+    const reduceMotion =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.classList.contains('reduce-motion');
+
+    if (reduceMotion) return;
+
+    const lastIndex = sections.length - 1;
+
+    ScrollTrigger.matchMedia({
+      // Desktop: full stacking effect with pin, scale, rotate, opacity
+      '(min-width: 1024px)': function () {
+        sections.forEach((section, i) => {
+          if (i === lastIndex) return; // Last section does NOT pin
+
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top top',
+            end: 'bottom top',
+            pin: false,
+            pinSpacing: false,
+            scrub: true,
+            _stackingSection: true,
+            onUpdate: (self) => {
+              const progress = self.progress;
+              const scale = 1 - progress * 0.1;
+              const rotation = progress * (i % 2 === 0 ? 2 : -3);
+              const opacity = 1 - progress * 0.6;
+
+              gsap.set(section, {
+                scale,
+                rotation,
+                opacity,
+                transformOrigin: 'center center',
+              });
+            },
+          } as ScrollTrigger.Vars & { _stackingSection: boolean });
+        });
+
+        ScrollTrigger.refresh();
+      },
+
+      // Tablet: scale + opacity only, no rotation
+      '(min-width: 768px) and (max-width: 1023px)': function () {
+        sections.forEach((section, i) => {
+          if (i === lastIndex) return;
+
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+            _stackingSection: true,
+            onUpdate: (self) => {
+              const progress = self.progress;
+              const scale = 1 - progress * 0.1;
+              const opacity = 1 - progress * 0.6;
+
+              gsap.set(section, {
+                scale,
+                opacity,
+                transformOrigin: 'center center',
+              });
+            },
+          } as ScrollTrigger.Vars & { _stackingSection: boolean });
+        });
+
+        ScrollTrigger.refresh();
+      },
+
+      // Mobile: simple fade-up entrance
+      '(max-width: 767px)': function () {
+        sections.forEach((section) => {
+          gsap.from(section, {
+            opacity: 0,
+            y: 40,
+            scrollTrigger: {
+              trigger: section,
+              scrub: true,
+              start: 'top 80%',
+              end: 'top 40%',
+              _stackingSection: true,
+            } as ScrollTrigger.Vars & { _stackingSection: boolean },
+          });
+        });
+
+        ScrollTrigger.refresh();
+      },
+    });
+
+    // Dispatch sectionchange events for SectionProgress
+    sections.forEach((section, i) => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => {
+          window.dispatchEvent(
+            new CustomEvent('sectionchange', { detail: { index: i, name: section.dataset.sectionName } })
+          );
+        },
+        onEnterBack: () => {
+          window.dispatchEvent(
+            new CustomEvent('sectionchange', { detail: { index: i, name: section.dataset.sectionName } })
+          );
+        },
+      });
+    });
+  }
+
+  // Initialize on load and after Astro page transitions
+  initSectionStacking();
+  document.addEventListener('astro:after-swap', initSectionStacking);
+</script>
 
 <style>
   .section-inner {

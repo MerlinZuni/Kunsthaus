@@ -1,7 +1,9 @@
 ---
-// PinnedNarrative.astro -- D-28: Pinned narrative sequence with scrolling cards
-// GSAP ScrollTrigger pinning will be added in Phase 3
-// Static card list for Phase 2
+// PinnedNarrative.astro -- D-28, D-33: Pinned narrative sequence with scrolling cards
+// GSAP ScrollTrigger: desktop pins section, cards crossfade one at a time
+// Mobile: cards stack vertically with normal scroll
+
+import ExhibitionCard from './ExhibitionCard.astro';
 
 interface Props {
   contentType: string;
@@ -17,45 +19,201 @@ interface Props {
 }
 
 const { contentType, items, lang } = Astro.props;
+const isExhibition = contentType === 'exhibitions';
 ---
 
-<div class="pinned-narrative" data-content-type={contentType}>
+<div class="pinned-narrative" data-content-type={contentType} data-card-count={items.length}>
   <div class="pinned-narrative__cards">
     {items.map((item, i) => (
-      <article
-        class:list={['pinned-narrative__card', { 'pinned-narrative__card--even': i % 2 === 0, 'pinned-narrative__card--odd': i % 2 === 1 }]}
+      <div
+        class:list={[
+          'pinned-narrative__card-wrap',
+          { 'pinned-narrative__card-wrap--even': i % 2 === 0 },
+          { 'pinned-narrative__card-wrap--odd': i % 2 === 1 },
+        ]}
+        data-card-index={i}
       >
-        {item.image && (
-          <div class="pinned-narrative__card-image">
-            <img src={item.image} alt={item.title[lang]} loading="lazy" />
-          </div>
+        {isExhibition ? (
+          <ExhibitionCard
+            title={item.title}
+            description={item.description}
+            image={item.image}
+            date={item.date}
+            lang={lang}
+          />
+        ) : (
+          <article class="pinned-narrative__card">
+            {item.image && (
+              <div class="pinned-narrative__card-image">
+                <img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${item.image}`} alt={item.title[lang]} loading="lazy" />
+              </div>
+            )}
+            <div class="pinned-narrative__card-content">
+              <h3 class="pinned-narrative__card-title sub-heading">{item.title[lang]}</h3>
+              {item.date && (
+                <span class="pinned-narrative__card-date">{item.date}</span>
+              )}
+              {item.description && (
+                <p class="pinned-narrative__card-desc">{item.description[lang]}</p>
+              )}
+              {item.link && (
+                <a href={item.link} class="pinned-narrative__card-link link-underline hover-wipe touch-pulse">
+                  <span>{lang === 'de' ? 'Mehr erfahren' : 'Learn more'}</span>
+                </a>
+              )}
+            </div>
+          </article>
         )}
-        <div class="pinned-narrative__card-content">
-          <h3 class="pinned-narrative__card-title sub-heading">{item.title[lang]}</h3>
-          {item.date && (
-            <span class="pinned-narrative__card-date">{item.date}</span>
-          )}
-          {item.description && (
-            <p class="pinned-narrative__card-desc">{item.description[lang]}</p>
-          )}
-          {item.link && (
-            <a href={item.link} class="pinned-narrative__card-link link-underline hover-wipe touch-pulse">
-              <span>{lang === 'de' ? 'Mehr erfahren' : 'Learn more'}</span>
-            </a>
-          )}
-        </div>
-      </article>
+      </div>
     ))}
   </div>
 </div>
 
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initPinnedNarrative() {
+    const narratives = document.querySelectorAll<HTMLElement>('.pinned-narrative');
+    if (!narratives.length) return;
+
+    const reduceMotion =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.classList.contains('reduce-motion');
+
+    if (reduceMotion) return;
+
+    narratives.forEach((narrative) => {
+      const cards = narrative.querySelectorAll<HTMLElement>('.pinned-narrative__card-wrap');
+      if (cards.length < 2) return;
+
+      const cardCount = cards.length;
+
+      ScrollTrigger.matchMedia({
+        // Desktop: pin section, crossfade cards
+        '(min-width: 768px)': function () {
+          // Set total scroll distance
+          const totalHeight = cardCount * 100; // vh per card
+          narrative.style.height = `${totalHeight}vh`;
+
+          const cardsContainer = narrative.querySelector('.pinned-narrative__cards') as HTMLElement;
+          if (!cardsContainer) return;
+
+          // Initially show only first card, hide others
+          cards.forEach((card, i) => {
+            if (i > 0) {
+              gsap.set(card, { opacity: 0, y: 60 });
+            }
+          });
+
+          ScrollTrigger.create({
+            trigger: narrative,
+            start: 'top top',
+            end: `+=${totalHeight}vh`,
+            pin: true,
+            pinSpacing: true,
+            scrub: true,
+            onUpdate: (self) => {
+              const progress = self.progress * cardCount;
+              const activeIndex = Math.min(Math.floor(progress), cardCount - 1);
+              const cardProgress = progress - activeIndex;
+
+              cards.forEach((card, i) => {
+                if (i === activeIndex) {
+                  // Current card: visible, fading out as we progress
+                  const fadeOut = i < cardCount - 1 ? 1 - cardProgress * 0.8 : 1;
+                  const slideOut = i < cardCount - 1 ? -cardProgress * 40 : 0;
+                  gsap.set(card, { opacity: fadeOut, y: slideOut, zIndex: 2 });
+                } else if (i === activeIndex + 1) {
+                  // Next card: fading in
+                  gsap.set(card, { opacity: cardProgress, y: 60 * (1 - cardProgress), zIndex: 3 });
+                } else if (i < activeIndex) {
+                  // Past cards: hidden
+                  gsap.set(card, { opacity: 0, y: -40, zIndex: 1 });
+                } else {
+                  // Future cards: hidden below
+                  gsap.set(card, { opacity: 0, y: 60, zIndex: 1 });
+                }
+              });
+            },
+          });
+        },
+
+        // Mobile: normal stacked scroll
+        '(max-width: 767px)': function () {
+          narrative.style.height = 'auto';
+
+          cards.forEach((card) => {
+            gsap.set(card, { opacity: 1, y: 0, zIndex: 'auto' });
+
+            gsap.from(card, {
+              opacity: 0,
+              y: 30,
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 85%',
+                end: 'top 60%',
+                scrub: true,
+              },
+            });
+          });
+        },
+      });
+    });
+  }
+
+  initPinnedNarrative();
+  document.addEventListener('astro:after-swap', initPinnedNarrative);
+</script>
+
 <style>
+  .pinned-narrative {
+    position: relative;
+  }
+
   .pinned-narrative__cards {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-12);
   }
 
+  @media (min-width: 768px) {
+    .pinned-narrative__cards {
+      position: relative;
+      min-height: 80vh;
+    }
+
+    .pinned-narrative__card-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      will-change: transform, opacity;
+    }
+
+    .pinned-narrative__card-wrap--even {
+      padding-right: 40%;
+    }
+
+    .pinned-narrative__card-wrap--odd {
+      padding-left: 40%;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .pinned-narrative__card-wrap {
+      position: relative;
+    }
+
+    .pinned-narrative__cards {
+      gap: var(--space-16);
+    }
+  }
+
+  /* Generic card styles (non-exhibition content) */
   .pinned-narrative__card {
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -63,27 +221,16 @@ const { contentType, items, lang } = Astro.props;
     align-items: center;
   }
 
-  .pinned-narrative__card--odd {
-    grid-template-columns: 2fr 3fr;
-  }
-
-  .pinned-narrative__card--odd .pinned-narrative__card-image {
-    order: 2;
-  }
-
   .pinned-narrative__card-image {
     overflow: hidden;
     aspect-ratio: 3 / 2;
+    background: #d1d5db;
   }
 
   .pinned-narrative__card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .pinned-narrative__card-image {
-    background: #d1d5db;
   }
 
   .pinned-narrative__card-content {
@@ -117,13 +264,8 @@ const { contentType, items, lang } = Astro.props;
   }
 
   @media (max-width: 767px) {
-    .pinned-narrative__card,
-    .pinned-narrative__card--odd {
+    .pinned-narrative__card {
       grid-template-columns: 1fr;
-    }
-
-    .pinned-narrative__card--odd .pinned-narrative__card-image {
-      order: unset;
     }
   }
 </style>

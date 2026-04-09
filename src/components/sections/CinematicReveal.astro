@@ -1,7 +1,6 @@
 ---
 // CinematicReveal.astro -- D-28: Full-bleed image with cinematic scroll reveal
-// Animation via GSAP ScrollTrigger will be added in Phase 3
-// Static layout for Phase 2
+// GSAP ScrollTrigger: clipPath expansion, overlay fade, text slide-in
 
 interface Props {
   contentType: string;
@@ -10,21 +9,39 @@ interface Props {
     subtitle?: { de: string; en: string };
     image?: string;
     description?: { de: string; en: string };
-    cta?: { label: string; href: string };
+    cta?: { label: { de: string; en: string }; href: string };
   };
   lang: 'en' | 'de';
 }
 
 const { contentType, data, lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const imageSrc = data.image ? `${base}${data.image}` : '';
 ---
 
 <div class="cinematic-reveal" data-content-type={contentType}>
-  {data.image && (
-    <div class="cinematic-reveal__image">
-      <img src={data.image} alt={data.title?.[lang] || ''} loading="lazy" />
+  <div class="cinematic-reveal__visual">
+    <div class="cinematic-reveal__image-wrap">
+      {imageSrc ? (
+        <img
+          src={imageSrc}
+          alt={data.title?.[lang] || ''}
+          class="cinematic-reveal__img"
+          loading="lazy"
+        />
+      ) : (
+        <div class="cinematic-reveal__placeholder" aria-label={data.title?.[lang] || ''}>
+          <span class="icon" style="font-size: 48px; opacity: 0.3;">image</span>
+        </div>
+      )}
+      <div class="cinematic-reveal__overlay" aria-hidden="true"></div>
     </div>
-  )}
+  </div>
+
   <div class="cinematic-reveal__content">
+    {data.title && (
+      <h3 class="cinematic-reveal__title">{data.title[lang]}</h3>
+    )}
     {data.subtitle && (
       <p class="cinematic-reveal__subtitle">{data.subtitle[lang]}</p>
     )}
@@ -33,12 +50,85 @@ const { contentType, data, lang } = Astro.props;
     )}
     {data.cta && (
       <a href={data.cta.href} class="cinematic-reveal__cta hover-wipe-inverse touch-pulse touch-target">
-        <span>{data.cta.label}</span>
+        <span>{typeof data.cta.label === 'object' ? data.cta.label[lang] : data.cta.label}</span>
         <span class="icon">chevron_right</span>
       </a>
     )}
   </div>
 </div>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initCinematicReveal() {
+    const reveals = document.querySelectorAll<HTMLElement>('.cinematic-reveal');
+    if (!reveals.length) return;
+
+    const reduceMotion =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.classList.contains('reduce-motion');
+
+    if (reduceMotion) return;
+
+    reveals.forEach((reveal) => {
+      const overlay = reveal.querySelector('.cinematic-reveal__overlay');
+      const imageWrap = reveal.querySelector('.cinematic-reveal__image-wrap');
+      const title = reveal.querySelector('.cinematic-reveal__title');
+      const subtitle = reveal.querySelector('.cinematic-reveal__subtitle');
+      const content = reveal.querySelector('.cinematic-reveal__content');
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: reveal,
+          scrub: true,
+          start: 'top 80%',
+          end: 'top 20%',
+        },
+      });
+
+      // Overlay fades out
+      if (overlay) {
+        tl.fromTo(overlay, { opacity: 1 }, { opacity: 0, duration: 1 }, 0);
+      }
+
+      // Image clipPath expands from inset to full
+      if (imageWrap) {
+        const isMobile = window.innerWidth < 768;
+        const startClip = isMobile
+          ? 'inset(0% 0% 40% 0%)'   // Mobile: vertical wipe from bottom
+          : 'inset(20% 20% 20% 20%)'; // Desktop: all sides
+
+        tl.fromTo(
+          imageWrap,
+          { clipPath: startClip },
+          { clipPath: 'inset(0% 0% 0% 0%)', duration: 1 },
+          0
+        );
+      }
+
+      // Title enters from left
+      if (title) {
+        tl.fromTo(title, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 0.2);
+      }
+
+      // Subtitle enters from right
+      if (subtitle) {
+        tl.fromTo(subtitle, { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 0.3);
+      }
+
+      // Content fades in
+      if (content && !title && !subtitle) {
+        tl.fromTo(content, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 0.2);
+      }
+    });
+  }
+
+  initCinematicReveal();
+  document.addEventListener('astro:after-swap', initCinematicReveal);
+</script>
 
 <style>
   .cinematic-reveal {
@@ -49,19 +139,37 @@ const { contentType, data, lang } = Astro.props;
     min-height: 60vh;
   }
 
-  .cinematic-reveal__image {
-    overflow: hidden;
-    aspect-ratio: 3 / 2;
+  .cinematic-reveal__visual {
+    position: relative;
   }
 
-  .cinematic-reveal__image img {
+  .cinematic-reveal__image-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    will-change: clip-path;
+  }
+
+  .cinematic-reveal__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .cinematic-reveal__image {
-    background: #d1d5db;
+  .cinematic-reveal__placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--color-decorative);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cinematic-reveal__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--color-surface);
+    pointer-events: none;
   }
 
   .cinematic-reveal__content {
@@ -101,6 +209,10 @@ const { contentType, data, lang } = Astro.props;
     .cinematic-reveal {
       grid-template-columns: 1fr;
       min-height: auto;
+    }
+
+    .cinematic-reveal__image-wrap {
+      aspect-ratio: 4 / 3;
     }
   }
 </style>
