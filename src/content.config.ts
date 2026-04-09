@@ -9,6 +9,23 @@ const localizedText = z.object({
   fr: z.string().optional(),
 });
 
+// Hero carousel slide sub-schema -- per D-01 through D-04
+const heroSlide = z.object({
+  id: z.string(),
+  title: localizedText,
+  subtitle: localizedText.optional(),
+  cta: z.object({
+    label: localizedText,
+    href: z.string(),
+  }),
+  images: z.array(z.object({
+    src: z.string(),
+    alt: localizedText,
+    gridCol: z.string(),
+    gridRow: z.string(),
+  })),
+});
+
 // Planning homepage sections -- per D-13 priority hierarchy
 const planningHomepage = defineCollection({
   loader: file("src/content/planning/homepage.json"),
@@ -20,6 +37,7 @@ const planningHomepage = defineCollection({
     subtitle: localizedText.optional(),
     body: localizedText.optional(),
     image: z.string().optional(),
+    slides: z.array(heroSlide).optional(),
     items: z.array(z.object({
       id: z.string(),
       title: localizedText,
@@ -73,8 +91,69 @@ const shared = defineCollection({
   }),
 });
 
+// Footer content -- per D-35 through D-39
+const footerCollection = defineCollection({
+  loader: file("src/content/shared/footer.json"),
+  schema: z.object({
+    id: z.string(),
+    address: z.object({
+      street: z.string(),
+      zip: z.string(),
+      city: localizedText,
+      mapsUrl: z.string(),
+      email: z.string(),
+      phone: z.string(),
+    }),
+    schedule: z.array(z.object({
+      day: localizedText,
+      hours: localizedText,
+      closed: z.boolean(),
+    })),
+    openStatus: localizedText,
+    quickLinks: z.array(z.object({
+      id: z.string(),
+      label: localizedText,
+      href: z.string(),
+    })),
+    media: z.array(z.object({
+      id: z.string(),
+      label: localizedText,
+      href: z.string(),
+    })),
+    newsletter: z.object({
+      description: localizedText,
+      linkLabel: localizedText,
+      href: z.string(),
+    }),
+    social: z.array(z.object({
+      id: z.string(),
+      platform: z.string(),
+      url: z.string(),
+      icon: z.string(),
+    })),
+    legal: z.array(z.object({
+      id: z.string(),
+      label: localizedText,
+      href: z.string(),
+    })),
+    copyright: localizedText,
+  }),
+});
+
+// UI string labels -- per D-22, D-41, D-44
+const uiStrings = defineCollection({
+  loader: file("src/content/shared/ui-strings.json"),
+  schema: z.object({
+    id: z.string(),
+    key: z.string(),
+    value: localizedText,
+  }),
+});
+
 export const collections = {
   planning: planningHomepage,
   onsite: onsiteExhibition,
   shared,
+  footer: footerCollection,
+  uiStrings,
 };

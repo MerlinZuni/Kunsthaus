@@ -1,8 +1,6 @@
 [
-  { "id": "home", "label": { "de": "Startseite", "en": "Home" }, "href": "/" },
-  { "id": "exhibitions", "label": { "de": "Ausstellungen", "en": "Exhibitions" }, "href": "/exhibitions" },
-  { "id": "visit", "label": { "de": "Besuch planen", "en": "Plan Your Visit" }, "href": "/visit" },
+  { "id": "visit", "label": { "de": "Besuchen", "en": "Visit us" }, "href": "/visit" },
   { "id": "collection", "label": { "de": "Sammlung", "en": "Collection" }, "href": "/collection" },
-  { "id": "about", "label": { "de": "\u00dcber uns", "en": "About" }, "href": "/about" },
-  { "id": "mode-toggle", "label": { "de": "Modus wechseln", "en": "Switch Mode" }, "icon": "toggle" }
+  { "id": "exhibitions", "label": { "de": "Ausstellungen", "en": "Exhibitions" }, "href": "/exhibitions" },
+  { "id": "about", "label": { "de": "Uber uns", "en": "About" }, "href": "/about" }
 ]

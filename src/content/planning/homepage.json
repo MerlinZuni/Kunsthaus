@@ -15,7 +15,51 @@
       "de": "Entdecken Sie Meisterwerke vom 13. Jahrhundert bis zur Gegenwart in einem der gr\u00f6ssten Kunstmuseen der Schweiz.",
       "en": "Discover masterpieces from the 13th century to the present in one of Switzerland's largest art museums."
     },
-    "image": "/images/hero-kunsthaus.jpg"
+    "image": "/images/hero-kunsthaus.jpg",
+    "slides": [
+      {
+        "id": "slide-kerry-marshall",
+        "title": { "de": "Kerry James Marshall", "en": "Kerry James Marshall" },
+        "subtitle": { "de": "Eine umfassende Retrospektive", "en": "A comprehensive retrospective" },
+        "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/kerry-james-marshall" },
+        "images": [
+          { "src": "/images/exhibitions/kerry-james-marshall-1.jpg", "alt": { "de": "Kerry James Marshall Werk", "en": "Kerry James Marshall artwork" }, "gridCol": "2/7", "gridRow": "2/5" },
+          { "src": "/images/exhibitions/kerry-james-marshall-2.jpg", "alt": { "de": "Kerry James Marshall Detail", "en": "Kerry James Marshall detail" }, "gridCol": "5/10", "gridRow": "4/7" }
+        ]
+      },
+      {
+        "id": "slide-sammlung-highlights",
+        "title": { "de": "Sammlung Highlights", "en": "Collection Highlights" },
+        "subtitle": { "de": "Meisterwerke neu entdecken", "en": "Rediscover masterpieces" },
+        "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/sammlung-highlights" },
+        "images": [
+          { "src": "/images/exhibitions/sammlung-highlights-1.jpg", "alt": { "de": "Sammlung Highlights Hauptwerk", "en": "Collection highlights main piece" }, "gridCol": "3/8", "gridRow": "1/4" },
+          { "src": "/images/exhibitions/sammlung-highlights-2.jpg", "alt": { "de": "Sammlung Highlights Detail", "en": "Collection highlights detail" }, "gridCol": "6/11", "gridRow": "3/6" },
+          { "src": "/images/exhibitions/sammlung-highlights-3.jpg", "alt": { "de": "Sammlung Highlights Raum", "en": "Collection highlights gallery view" }, "gridCol": "1/5", "gridRow": "5/8" }
+        ]
+      },
+      {
+        "id": "slide-giacometti-hodler",
+        "title": { "de": "Giacometti / Hodler", "en": "Giacometti / Hodler" },
+        "subtitle": { "de": "Schweizer Meister im Dialog", "en": "Swiss masters in dialogue" },
+        "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/giacometti-hodler" },
+        "images": [
+          { "src": "/images/exhibitions/giacometti-hodler-1.jpg", "alt": { "de": "Giacometti Skulptur", "en": "Giacometti sculpture" }, "gridCol": "4/9", "gridRow": "2/6" },
+          { "src": "/images/exhibitions/giacometti-hodler-2.jpg", "alt": { "de": "Hodler Landschaft", "en": "Hodler landscape" }, "gridCol": "7/12", "gridRow": "1/4" }
+        ]
+      },
+      {
+        "id": "slide-photography-now",
+        "title": { "de": "Photography Now", "en": "Photography Now" },
+        "subtitle": { "de": "Zeitgen\u00f6ssische Fotografie heute", "en": "Contemporary photography today" },
+        "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/photography-now" },
+        "images": [
+          { "src": "/images/exhibitions/photography-now-1.jpg", "alt": { "de": "Photography Now Werk", "en": "Photography Now artwork" }, "gridCol": "1/6", "gridRow": "3/7" },
+          { "src": "/images/exhibitions/photography-now-2.jpg", "alt": { "de": "Photography Now Detail", "en": "Photography Now detail" }, "gridCol": "5/10", "gridRow": "1/4" },
+          { "src": "/images/exhibitions/photography-now-3.jpg", "alt": { "de": "Photography Now Installation", "en": "Photography Now installation" }, "gridCol": "8/12", "gridRow": "4/7" }
+        ]
+      }
+    ]
   },
   {
     "id": "key-info",
@@ -55,15 +99,34 @@
       {
         "id": "kerry-james-marshall",
         "title": { "de": "Kerry James Marshall", "en": "Kerry James Marshall" },
-        "description": { "de": "Eine umfassende Retrospektive des einflussreichen amerikanischen K\u00fcnstlers", "en": "A comprehensive retrospective of the influential American artist" },
+        "description": { "de": "Eine umfassende Retrospektive des einflussreichen amerikanischen K\u00fcnstlers, die sein bahnbrechendes Schaffen \u00fcber f\u00fcnf Jahrzehnte pr\u00e4sentiert.", "en": "A comprehensive retrospective of the influential American artist, showcasing his groundbreaking work across five decades." },
         "image": "/images/exhibitions/kerry-james-marshall.jpg",
-        "date": "15.03.2026 \u2013 22.06.2026"
+        "date": "15.03.2026 \u2013 22.06.2026",
+        "link": "/exhibitions/kerry-james-marshall"
       },
       {
         "id": "sammlung-highlights",
         "title": { "de": "Sammlung Highlights", "en": "Collection Highlights" },
-        "description": { "de": "Meisterwerke aus der st\u00e4ndigen Sammlung neu entdecken", "en": "Rediscover masterpieces from the permanent collection" },
-        "image": "/images/exhibitions/collection-highlights.jpg"
+        "description": { "de": "Meisterwerke aus der st\u00e4ndigen Sammlung neu entdecken \u2013 von Monet bis Giacometti.", "en": "Rediscover masterpieces from the permanent collection \u2013 from Monet to Giacometti." },
+        "image": "/images/exhibitions/collection-highlights.jpg",
+        "date": "Dauerausstellung",
+        "link": "/exhibitions/sammlung-highlights"
+      },
+      {
+        "id": "giacometti-hodler",
+        "title": { "de": "Giacometti / Hodler", "en": "Giacometti / Hodler" },
+        "description": { "de": "Zwei Schweizer Meister im Dialog \u2013 Skulptur trifft Malerei in einer einzigartigen Gegen\u00fcberstellung.", "en": "Two Swiss masters in dialogue \u2013 sculpture meets painting in a unique juxtaposition." },
+        "image": "/images/exhibitions/giacometti-hodler.jpg",
+        "date": "01.04.2026 \u2013 15.08.2026",
+        "link": "/exhibitions/giacometti-hodler"
+      },
+      {
+        "id": "photography-now",
+        "title": { "de": "Photography Now", "en": "Photography Now" },
+        "description": { "de": "Zeitgen\u00f6ssische Fotografie von aufstrebenden und etablierten K\u00fcnstlern aus der ganzen Welt.", "en": "Contemporary photography from emerging and established artists around the world." },
+        "image": "/images/exhibitions/photography-now.jpg",
+        "date": "10.05.2026 \u2013 30.09.2026",
+        "link": "/exhibitions/photography-now"
       }
     ]
   },
@@ -79,14 +142,38 @@
       {
         "id": "membership",
         "title": { "de": "Mitgliedschaft", "en": "Membership" },
-        "description": { "de": "Werden Sie Mitglied und geniessen Sie exklusive Vorteile", "en": "Become a member and enjoy exclusive benefits" },
+        "description": { "de": "Werden Sie Mitglied und geniessen Sie exklusive Vorteile und unbegrenzten Eintritt.", "en": "Become a member and enjoy exclusive benefits and unlimited access." },
         "link": "/membership"
       },
       {
-        "id": "shop",
-        "title": { "de": "Kunsthaus Shop", "en": "Kunsthaus Shop" },
-        "description": { "de": "Kunstb\u00fccher, Poster und einzigartige Geschenke", "en": "Art books, posters and unique gifts" },
-        "link": "/shop"
+        "id": "design-shop",
+        "title": { "de": "Design Shop", "en": "Design Shop" },
+        "description": { "de": "Ausgew\u00e4hlte Designobjekte, K\u00fcnstlereditionen und besondere Geschenke.", "en": "Curated design objects, artist editions and special gifts." },
+        "link": "/shop/design"
+      },
+      {
+        "id": "art-shop",
+        "title": { "de": "Art Shop", "en": "Art Shop" },
+        "description": { "de": "Kunstb\u00fccher, Poster, Kataloge und Reproduktionen aus unserem Sortiment.", "en": "Art books, posters, catalogues and reproductions from our collection." },
+        "link": "/shop/art"
+      },
+      {
+        "id": "restaurant",
+        "title": { "de": "Restaurant Kunsthaus", "en": "Restaurant Kunsthaus" },
+        "description": { "de": "Geniessen Sie saisonale K\u00fcche mit Blick auf den Heimplatz.", "en": "Enjoy seasonal cuisine with views of Heimplatz." },
+        "link": "/visit/restaurant"
+      },
+      {
+        "id": "bar",
+        "title": { "de": "Kunsthaus Bar", "en": "Kunsthaus Bar" },
+        "description": { "de": "Kaffee, Kuchen und leichte Gerichte im Herzen des Museums.", "en": "Coffee, pastries and light meals in the heart of the museum." },
+        "link": "/visit/bar"
+      },
+      {
+        "id": "guided-tours",
+        "title": { "de": "F\u00fchrungen", "en": "Guided Tours" },
+        "description": { "de": "Entdecken Sie die Sammlung und Sonderausstellungen mit unseren erfahrenen Guides.", "en": "Explore the collection and special exhibitions with our experienced guides." },
+        "link": "/visit/guided-tours"
       }
     ]
   },
@@ -107,6 +194,71 @@
         "id": "guided-tours",
         "title": { "de": "\u00d6ffentliche F\u00fchrungen", "en": "Public Guided Tours" },
         "description": { "de": "Jeden Samstag und Sonntag um 11 Uhr", "en": "Every Saturday and Sunday at 11am" }
+      }
+    ]
+  },
+  {
+    "id": "education",
+    "section": "education",
+    "priority": 6,
+    "title": {
+      "de": "Bildung & Vermittlung",
+      "en": "Education & Learning"
+    },
+    "body": {
+      "de": "Kreative Programme f\u00fcr alle Altersgruppen \u2013 vom Kindergarten bis zur Universit\u00e4t.",
+      "en": "Creative programs for all ages \u2013 from kindergarten to university."
+    },
+    "items": [
+      {
+        "id": "workshops",
+        "title": { "de": "Workshops", "en": "Workshops" },
+        "description": { "de": "Praktische K\u00fcnstlerworkshops f\u00fcr Erwachsene und Jugendliche, geleitet von professionellen K\u00fcnstlern.", "en": "Hands-on artist workshops for adults and young people, led by professional artists." }
+      },
+      {
+        "id": "school-programs",
+        "title": { "de": "Schulprogramme", "en": "School Programs" },
+        "description": { "de": "Massgeschneiderte F\u00fchrungen und Workshops f\u00fcr Schulklassen aller Stufen.", "en": "Tailored tours and workshops for school groups of all levels." }
+      },
+      {
+        "id": "family-programs",
+        "title": { "de": "Familienprogramme", "en": "Family Programs" },
+        "description": { "de": "Interaktive Erlebnisse f\u00fcr Familien mit Kindern \u2013 jeden Sonntag.", "en": "Interactive experiences for families with children \u2013 every Sunday." }
+      },
+      {
+        "id": "lectures",
+        "title": { "de": "Vortr\u00e4ge & Gespr\u00e4che", "en": "Lectures & Talks" },
+        "description": { "de": "K\u00fcnstlergespr\u00e4che, Podiumsdiskussionen und Vortragsreihen zu aktuellen Themen.", "en": "Artist talks, panel discussions and lecture series on current topics." }
+      }
+    ]
+  },
+  {
+    "id": "planning-details",
+    "section": "planning-details",
+    "priority": 7,
+    "title": {
+      "de": "Besuch planen",
+      "en": "Plan Your Visit"
+    },
+    "body": {
+      "de": "Alle Informationen f\u00fcr Ihren Besuch im Kunsthaus Z\u00fcrich.",
+      "en": "Everything you need to know for your visit to Kunsthaus Zurich."
+    },
+    "items": [
+      {
+        "id": "accessibility",
+        "title": { "de": "Barrierefreiheit", "en": "Accessibility" },
+        "description": { "de": "Das Kunsthaus ist vollst\u00e4ndig barrierefrei zug\u00e4nglich. Rollst\u00fchle stehen kostenlos zur Verf\u00fcgung.", "en": "The Kunsthaus is fully wheelchair accessible. Wheelchairs are available free of charge." }
+      },
+      {
+        "id": "parking",
+        "title": { "de": "Anfahrt & Parkieren", "en": "Parking & Directions" },
+        "description": { "de": "Parkhaus Hohe Promenade (5 Min. Fussweg). \u00d6V: Tram 3, 5, 8, 9 bis Kunsthaus.", "en": "Hohe Promenade parking garage (5 min walk). Public transport: Tram 3, 5, 8, 9 to Kunsthaus." }
+      },
+      {
+        "id": "museum-plan",
+        "title": { "de": "Museumsplan", "en": "Museum Map" },
+        "description": { "de": "Interaktiver Grundriss mit allen Ausstellungsr\u00e4umen, Einrichtungen und Servicebereichen.", "en": "Interactive floor plan with all exhibition rooms, facilities and service areas." }
       }
     ]
   }

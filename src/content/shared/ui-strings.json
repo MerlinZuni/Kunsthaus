@@ -1,0 +1,16 @@
+[
+  { "id": "mode-planning", "key": "mode-planning", "value": { "de": "Besuch planen", "en": "Plan a visit", "fr": "Planifier" } },
+  { "id": "mode-onsite", "key": "mode-onsite", "value": { "de": "Ich bin da", "en": "I'm here", "fr": "Je suis ici" } },
+  { "id": "tickets", "key": "tickets", "value": { "de": "Tickets", "en": "Tickets", "fr": "Billets" } },
+  { "id": "carousel-pause", "key": "carousel-pause", "value": { "de": "Diashow pausieren", "en": "Pause slideshow" } },
+  { "id": "carousel-play", "key": "carousel-play", "value": { "de": "Diashow abspielen", "en": "Play slideshow" } },
+  { "id": "search-label", "key": "search-label", "value": { "de": "Suche", "en": "Search" } },
+  { "id": "menu-label", "key": "menu-label", "value": { "de": "Menu", "en": "Menu" } },
+  { "id": "skip-nav", "key": "skip-nav", "value": { "de": "Zum Inhalt springen", "en": "Skip to content" } },
+  { "id": "explore-exhibition", "key": "explore-exhibition", "value": { "de": "Ausstellung entdecken", "en": "Explore exhibition" } },
+  { "id": "section-counter-a11y", "key": "section-counter-a11y", "value": { "de": "Abschnitt {n} von {total}: {name}", "en": "Section {n} of {total}: {name}" } },
+  { "id": "reduce-motion", "key": "reduce-motion", "value": { "de": "Bewegung reduzieren", "en": "Reduce motion" } },
+  { "id": "lang-en", "key": "lang-en", "value": { "de": "Englisch", "en": "English" } },
+  { "id": "lang-de", "key": "lang-de", "value": { "de": "Deutsch", "en": "German" } },
+  { "id": "lang-fr", "key": "lang-fr", "value": { "de": "Franzosisch", "en": "French" } }
+]
