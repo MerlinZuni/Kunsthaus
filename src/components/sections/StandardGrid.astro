@@ -21,12 +21,11 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
 ---
 
 <div class="standard-grid">
-  <div class="standard-grid__header">
-    <h2 class="standard-grid__title">{title[lang]}</h2>
-    {body && (
+  {body && (
+    <div class="standard-grid__header">
       <p class="standard-grid__body">{body[lang]}</p>
-    )}
-  </div>
+    </div>
+  )}
 
   <div class="standard-grid__items" style={`--grid-columns: ${columns};`}>
     {items.map((item) => (
@@ -94,6 +93,10 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .standard-grid__item-image {
+    background: #d1d5db;
   }
 
   .standard-grid__item-title {

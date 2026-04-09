@@ -3,6 +3,7 @@
 // Address, hours, links/media, newsletter
 
 interface Props {
+  modeLabels?: { planning?: string; onsite?: string };
   footerData: {
     address: {
       street: string;
@@ -29,7 +30,7 @@ interface Props {
   lang: 'en' | 'de';
 }
 
-const { footerData, lang } = Astro.props;
+const { footerData, lang, modeLabels = { planning: 'Plan a visit', onsite: "I'm here" } } = Astro.props;
 
 const quickLinksHeading = lang === 'de' ? 'SCHNELLZUGRIFF' : 'QUICK LINKS';
 const mediaHeading = 'MEDIA';
@@ -90,6 +91,25 @@ const newsletterHeading = 'NEWSLETTER';
     >
       <span>{footerData.newsletter.linkLabel[lang]}</span>
     </a>
+
+    <div class="footer-col__mode-toggle" role="radiogroup" aria-label="Site mode">
+      <button
+        class="footer-col__mode-segment footer-col__mode-segment--active"
+        data-mode-segment="planning"
+        role="radio"
+        aria-checked="true"
+      >
+        {modeLabels.planning}
+      </button>
+      <button
+        class="footer-col__mode-segment"
+        data-mode-segment="onsite"
+        role="radio"
+        aria-checked="false"
+      >
+        {modeLabels.onsite}
+      </button>
+    </div>
   </div>
 </div>
 
@@ -183,6 +203,42 @@ const newsletterHeading = 'NEWSLETTER';
     align-items: center;
     padding: var(--space-3) var(--space-6);
     text-decoration: none;
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .footer-col__mode-toggle {
+    display: flex;
+    border: 1px solid var(--color-text);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: var(--space-12);
+    width: 100%;
+  }
+
+  .footer-col__mode-segment {
+    flex: 1;
+    background: transparent;
+    color: var(--color-text);
+    border: none;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .footer-col__mode-segment--active {
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-weight: var(--weight-medium);
+  }
+
+  .footer-col__mode-segment:not(.footer-col__mode-segment--active):hover {
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 
   /* Responsive: 2 columns tablet, 1 column mobile */

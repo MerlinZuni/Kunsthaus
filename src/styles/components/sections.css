@@ -1,5 +1,6 @@
 @layer components {
   /* D-26: Section background rotation - 4 step cycle */
+  /* Planning mode (light) */
   .stacking-section[data-bg-step="1"] { background-color: #fbf8f7; }
   .stacking-section[data-bg-step="2"] { background-color: #ffffff; }
   .stacking-section[data-bg-step="3"] {
@@ -13,11 +14,29 @@
     background-repeat: repeat;
   }
 
-  /* Section stacking base styles */
+  /* Onsite mode (dark) */
+  html[data-mode="onsite"] .stacking-section[data-bg-step="1"] { background-color: #272523; }
+  html[data-mode="onsite"] .stacking-section[data-bg-step="2"] { background-color: #1e1c1a; }
+  html[data-mode="onsite"] .stacking-section[data-bg-step="3"] {
+    background-color: #A4A197;
+    background-image: url(/textures/concrete-wall.png);
+    background-repeat: repeat;
+    background-blend-mode: multiply;
+  }
+  html[data-mode="onsite"] .stacking-section[data-bg-step="4"] {
+    background-color: #272523;
+    background-image: url(/textures/asfalt-dark.png);
+    background-repeat: repeat;
+    background-blend-mode: luminosity;
+  }
+
+  /* Section stacking base styles — sticky cards scroll over each other */
   .stacking-section {
-    position: relative;
+    position: sticky;
+    top: 0;
     width: 100%;
     min-height: 100vh;
+    height: auto;
     will-change: transform, opacity;
   }
 
@@ -47,13 +66,15 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 85vh;
+    min-height: 500px;
     z-index: 10;
   }
 
   /* Hero spacer pushes content below fixed hero */
   .hero-spacer {
-    height: 100vh;
+    height: 85vh;
+    min-height: 500px;
     position: relative;
     z-index: 1;
   }

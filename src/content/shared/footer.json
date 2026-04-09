@@ -24,7 +24,7 @@
     },
     "quickLinks": [
       { "id": "exhibitions", "label": { "de": "Ausstellungen", "en": "Exhibitions" }, "href": "/exhibitions" },
-      { "id": "tickets", "label": { "de": "Tickets", "en": "Tickets" }, "href": "https://www.kunsthaus.ch/tickets" },
+      { "id": "tickets", "label": { "de": "Tickets kaufen", "en": "Buy Tickets" }, "href": "https://www.kunsthaus.ch/tickets" },
       { "id": "membership", "label": { "de": "Mitgliedschaft", "en": "Membership" }, "href": "/membership" }
     ],
     "media": [

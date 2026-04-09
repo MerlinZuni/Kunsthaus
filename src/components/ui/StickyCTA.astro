@@ -1,6 +1,6 @@
 ---
 // StickyCTA.astro -- D-18, D-19: Floating buttons (desktop) / sticky bottom bar (mobile)
-// Mode toggle + Tickets button
+// Segmented mode toggle + Tickets button
 
 interface Props {
   modeLabels: {
@@ -12,19 +12,11 @@ interface Props {
   ticketsHref?: string;
 }
 
-const { modeLabels, ticketsLabel = 'Tickets', lang, ticketsHref = 'https://www.kunsthaus.ch/tickets' } = Astro.props;
+const { modeLabels, ticketsLabel = 'Buy Tickets', lang, ticketsHref = 'https://www.kunsthaus.ch/tickets' } = Astro.props;
 ---
 
 {/* Desktop: floating buttons bottom-right */}
 <div class="sticky-cta sticky-cta--desktop">
-  <button
-    class="sticky-cta__mode-toggle hover-wipe touch-pulse touch-target"
-    data-mode-toggle
-    aria-label={modeLabels.planning || 'Plan a visit'}
-  >
-    <span class="sticky-cta__mode-label" data-mode-label="planning">{modeLabels.planning || 'Plan a visit'}</span>
-    <span class="sticky-cta__mode-label sticky-cta__mode-label--hidden" data-mode-label="onsite">{modeLabels.onsite || "I'm here"}</span>
-  </button>
   <a
     href={ticketsHref}
     target="_blank"
@@ -33,6 +25,24 @@ const { modeLabels, ticketsLabel = 'Tickets', lang, ticketsHref = 'https://www.k
   >
     <span>{ticketsLabel}</span>
   </a>
+  <div class="sticky-cta__toggle" role="radiogroup" aria-label="Site mode">
+    <button
+      class="sticky-cta__segment sticky-cta__segment--active"
+      data-mode-segment="planning"
+      role="radio"
+      aria-checked="true"
+    >
+      {modeLabels.planning || 'Plan a visit'}
+    </button>
+    <button
+      class="sticky-cta__segment"
+      data-mode-segment="onsite"
+      role="radio"
+      aria-checked="false"
+    >
+      {modeLabels.onsite || "I'm here"}
+    </button>
+  </div>
 </div>
 
 {/* Mobile: sticky bottom bar */}
@@ -45,47 +55,92 @@ const { modeLabels, ticketsLabel = 'Tickets', lang, ticketsHref = 'https://www.k
   >
     <span>{ticketsLabel}</span>
   </a>
-  <button
-    class="sticky-cta__mode-toggle hover-wipe touch-pulse touch-target"
-    data-mode-toggle
-    aria-label={modeLabels.planning || 'Plan a visit'}
-  >
-    <span class="sticky-cta__mode-label" data-mode-label="planning">{modeLabels.planning || 'Plan a visit'}</span>
-    <span class="sticky-cta__mode-label sticky-cta__mode-label--hidden" data-mode-label="onsite">{modeLabels.onsite || "I'm here"}</span>
-  </button>
+  <div class="sticky-cta__toggle" role="radiogroup" aria-label="Site mode">
+    <button
+      class="sticky-cta__segment sticky-cta__segment--active"
+      data-mode-segment="planning"
+      role="radio"
+      aria-checked="true"
+    >
+      {modeLabels.planning || 'Plan a visit'}
+    </button>
+    <button
+      class="sticky-cta__segment"
+      data-mode-segment="onsite"
+      role="radio"
+      aria-checked="false"
+    >
+      {modeLabels.onsite || "I'm here"}
+    </button>
+  </div>
 </div>
 
 <script>
-  // Mode toggle: switches data-mode attribute on <html>
-  document.querySelectorAll('[data-mode-toggle]').forEach((btn) => {
+  document.querySelectorAll('[data-mode-segment]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const html = document.documentElement;
-      const current = html.getAttribute('data-mode');
-      const next = current === 'planning' ? 'onsite' : 'planning';
-      html.setAttribute('data-mode', next);
+      const mode = (btn as HTMLElement).dataset.modeSegment;
+      if (!mode) return;
 
-      // Toggle label visibility
-      document.querySelectorAll('[data-mode-label]').forEach((label) => {
-        const el = label as HTMLElement;
-        const mode = el.dataset.modeLabel;
-        el.classList.toggle('sticky-cta__mode-label--hidden', mode !== next);
-      });
+      // Update HTML mode attribute
+      document.documentElement.setAttribute('data-mode', mode);
 
-      // Update aria-label
-      document.querySelectorAll('[data-mode-toggle]').forEach((b) => {
-        const labels = b.querySelectorAll('[data-mode-label]');
-        labels.forEach((l) => {
-          const el = l as HTMLElement;
-          if (el.dataset.modeLabel === next) {
-            (b as HTMLElement).setAttribute('aria-label', el.textContent || '');
-          }
-        });
+      // Update all toggle segments across desktop + mobile
+      document.querySelectorAll('[data-mode-segment]').forEach((seg) => {
+        const el = seg as HTMLElement;
+        const isActive = el.dataset.modeSegment === mode;
+        el.classList.toggle('sticky-cta__segment--active', isActive);
+        el.setAttribute('aria-checked', isActive ? 'true' : 'false');
       });
     });
   });
+
+  // Hide sticky CTA when footer is visible
+  const footer = document.querySelector('.site-footer');
+  if (footer) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        document.querySelectorAll('.sticky-cta').forEach((el) => {
+          (el as HTMLElement).style.opacity = entry.isIntersecting ? '0' : '1';
+          (el as HTMLElement).style.pointerEvents = entry.isIntersecting ? 'none' : 'auto';
+        });
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(footer);
+  }
 </script>
 
 <style>
+  /* Segmented toggle */
+  .sticky-cta__toggle {
+    display: flex;
+    border: 1px solid var(--color-text);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .sticky-cta__segment {
+    background: transparent;
+    color: var(--color-text);
+    border: none;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .sticky-cta__segment--active {
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-weight: var(--weight-medium);
+  }
+
+  .sticky-cta__segment:not(.sticky-cta__segment--active):hover {
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
   /* Desktop floating buttons */
   .sticky-cta--desktop {
     position: fixed;
@@ -95,21 +150,12 @@ const { modeLabels, ticketsLabel = 'Tickets', lang, ticketsHref = 'https://www.k
     flex-direction: column;
     gap: var(--space-3);
     z-index: 50;
+    align-items: flex-end;
+    transition: opacity 0.3s ease;
   }
 
   .sticky-cta--mobile {
     display: none;
-  }
-
-  .sticky-cta__mode-toggle {
-    background: var(--color-surface);
-    color: var(--color-text);
-    border: 2px solid var(--color-text);
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--type-md);
-    font-weight: var(--weight-medium);
-    cursor: pointer;
-    white-space: nowrap;
   }
 
   .sticky-cta__tickets {
@@ -121,10 +167,6 @@ const { modeLabels, ticketsLabel = 'Tickets', lang, ticketsHref = 'https://www.k
     font-size: var(--type-md);
     font-weight: var(--weight-medium);
     white-space: nowrap;
-  }
-
-  .sticky-cta__mode-label--hidden {
-    display: none;
   }
 
   /* Mobile: sticky bottom bar */
@@ -145,6 +187,7 @@ const { modeLabels, ticketsLabel = 'Tickets', lang, ticketsHref = 'https://www.k
       background: var(--color-surface);
       border-top: 1px solid var(--color-decorative);
       z-index: 50;
+      transition: opacity 0.3s ease;
     }
   }
 </style>

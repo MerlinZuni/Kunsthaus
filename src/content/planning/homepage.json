@@ -24,7 +24,8 @@
         "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/kerry-james-marshall" },
         "images": [
           { "src": "/images/exhibitions/kerry-james-marshall-1.jpg", "alt": { "de": "Kerry James Marshall Werk", "en": "Kerry James Marshall artwork" }, "gridCol": "2/7", "gridRow": "2/5" },
-          { "src": "/images/exhibitions/kerry-james-marshall-2.jpg", "alt": { "de": "Kerry James Marshall Detail", "en": "Kerry James Marshall detail" }, "gridCol": "5/10", "gridRow": "4/7" }
+          { "src": "/images/exhibitions/kerry-james-marshall-2.jpg", "alt": { "de": "Kerry James Marshall Detail", "en": "Kerry James Marshall detail" }, "gridCol": "5/10", "gridRow": "3/6" },
+          { "src": "/images/exhibitions/kerry-james-marshall-3.jpg", "alt": { "de": "Kerry James Marshall Porträt", "en": "Kerry James Marshall portrait" }, "gridCol": "9/12", "gridRow": "3/7" }
         ]
       },
       {

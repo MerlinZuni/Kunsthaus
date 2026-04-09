@@ -1,3 +1,51 @@
+@font-face {
+  font-family: 'DINNextW1G';
+  src: url('../assets/fonts/DINNextW1G/DINNextW1G-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DINNextW1G';
+  src: url('../assets/fonts/DINNextW1G/DINNextW1G-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DINNextW1G';
+  src: url('../assets/fonts/DINNextW1G/DINNextW1G-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DINNextW1G';
+  src: url('../assets/fonts/DINNextW1G/DINNextW1G-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DINNextW1G';
+  src: url('../assets/fonts/DINNextW1G/DINNextW1G-Heavy.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DINNextW1G';
+  src: url('../assets/fonts/DINNextW1G/DINNextW1G-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --font-primary: 'DINNextW1G', 'DIN Alternate', 'DIN Next', system-ui, -apple-system, sans-serif;
@@ -18,5 +66,6 @@
     --weight-regular: 400;
     --weight-medium: 500;
     --weight-bold: 700;
+    --weight-heavy: 900;
   }
 }

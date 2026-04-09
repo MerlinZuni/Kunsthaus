@@ -1,7 +1,7 @@
 [
   { "id": "mode-planning", "key": "mode-planning", "value": { "de": "Besuch planen", "en": "Plan a visit", "fr": "Planifier" } },
   { "id": "mode-onsite", "key": "mode-onsite", "value": { "de": "Ich bin da", "en": "I'm here", "fr": "Je suis ici" } },
-  { "id": "tickets", "key": "tickets", "value": { "de": "Tickets", "en": "Tickets", "fr": "Billets" } },
+  { "id": "tickets", "key": "tickets", "value": { "de": "Tickets kaufen", "en": "Buy Tickets", "fr": "Acheter billets" } },
   { "id": "carousel-pause", "key": "carousel-pause", "value": { "de": "Diashow pausieren", "en": "Pause slideshow" } },
   { "id": "carousel-play", "key": "carousel-play", "value": { "de": "Diashow abspielen", "en": "Play slideshow" } },
   { "id": "search-label", "key": "search-label", "value": { "de": "Suche", "en": "Search" } },

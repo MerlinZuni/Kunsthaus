@@ -25,9 +25,6 @@ const { contentType, data, lang } = Astro.props;
     </div>
   )}
   <div class="cinematic-reveal__content">
-    {data.title && (
-      <h2 class="cinematic-reveal__title">{data.title[lang]}</h2>
-    )}
     {data.subtitle && (
       <p class="cinematic-reveal__subtitle">{data.subtitle[lang]}</p>
     )}
@@ -60,6 +57,10 @@ const { contentType, data, lang } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .cinematic-reveal__image {
+    background: #d1d5db;
   }
 
   .cinematic-reveal__content {

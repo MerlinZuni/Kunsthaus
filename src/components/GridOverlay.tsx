@@ -1,4 +1,3 @@
-import { useControls } from 'leva';
 import { useState, useEffect } from 'react';
 
 function useDataMode() {
@@ -17,29 +16,33 @@ function useDataMode() {
 
 export default function GridOverlay() {
   const mode = useDataMode();
-  const autoColor = mode === 'onsite' ? '#fbf8f7' : '#222222';
+  const color = mode === 'onsite' ? '#fbf8f7' : '#222222';
+  const opacity = 0.20;
+  const tracks = 48;
 
-  const {
-    visible,
-    density,
-    fullViewport,
-    showRows,
-    opacity,
-  } = useControls('Grid Overlay', {
-    visible: { value: true, label: 'Show Grid' },
-    density: { value: 12, options: [12, 24, 48], label: 'Column Density' },
-    fullViewport: { value: true, label: 'Full Viewport' },
-    showRows: { value: false, label: 'Show Rows' },
-    opacity: { value: 0.20, min: 0, max: 1, step: 0.01, label: 'Opacity' },
-  });
+  // Responsive: halve column count on mobile
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
-  const color = autoColor;
+  const activeTracks = isMobile ? 24 : tracks;
 
-  if (!visible) return null;
-
-  // Map density to actual track count
-  // density 12 = 12 lines (layout columns), 24 = half-columns, 48 = all tracks
-  const tracks = density;
+  // Custom row pattern: 80px, 80px, 160px, 160px, 160px — then repeats
+  const rowPattern = [80, 80, 160, 160, 160];
+  const rowSizes: number[] = [];
+  let totalHeight = 0;
+  while (totalHeight < 2000) {
+    for (const size of rowPattern) {
+      rowSizes.push(size);
+      totalHeight += size;
+      if (totalHeight >= 2000) break;
+    }
+  }
 
   return (
     <div
@@ -47,17 +50,17 @@ export default function GridOverlay() {
         position: 'fixed',
         inset: 0,
         pointerEvents: 'none',
-        zIndex: 1,
+        zIndex: 15,
         display: 'grid',
-        gridTemplateColumns: `repeat(${tracks}, 1fr)`,
-        gridTemplateRows: showRows ? 'repeat(8, 1fr)' : 'none',
-        width: fullViewport ? '100vw' : undefined,
-        height: showRows ? '100vh' : undefined,
-        maxWidth: fullViewport ? 'none' : undefined,
+        gridTemplateColumns: `repeat(${activeTracks}, 1fr)`,
+        gridTemplateRows: rowSizes.map(s => `${s}px`).join(' '),
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
       }}
     >
-      {/* Vertical lines -- left edge of each column per D-28 */}
-      {Array.from({ length: tracks }).map((_, i) => (
+      {/* Vertical lines */}
+      {Array.from({ length: activeTracks }).map((_, i) => (
         <div
           key={`col-${i}`}
           style={{
@@ -68,19 +71,18 @@ export default function GridOverlay() {
           }}
         />
       ))}
-      {/* Horizontal rows -- visually distinct from vertical per D-21 */}
-      {showRows &&
-        Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={`row-${i}`}
-            style={{
-              borderTop: `1px solid ${color}`,
-              opacity,
-              gridColumn: '1 / -1',
-              gridRow: i + 1,
-            }}
-          />
-        ))}
+      {/* Horizontal rows — custom spacing: 80, 80, 160, 160, 160 repeating */}
+      {rowSizes.map((_, i) => (
+        <div
+          key={`row-${i}`}
+          style={{
+            borderTop: `1px solid ${color}`,
+            opacity,
+            gridColumn: '1 / -1',
+            gridRow: i + 1,
+          }}
+        />
+      ))}
     </div>
   );
 }
