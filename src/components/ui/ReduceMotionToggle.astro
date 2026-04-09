@@ -1,6 +1,14 @@
 ---
 // ReduceMotionToggle.astro -- D-40: Manual reduce-motion toggle
 // Respects OS prefers-reduced-motion as default, user can override via localStorage
+// Stores preference in localStorage key 'kunsthaus-reduce-motion'
+
+interface Props {
+  lang?: 'en' | 'de';
+}
+
+const { lang = 'en' } = Astro.props;
+const label = lang === 'de' ? 'Bewegung reduzieren' : 'Reduce motion';
 ---
 
 <div class="reduce-motion-toggle">
@@ -9,18 +17,20 @@
       type="checkbox"
       class="reduce-motion-toggle__input"
       id="reduce-motion-toggle"
-      aria-label="Reduce motion"
+      aria-label={label}
     />
     <span class="reduce-motion-toggle__switch" aria-hidden="true"></span>
-    <span class="reduce-motion-toggle__text">Reduce motion</span>
+    <span class="reduce-motion-toggle__text">{label}</span>
   </label>
 </div>
 
 <script>
-  const toggle = document.getElementById('reduce-motion-toggle') as HTMLInputElement;
-  if (toggle) {
-    // Check localStorage first, then OS preference
-    const stored = localStorage.getItem('reduce-motion');
+  function initReduceMotion() {
+    const toggle = document.getElementById('reduce-motion-toggle') as HTMLInputElement;
+    if (!toggle) return;
+
+    // Check localStorage first (kunsthaus-reduce-motion), then OS preference
+    const stored = localStorage.getItem('kunsthaus-reduce-motion');
     const osPrefers = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const shouldReduce = stored !== null ? stored === 'true' : osPrefers;
 
@@ -31,10 +41,13 @@
 
     toggle.addEventListener('change', () => {
       const reduced = toggle.checked;
-      localStorage.setItem('reduce-motion', String(reduced));
+      localStorage.setItem('kunsthaus-reduce-motion', String(reduced));
       document.documentElement.classList.toggle('reduce-motion', reduced);
     });
   }
+
+  initReduceMotion();
+  document.addEventListener('astro:after-swap', initReduceMotion);
 </script>
 
 <style>
