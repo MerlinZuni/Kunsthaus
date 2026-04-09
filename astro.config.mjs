@@ -4,6 +4,8 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://merlinzuni.github.io',
+  base: '/Kunsthaus',
   integrations: [react()],
   // Fonts API configuration -- uncomment when .woff2 font files are added
   // to src/assets/fonts/DINNextW1G/. The local() provider requires files

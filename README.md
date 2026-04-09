@@ -1,43 +1,43 @@
-# Astro Starter Kit: Minimal
+# Kunsthaus Zurich — Website Redesign Concept
 
-```sh
-npm create astro@latest -- --template minimal
+> **Live Preview:** [https://merlinzuni.github.io/Kunsthaus/](https://merlinzuni.github.io/Kunsthaus/)
+
+## About
+
+A competition prototype for the Kunsthaus Zurich museum website redesign. A responsive, interactive homepage demonstrating a dual-mode concept: **Planning mode** (remote visitors exploring what's on offer) and **On-site mode** (visitors physically at the museum diving deeper into exhibits).
+
+## Current State
+
+**Phase 2 — Static Homepage (Wave 1 complete)**
+
+What's built:
+- Hero section with scattered exhibition images, monumental typography, and carousel navigation
+- 6 content sections with sticky stacking scroll effect and background rotation
+- Footer with marquee, 4-column layout, newsletter, and mode toggle
+- Dual-mode switching (Planning / On-site) with full theme adaptation
+- DINNextW1G font system across all weights
+- 48-column architectural grid overlay (dev mode)
+- Responsive layouts across desktop, tablet, and mobile breakpoints
+
+What's next (Wave 2):
+- Navigation bar with scroll behavior
+- Full hero carousel with auto-play
+- Interactive content section components
+- Scroll-driven GSAP animations (Phase 3)
+
+## Tech Stack
+
+- **Astro 6** — Static site framework, zero JS by default
+- **GSAP + ScrollTrigger** — Animation engine (Phase 3)
+- **Lenis** — Smooth scrolling
+- **Vanilla CSS** — Custom properties, @layer cascade, headless-ready
+- **JSON Content Collections** — CMS-ready data layer
+
+## Running Locally
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Open http://localhost:4321
