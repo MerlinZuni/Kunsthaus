@@ -1,0 +1,79 @@
+@layer components {
+  /* D-26: Section background rotation - 4 step cycle */
+  .stacking-section[data-bg-step="1"] { background-color: #fbf8f7; }
+  .stacking-section[data-bg-step="2"] { background-color: #ffffff; }
+  .stacking-section[data-bg-step="3"] {
+    background-color: #EBEBEB;
+    background-image: url(/textures/concrete-wall.png);
+    background-repeat: repeat;
+  }
+  .stacking-section[data-bg-step="4"] {
+    background-color: #C1BFB2;
+    background-image: url(/textures/asfalt-dark.png);
+    background-repeat: repeat;
+  }
+
+  /* Section stacking base styles */
+  .stacking-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    will-change: transform, opacity;
+  }
+
+  /* D-24: Section vertical spacing */
+  .section-spacing {
+    padding-top: var(--space-32);    /* 128px desktop */
+    padding-bottom: var(--space-32);
+  }
+
+  @media (max-width: 1023px) {
+    .section-spacing {
+      padding-top: var(--space-24);  /* 96px tablet */
+      padding-bottom: var(--space-24);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .section-spacing {
+      padding-top: var(--space-16);  /* 64px mobile */
+      padding-bottom: var(--space-16);
+    }
+  }
+
+  /* Hero pinned section (D-06) */
+  .hero-pinned {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 10;
+  }
+
+  /* Hero spacer pushes content below fixed hero */
+  .hero-spacer {
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* D-25: Mobile stacking - no pinning, native scroll */
+  @media (max-width: 767px) {
+    .hero-pinned {
+      position: relative;
+      height: auto;
+      min-height: 100vh;
+    }
+    .hero-spacer {
+      display: none;
+    }
+  }
+
+  /* Reduced motion: no transforms */
+  @media (prefers-reduced-motion: reduce) {
+    .stacking-section {
+      will-change: auto;
+    }
+  }
+}

@@ -1,0 +1,83 @@
+@layer components {
+  /* D-17: Eliminate 300ms tap delay globally */
+  * { touch-action: manipulation; }
+
+  /* D-14: Clip-path background wipe hover */
+  .hover-wipe {
+    position: relative;
+    overflow: hidden;
+    /* Text must be above the pseudo-element */
+  }
+  .hover-wipe > * { position: relative; z-index: 1; }
+
+  .hover-wipe::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-text);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 200ms ease-in;
+    z-index: 0;
+  }
+
+  /* D-15: Gate hover to real hover devices */
+  @media (hover: hover) {
+    .hover-wipe:hover::before {
+      clip-path: inset(0 0 0 0);
+    }
+    .hover-wipe:hover { color: var(--color-surface); }
+    .hover-wipe:not(:hover)::before {
+      transition: clip-path 350ms ease-out;
+    }
+  }
+
+  /* D-16: Inverse wipe for filled CTA buttons */
+  .hover-wipe-inverse {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-text);
+    color: var(--color-surface);
+  }
+  .hover-wipe-inverse > * { position: relative; z-index: 1; }
+
+  .hover-wipe-inverse::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-surface);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 200ms ease-in;
+    z-index: 0;
+  }
+
+  @media (hover: hover) {
+    .hover-wipe-inverse:hover::before {
+      clip-path: inset(0 0 0 0);
+    }
+    .hover-wipe-inverse:hover { color: var(--color-text); }
+    .hover-wipe-inverse:not(:hover)::before {
+      transition: clip-path 350ms ease-out;
+    }
+  }
+
+  /* D-14: Touch press pulse */
+  .touch-pulse:active {
+    transform: scale(0.96);
+    transition: transform 80ms ease-out;
+  }
+
+  /* D-39: Footer link underline style */
+  .link-underline {
+    border-bottom: 2px solid currentColor;
+    text-decoration: none;
+  }
+
+  /* Minimum 44x44px touch targets (WCAG 2.5.8) */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
