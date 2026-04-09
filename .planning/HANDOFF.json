@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-04-09T21:59:07.635Z",
+  "phase": "02",
+  "phase_name": "static-homepage",
+  "phase_dir": ".planning/phases/02-static-homepage",
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "paused",
+  "completed_tasks": [
+    {"id": "02-01", "name": "Content data & CSS infrastructure", "status": "done", "commit": "9e7f4b0"},
+    {"id": "02-04", "name": "Footer & homepage composition", "status": "done", "commit": "ecb6396"},
+    {"id": "02-02", "name": "Navigation bar & hero carousel", "status": "done", "commit": "aacd647"},
+    {"id": "02-03", "name": "Content sections & interactive UI", "status": "done", "commit": "ec2e178"}
+  ],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [
+    {"action": "Visual review of all new Wave 2 components (nav, carousel, section animations)", "context": "Wave 2 just completed — user plans to review tomorrow", "blocking": false},
+    {"action": "Download medieval.jpg for collection if desired", "context": "Medieval collection image was removed from data but could be re-added", "blocking": false}
+  ],
+  "decisions": [
+    {"decision": "Direct JSON imports instead of Astro getCollection()", "rationale": "Dev server content collection caching caused stale data", "phase": "02"},
+    {"decision": "mix-blend-mode: multiply (planning) / screen (onsite) for hero title", "rationale": "User tested all blend modes via Leva panel, chose multiply for light mode, screen for dark", "phase": "02"},
+    {"decision": "Two-column section layout with sticky title", "rationale": "User requested titles fixed left while content scrolls right — magazine-style", "phase": "02"},
+    {"decision": "All sections position: relative (not sticky)", "rationale": "Sticky clipped long content; stacking scroll deferred to Phase 3 GSAP", "phase": "02"},
+    {"decision": "Segmented toggle for mode switching", "rationale": "User found single button confusing; both labels always visible", "phase": "02"},
+    {"decision": "ExhibitionList replaces CinematicReveal+PinnedNarrative for exhibitions section", "rationale": "User designed 3-group list (collection, current, upcoming) with hover preview", "phase": "02"},
+    {"decision": "Global .sub-heading class for consistent typography", "rationale": "User wanted all group titles/labels to match across site", "phase": "02"},
+    {"decision": "Custom grid row pattern: 80,80,160,160,160 repeating", "rationale": "Matches user's Figma grid specification", "phase": "02"},
+    {"decision": "base: '/Kunsthaus' in astro.config for GitHub Pages", "rationale": "Deployed to merlinzuni.github.io/Kunsthaus/", "phase": "02"},
+    {"decision": "DINNextW1G fonts self-hosted as woff2", "rationale": "User provided .otf files, converted with woff2_compress", "phase": "02"},
+    {"decision": "Material Symbols Outlined (weight 100, no fill)", "rationale": "User requested thinnest outline icons for chevrons and UI", "phase": "02"}
+  ],
+  "uncommitted_files": [],
+  "next_action": "Run phase verification: /gsd-execute-phase 2 (will pick up verification since all plans complete). Then visual review of nav, carousel, animations, and dark mode.",
+  "context_notes": "All 4 plans in Phase 02 are complete. Extensive manual UI refinements were made during 02-04 checkpoint review. User has strong design opinions — test everything visually. GitHub Pages live at merlinzuni.github.io/Kunsthaus/. Dev server needs base path (/Kunsthaus/) to work."
+}
