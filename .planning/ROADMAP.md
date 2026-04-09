@@ -36,7 +36,7 @@ Plans:
 - [x] 01-03-PLAN.md -- JSON content collections with Zod schemas, Planning and On-site mock data
 
 ### Phase 2: Static Homepage
-**Goal**: A complete homepage with hero, exhibitions, visit info, and footer -- all sections rendering real mock content in both mode layouts
+**Goal**: A complete homepage with hero carousel, exhibitions, visit info, and footer -- all sections rendering real mock content with immersive storytelling components, responsive navigation, and section stacking scroll effect
 **Depends on**: Phase 1
 **Requirements**: HOME-01, HOME-02, HOME-03, HOME-04, NAV-01
 **Success Criteria** (what must be TRUE):
@@ -45,11 +45,13 @@ Plans:
   3. Visit information section shows hours, location, and ticket info
   4. Footer displays contact details, social links, and museum information
   5. Responsive navigation with mobile hamburger menu works across all breakpoints
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Content layer expansion (JSON data, schemas, textures) and CSS infrastructure (interactions, sections)
+- [ ] 02-02-PLAN.md -- Navigation bar with scroll behavior, overlays, language switcher, and hero carousel with monumental typography
+- [ ] 02-03-PLAN.md -- Immersive storytelling sections (Cinematic Reveal, Pinned Narrative), sticky CTA, mode toggle, section progress
+- [ ] 02-04-PLAN.md -- Footer with marquee and columns, final homepage composition wiring all components into index.astro
 
 ### Phase 3: Dual-Mode + Animation
 **Goal**: The competition differentiator -- mode switching transforms the page between Planning and On-site experiences, layered with scroll-driven animations, text motion, hover effects, and stacking/layering scroll effects
@@ -87,8 +89,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
-| 2. Static Homepage | 0/2 | Not started | - |
+| 1. Foundation | 3/3 | Complete | - |
+| 2. Static Homepage | 0/4 | Not started | - |
 | 3. Dual-Mode + Animation | 0/3 | Not started | - |
 | 4. Deploy + Present | 0/1 | Not started | - |
 
