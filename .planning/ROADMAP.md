@@ -51,7 +51,7 @@ Plans:
 - [x] 02-01-PLAN.md -- Content layer expansion (JSON data, schemas, textures) and CSS infrastructure (interactions, sections)
 - [ ] 02-02-PLAN.md -- Navigation bar with scroll behavior, overlays, language switcher, and hero carousel with monumental typography
 - [ ] 02-03-PLAN.md -- Immersive storytelling sections (Cinematic Reveal, Pinned Narrative), sticky CTA, mode toggle, section progress
-- [ ] 02-04-PLAN.md -- Footer with marquee and columns, final homepage composition wiring all components into index.astro
+- [x] 02-04-PLAN.md -- Footer with marquee and columns, final homepage composition wiring all components into index.astro
 
 ### Phase 3: Dual-Mode + Animation
 **Goal**: The competition differentiator -- mode switching transforms the page between Planning and On-site experiences, layered with scroll-driven animations, text motion, hover effects, and stacking/layering scroll effects
