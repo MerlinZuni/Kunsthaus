@@ -20,30 +20,53 @@ const suggestions = [
 
 <div class="search-overlay" id="search-overlay" aria-hidden="true">
   <div class="search-overlay__inner">
-    <button class="search-overlay__close touch-target" aria-label="Close search">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
+    {/* Header: close left (where search was), logo center, hamburger right (to swap) */}
+    <div class="search-overlay__header">
+      <button class="search-overlay__close touch-target" aria-label="Close search">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <a href="/" class="search-overlay__logo">
+        <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="search-overlay__logo-img" />
+      </a>
+      <button class="search-overlay__hamburger touch-target" aria-label="Open menu" data-action="open-hamburger">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
 
-    <div class="search-overlay__content">
-      <label for="search-input" class="sr-only">{searchLabel}</label>
-      <input
-        type="text"
-        id="search-input"
-        class="search-overlay__input"
-        placeholder={`${searchLabel}...`}
-        autocomplete="off"
-      />
+    {/* Body: search field + suggestions */}
+    <div class="search-overlay__body">
+      {/* Search field — pill with go button */}
+      <div class="search-overlay__field">
+        <label for="search-input" class="sr-only">{searchLabel}</label>
+        <input
+          type="text"
+          id="search-input"
+          class="search-overlay__input"
+          placeholder={`${searchLabel}...`}
+          autocomplete="off"
+        />
+        <button class="search-overlay__go" type="button" aria-label="Search">
+          <span class="search-overlay__go-label">{searchLabel}</span>
+          <span class="icon">search</span>
+        </button>
+      </div>
 
+      {/* Suggestions */}
       <nav class="search-overlay__suggestions" aria-label="Suggested searches">
-        <h2 class="search-overlay__heading">Popular Searches</h2>
+        <h2 class="search-overlay__heading sub-heading">Popular Searches</h2>
         <ul>
-          {suggestions.map(s => (
-            <li>
-              <a href={s.href} class="search-overlay__link hover-wipe touch-pulse">
+          {suggestions.map((s, i) => (
+            <li class="search-overlay__item" data-search-item={i}>
+              <a href={s.href} class="search-overlay__item-link btn-link touch-pulse">
                 <span>{s.label}</span>
+                <span class="icon">arrow_forward</span>
               </a>
             </li>
           ))}
@@ -58,42 +81,118 @@ const suggestions = [
     position: fixed;
     inset: 0;
     z-index: 80;
-    background: color-mix(in srgb, var(--color-surface) 95%, transparent);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    display: none;
-    overflow-y: auto;
+    background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    opacity: 0;
+    visibility: hidden;
   }
 
   .search-overlay.is-open {
-    display: block;
+    visibility: visible;
   }
 
   .search-overlay__inner {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: var(--space-16) var(--space-8) var(--space-8);
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: var(--space-3);
   }
 
-  .search-overlay__close {
-    position: absolute;
-    top: var(--space-4);
-    right: 0;
+  /* Header: mirrors nav bar */
+  .search-overlay__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .search-overlay__hamburger {
     background: none;
     border: none;
     cursor: pointer;
     color: var(--color-text);
+    padding: var(--space-2);
+  }
+
+  .search-overlay__logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-overlay__logo-img {
+    width: 200px;
+    height: auto;
+    display: block;
+    filter: invert(1);
+  }
+
+  html[data-mode="onsite"] .search-overlay__logo-img {
+    filter: none;
+  }
+
+  .search-overlay__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-2);
+  }
+
+  /* Body */
+  .search-overlay__body {
+    padding: var(--space-8) var(--space-4) 0;
+  }
+
+  /* Search field — pill shaped */
+  .search-overlay__field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+    border-radius: 999px;
+    padding: 4px 4px 4px var(--space-6);
+    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .search-overlay__go {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--color-text) 75%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--color-surface);
+    transition: background 0.3s ease;
+  }
+
+  .search-overlay__go .icon {
+    font-size: 22px;
+  }
+
+  .search-overlay__go:hover {
+    background: color-mix(in srgb, var(--color-text) 90%, transparent);
   }
 
   .search-overlay__input {
     width: 100%;
     background: none;
     border: none;
-    border-bottom: 2px solid var(--color-text);
-    padding: var(--space-4) 0;
-    font-size: var(--type-2xl);
-    font-weight: var(--weight-bold);
+    padding: 0;
+    font-size: var(--type-xl);
+    font-weight: var(--weight-light);
     color: var(--color-text);
     outline: none;
     font-family: inherit;
@@ -103,14 +202,11 @@ const suggestions = [
     color: var(--color-decorative-shadow);
   }
 
+  /* Suggestions */
   .search-overlay__heading {
-    font-size: var(--type-sm);
-    font-weight: var(--weight-bold);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-decorative-shadow);
     margin-top: var(--space-8);
     margin-bottom: var(--space-4);
+    padding-left: var(--space-4);
   }
 
   .search-overlay__suggestions ul {
@@ -119,12 +215,22 @@ const suggestions = [
     margin: 0;
   }
 
-  .search-overlay__link {
-    display: block;
+  .search-overlay__item {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .search-overlay__item:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .search-overlay__item-link {
     padding: var(--space-3) 0;
-    font-size: var(--type-lg);
-    color: var(--color-text);
-    text-decoration: none;
+    padding-left: var(--space-4);
+  }
+
+  /* Hide go label on mobile — just icon */
+  .search-overlay__go-label {
+    display: none;
   }
 
   .sr-only {
@@ -138,33 +244,137 @@ const suggestions = [
     white-space: nowrap;
     border-width: 0;
   }
+
+  /* Desktop: same as mobile but with transparent margins matching nav bar */
+  @media (min-width: 1201px) {
+    .search-overlay__inner {
+      max-width: calc(100% - var(--space-3) * 2);
+      margin: var(--space-3) auto 0;
+      min-height: auto;
+      padding: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .search-overlay {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .search-overlay__go {
+      width: auto;
+      height: auto;
+      border-radius: 999px;
+      padding: 12px 20px;
+      gap: 6px;
+    }
+
+    .search-overlay__go-label {
+      display: inline;
+      font-size: var(--type-sm);
+      font-family: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .search-overlay__hamburger {
+      display: none;
+    }
+  }
 </style>
 
 <script>
+  import { gsap } from 'gsap';
+
   function initSearchOverlay() {
     const overlay = document.getElementById('search-overlay');
     const closeBtn = overlay?.querySelector('.search-overlay__close');
     const input = overlay?.querySelector('.search-overlay__input') as HTMLInputElement;
+    const searchItems = overlay?.querySelectorAll('.search-overlay__item');
+    const field = overlay?.querySelector('.search-overlay__field');
+    const heading = overlay?.querySelector('.search-overlay__heading');
 
-    function open() {
+    const inner = overlay?.querySelector('.search-overlay__inner') as HTMLElement;
+
+    function open(swap = false) {
       if (!overlay) return;
       overlay.classList.add('is-open');
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      // Pause Lenis if available
       (window as any).__lenis?.stop?.();
-      input?.focus();
+
+      if (!swap) {
+        gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+      } else {
+        gsap.set(overlay, { opacity: 1 });
+      }
+
+      const tl = gsap.timeline();
+      if (field) {
+        gsap.set(field, { opacity: 0, y: -10 });
+        tl.to(field, { opacity: 1, y: 0, duration: 0.3, ease: 'power3.out' }, swap ? 0 : 0.15);
+      }
+      if (heading) {
+        gsap.set(heading, { opacity: 0 });
+        tl.to(heading, { opacity: 1, duration: 0.3, ease: 'power2.out' }, swap ? 0.1 : 0.25);
+      }
+      if (searchItems?.length) {
+        gsap.set(searchItems, { opacity: 0, x: -20 });
+        tl.to(searchItems, {
+          opacity: 1, x: 0, duration: 0.4, ease: 'power3.out', stagger: 0.04,
+        }, swap ? 0.1 : 0.3);
+      }
+
+      tl.call(() => input?.focus());
     }
 
-    function close() {
+    function close(swap = false) {
       if (!overlay) return;
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      (window as any).__lenis?.start?.();
+      if (swap) {
+        gsap.to(inner, {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.in',
+          onComplete: () => {
+            overlay.classList.remove('is-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            gsap.set(inner, { opacity: 1 });
+          },
+        });
+      } else {
+        gsap.to(overlay, {
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.in',
+          onComplete: () => {
+            overlay.classList.remove('is-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            (window as any).__lenis?.start?.();
+          },
+        });
+      }
     }
 
-    closeBtn?.addEventListener('click', close);
+    closeBtn?.addEventListener('click', () => close(false));
+
+    // Hamburger button — swap to hamburger overlay
+    const hamburgerBtn = overlay?.querySelector('.search-overlay__hamburger');
+    hamburgerBtn?.addEventListener('click', () => {
+      (window as any).__hamburgerOverlay?.open(true);
+      close(true);
+    });
+
+    // Close on click outside the inner container
+    overlay?.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        close(false);
+      }
+    });
 
     // Close on Escape
     document.addEventListener('keydown', (e) => {

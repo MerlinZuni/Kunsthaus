@@ -30,8 +30,9 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
     <ul class="exhibition-list__items">
       {data.collection.map((item) => (
         <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
-          <span class="exhibition-list__row-title">{item.title[lang]}</span>
+          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
           <span class="exhibition-list__row-meta">{item.period}</span>
+          <span class="exhibition-list__row-tags"></span>
           <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
         </li>
       ))}
@@ -46,16 +47,14 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
     <ul class="exhibition-list__items">
       {data.currentExhibitions.map((item) => (
         <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
-          <span class="exhibition-list__row-title">{item.title[lang]}</span>
-          <span class="exhibition-list__row-meta">
-            <span>{item.dateLabel[lang]}</span>
-            <span style="opacity: 0.5;">{item.location.building}, {item.location.floor}</span>
-          </span>
-          <span class="exhibition-list__row-location">
+          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
+          <span class="exhibition-list__row-meta">{item.dateLabel[lang]}</span>
+          <span class="exhibition-list__row-tags">
             {item.tags.map((tag) => (
               <span class="exhibition-list__tag">{tag}</span>
             ))}
           </span>
+          <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
         </li>
       ))}
     </ul>
@@ -69,16 +68,14 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
     <ul class="exhibition-list__items">
       {data.upcomingExhibitions.map((item) => (
         <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
-          <span class="exhibition-list__row-title">{item.title[lang]}</span>
+          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
           <span class="exhibition-list__row-meta">{item.dateLabel[lang]}</span>
-          <span class="exhibition-list__row-location">
+          <span class="exhibition-list__row-tags">
             {item.tags.includes('members-preview') && (
-              <span class="exhibition-list__tag exhibition-list__tag--members">
-                <span class="icon" style="font-size: 16px;">lock</span>
-                {memberLabel}
-              </span>
+              <span class="exhibition-list__tag">{memberLabel}</span>
             )}
           </span>
+          <span class="exhibition-list__row-location">{item.location?.building ? `${item.location.building}, ${item.location.floor}` : ''}</span>
         </li>
       ))}
     </ul>
@@ -195,8 +192,8 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
 
   .exhibition-list__row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: var(--space-8);
+    grid-template-columns: 2fr 1fr minmax(120px, auto) 1fr;
+    gap: var(--space-6);
     align-items: center;
     padding: var(--space-6) 0;
     border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
@@ -224,23 +221,43 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
 
   .exhibition-list__row-title {
     font-size: var(--type-md);
-    font-weight: var(--weight-light);
+    font-weight: var(--weight-regular);
     line-height: var(--leading-normal);
+  }
+
+  .exhibition-list__row-arrow {
+    font-size: 18px;
+    opacity: 0;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: var(--space-2);
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .exhibition-list__row--active .exhibition-list__row-arrow {
+    opacity: 0.7;
+    transform: translateX(4px);
   }
 
   .exhibition-list__row-meta {
     font-size: var(--type-md);
-    font-weight: var(--weight-regular);
+    font-weight: var(--weight-light);
     color: var(--color-text);
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
   }
 
+  .exhibition-list__row-tags {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
   .exhibition-list__row-location {
     font-size: var(--type-md);
-    font-weight: var(--weight-regular);
-    color: var(--color-decorative-shadow);
+    font-weight: var(--weight-light);
+    color: var(--color-text);
     display: flex;
     align-items: center;
     gap: var(--space-3);

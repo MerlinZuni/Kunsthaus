@@ -14,31 +14,25 @@ const languages = [
 const current = languages.find(l => l.code === lang) || languages[0];
 ---
 
-<div class="lang-switcher">
+<div class="lang-switcher" role="group" aria-label="Language selection">
   <button
     class="lang-switcher__trigger touch-target"
     aria-expanded="false"
-    aria-haspopup="listbox"
     aria-label={`Language: ${current.label}`}
   >
-    <span>{current.label}</span>
-    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-      <path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <span class="lang-switcher__current">{current.label}</span>
+    <span class="icon lang-switcher__arrow">arrow_drop_down</span>
   </button>
-  <ul class="lang-switcher__dropdown" role="listbox" aria-label="Select language">
+  <div class="lang-switcher__panel">
     {languages.map(l => (
-      <li role="option" aria-selected={l.code === lang ? 'true' : 'false'}>
-        <button
-          class="lang-switcher__option touch-target"
-          data-lang={l.code}
-          aria-current={l.code === lang ? 'true' : undefined}
-        >
-          {l.label}
-        </button>
-      </li>
+      <button
+        class:list={['lang-switcher__option', { 'lang-switcher__option--hidden': l.code === lang }]}
+        data-lang={l.code}
+      >
+        {l.label}
+      </button>
     ))}
-  </ul>
+  </div>
 </div>
 
 <style>
@@ -49,54 +43,84 @@ const current = languages.find(l => l.code === lang) || languages[0];
 
   .lang-switcher__trigger {
     background: none;
-    border: none;
+    border: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
+    border-radius: 999px;
     cursor: pointer;
     color: var(--color-text);
     font-size: var(--type-md);
-    font-weight: var(--weight-regular);
-    display: inline-flex;
+    font-weight: var(--weight-medium);
+    font-family: inherit;
+    display: flex;
     align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-2);
+    justify-content: space-between;
+    gap: 2px;
+    padding: 6px 14px 6px 18px;
   }
 
-  .lang-switcher__dropdown {
-    display: none;
+  .lang-switcher.is-open .lang-switcher__trigger {
+    border-radius: 16px 16px 0 0;
+  }
+
+  .lang-switcher__arrow {
+    font-size: 24px;
+    opacity: 0.7;
+    transition: transform 0.3s ease;
+  }
+
+  .lang-switcher.is-open .lang-switcher__arrow {
+    transform: rotate(180deg);
+  }
+
+  .lang-switcher__panel {
     position: absolute;
     top: 100%;
+    left: 0;
     right: 0;
-    background: var(--color-decorative);
-    list-style: none;
-    padding: var(--space-2) 0;
-    margin: var(--space-1) 0 0;
-    min-width: 60px;
-    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    background-color: var(--color-concrete-light);
+    background-image: url(/Kunsthaus/textures/concrete-wall.png);
+    background-repeat: repeat;
+    background-blend-mode: multiply;
+    border: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    transition: max-height 0.3s ease;
+    opacity: 0;
   }
 
-  .lang-switcher.is-open .lang-switcher__dropdown {
-    display: block;
+  .lang-switcher.is-open .lang-switcher__panel {
+    max-height: 100px;
+    opacity: 1;
   }
 
   .lang-switcher__option {
     background: none;
     border: none;
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
     cursor: pointer;
     color: var(--color-text);
     font-size: var(--type-md);
     font-weight: var(--weight-regular);
-    padding: var(--space-2) var(--space-4);
-    width: 100%;
+    font-family: inherit;
+    padding: 6px 18px;
     text-align: left;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
   }
 
-  .lang-switcher__option[aria-current="true"] {
-    font-weight: var(--weight-bold);
+  .lang-switcher__option--hidden {
+    display: none;
   }
 
-  @media (hover: hover) {
-    .lang-switcher__option:hover {
-      background: var(--color-surface);
-    }
+  .lang-switcher__option:last-child {
+    padding-bottom: 8px;
+  }
+
+  .lang-switcher__option:hover {
+    opacity: 1;
   }
 </style>
 
@@ -104,6 +128,7 @@ const current = languages.find(l => l.code === lang) || languages[0];
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lang-switcher').forEach(switcher => {
       const trigger = switcher.querySelector('.lang-switcher__trigger') as HTMLButtonElement;
+      const currentLabel = trigger?.querySelector('.lang-switcher__current') as HTMLElement;
       const options = switcher.querySelectorAll('.lang-switcher__option');
 
       trigger?.addEventListener('click', () => {
@@ -117,8 +142,10 @@ const current = languages.find(l => l.code === lang) || languages[0];
           if (lang) {
             document.documentElement.setAttribute('lang', lang);
             localStorage.setItem('kunsthaus-lang', lang);
-            // Update trigger text
-            trigger.querySelector('span')!.textContent = lang.toUpperCase();
+            if (currentLabel) currentLabel.textContent = lang.toUpperCase();
+            // Show all options, then hide the newly active one
+            options.forEach(o => o.classList.remove('lang-switcher__option--hidden'));
+            option.classList.add('lang-switcher__option--hidden');
           }
           switcher.classList.remove('is-open');
           trigger.setAttribute('aria-expanded', 'false');

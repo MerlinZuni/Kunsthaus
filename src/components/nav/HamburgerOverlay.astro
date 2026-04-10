@@ -9,62 +9,79 @@ interface Props {
 
 const { navItems, lang, searchLabel } = Astro.props;
 const languages = [
-  { code: 'en', label: 'EN' },
-  { code: 'de', label: 'DE' },
-  { code: 'fr', label: 'FR' },
+  { code: 'en', label: 'English' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'fr', label: 'Fran\u00e7ais' },
 ];
 ---
 
 <div class="hamburger-overlay" id="hamburger-overlay" aria-hidden="true" role="dialog" aria-label="Navigation menu">
   <div class="hamburger-overlay__inner">
-    {/* Close button */}
-    <button class="hamburger-overlay__close touch-target" aria-label="Close menu">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-
-    {/* Logo at top */}
-    <div class="hamburger-overlay__logo">
-      <a href="/">Kunsthaus Zurich</a>
+    {/* Top bar: mirrors nav bar exactly — same padding, same icon positions */}
+    <div class="hamburger-overlay__header">
+      <button class="hamburger-overlay__search-btn touch-target" aria-label={searchLabel}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <a href="/" class="hamburger-overlay__logo">
+        <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="hamburger-overlay__logo-img" />
+      </a>
+      <button class="hamburger-overlay__close touch-target" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
     </div>
 
-    {/* Navigation links */}
-    <nav class="hamburger-overlay__nav" aria-label="Main navigation">
-      <ul>
-        {navItems.map(item => (
-          <li>
-            <a href={item.href} class="hamburger-overlay__link hover-wipe touch-pulse">
-              <span>{item.label[lang]}</span>
-            </a>
+    {/* Navigation links + secondary + language */}
+    <div class="hamburger-overlay__body">
+      <nav class="hamburger-overlay__nav" aria-label="Main navigation">
+        <ul>
+          {navItems.map((item, i) => (
+            <li class="hamburger-overlay__item" data-nav-item={i}>
+              <a href={item.href} class="hamburger-overlay__link">
+                <span>{item.label[lang]}</span>
+                <span class="icon hamburger-overlay__link-arrow">arrow_forward</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Secondary navigation */}
+      <nav class="hamburger-overlay__secondary" aria-label="Secondary navigation">
+        <ul>
+          <li class="hamburger-overlay__secondary-item">
+            <a href="/membership" class="hamburger-overlay__secondary-link">{lang === 'de' ? 'Mitgliedschaft' : 'Membership'}</a>
           </li>
+          <li class="hamburger-overlay__secondary-item">
+            <a href="/shop" class="hamburger-overlay__secondary-link">{lang === 'de' ? 'Shop' : 'Shop'}</a>
+          </li>
+          <li class="hamburger-overlay__secondary-item">
+            <a href="/visit/restaurant" class="hamburger-overlay__secondary-link">{lang === 'de' ? 'Gastronomie' : 'Gastronomy'}</a>
+          </li>
+          <li class="hamburger-overlay__secondary-item">
+            <a href="/press" class="hamburger-overlay__secondary-link">{lang === 'de' ? 'Presse' : 'Press'}</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="hamburger-overlay__spacer"></div>
+
+      <div class="hamburger-overlay__lang" role="group" aria-label="Language selection" data-lang-toggle>
+        <span class="hamburger-overlay__lang-pill"></span>
+        {languages.map(l => (
+          <button
+            class:list={['hamburger-overlay__lang-btn', { 'is-active': l.code === lang }]}
+            data-lang={l.code}
+          >
+            {l.label}
+          </button>
         ))}
-      </ul>
-    </nav>
-
-    {/* Language options */}
-    <div class="hamburger-overlay__lang" role="group" aria-label="Language selection">
-      {languages.map(l => (
-        <button
-          class:list={['hamburger-overlay__lang-btn', 'touch-target', { 'is-active': l.code === lang }]}
-          data-lang={l.code}
-        >
-          {l.label}
-        </button>
-      ))}
-    </div>
-
-    {/* Search field at bottom */}
-    <div class="hamburger-overlay__search">
-      <label for="hamburger-search-input" class="sr-only">{searchLabel}</label>
-      <input
-        type="text"
-        id="hamburger-search-input"
-        class="hamburger-overlay__search-input"
-        placeholder={`${searchLabel}...`}
-        autocomplete="off"
-      />
+      </div>
     </div>
   </div>
 </div>
@@ -74,49 +91,85 @@ const languages = [
     position: fixed;
     inset: 0;
     z-index: 80;
-    background: var(--color-surface);
-    display: none;
-    overflow-y: auto;
+    background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
   }
 
   .hamburger-overlay.is-open {
-    display: block;
+    visibility: visible;
   }
 
   .hamburger-overlay__inner {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding: var(--space-6);
+    /* Match navbar: padding var(--space-3) around the bar */
+    padding: var(--space-3);
   }
 
-  .hamburger-overlay__close {
-    position: absolute;
-    top: var(--space-4);
-    right: var(--space-4);
+  /* Header: exact same layout as .navbar__inner */
+  .hamburger-overlay__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .hamburger-overlay__search-btn {
     background: none;
     border: none;
     cursor: pointer;
     color: var(--color-text);
-    z-index: 2;
+    padding: var(--space-2);
   }
 
   .hamburger-overlay__logo {
-    text-align: center;
-    padding: var(--space-6) 0 var(--space-8);
-  }
-
-  .hamburger-overlay__logo a {
-    font-size: var(--type-lg);
-    font-weight: var(--weight-bold);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     text-decoration: none;
-    color: var(--color-text);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
   }
 
-  .hamburger-overlay__nav {
+  .hamburger-overlay__logo-img {
+    width: 200px;
+    height: auto;
+    display: block;
+    filter: invert(1);
+  }
+
+  html[data-mode="onsite"] .hamburger-overlay__logo-img {
+    filter: none;
+  }
+
+  .hamburger-overlay__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-2);
+  }
+
+  /* Body: nav + secondary + language */
+  .hamburger-overlay__body {
+    display: flex;
+    flex-direction: column;
     flex: 1;
+    padding: var(--space-6) var(--space-4) var(--space-6);
+  }
+
+  .hamburger-overlay__spacer {
+    flex: 1;
+  }
+
+  /* Navigation links */
+  .hamburger-overlay__nav {
+    display: flex;
   }
 
   .hamburger-overlay__nav ul {
@@ -125,59 +178,120 @@ const languages = [
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .hamburger-overlay__item {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .hamburger-overlay__item:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 
   .hamburger-overlay__link {
-    display: block;
-    padding: var(--space-4) 0;
-    font-size: var(--type-2xl);
-    font-weight: var(--weight-bold);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6) 0;
+    padding-left: var(--space-4);
+    padding-right: var(--space-2);
+    font-size: var(--type-xl);
+    font-weight: var(--weight-light);
     color: var(--color-text);
     text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
+
+  .hamburger-overlay__link-arrow {
+    font-size: 24px;
+    opacity: 0.4;
+  }
+
+  /* Secondary navigation */
+  .hamburger-overlay__secondary {
+    padding-top: 88px;
+  }
+
+  .hamburger-overlay__secondary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hamburger-overlay__secondary-item {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .hamburger-overlay__secondary-item:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .hamburger-overlay__secondary-link {
+    display: block;
+    padding: var(--space-3) 0;
+    padding-left: var(--space-4);
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    opacity: 0.6;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .hamburger-overlay__secondary-link:hover,
+  .hamburger-overlay__secondary-link:active {
+    opacity: 1;
+  }
+
+  /* Language */
 
   .hamburger-overlay__lang {
     display: flex;
-    gap: var(--space-4);
-    padding: var(--space-6) 0;
-    border-top: 1px solid var(--color-decorative);
+    position: relative;
+    border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 0;
+    margin-top: 0;
+    width: 100%;
+  }
+
+  .hamburger-overlay__lang-pill {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: calc(100% - 6px);
+    border-radius: 999px;
+    border: 1px solid var(--color-text);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .hamburger-overlay__lang-btn {
+    position: relative;
+    z-index: 1;
+    flex: 1;
     background: none;
     border: none;
+    border-radius: 999px;
     cursor: pointer;
-    font-size: var(--type-md);
+    font-size: var(--type-sm);
     font-weight: var(--weight-regular);
     color: var(--color-decorative-shadow);
-    padding: var(--space-2) var(--space-3);
+    padding: 16px 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: center;
+    transition: color 0.3s ease;
   }
 
   .hamburger-overlay__lang-btn.is-active {
-    font-weight: var(--weight-bold);
+    font-weight: var(--weight-medium);
     color: var(--color-text);
-  }
-
-  .hamburger-overlay__search {
-    padding: var(--space-4) 0;
-    border-top: 1px solid var(--color-decorative);
-  }
-
-  .hamburger-overlay__search-input {
-    width: 100%;
-    background: none;
-    border: none;
-    border-bottom: 2px solid var(--color-text);
-    padding: var(--space-3) 0;
-    font-size: var(--type-lg);
-    color: var(--color-text);
-    font-family: inherit;
-    outline: none;
-  }
-
-  .hamburger-overlay__search-input::placeholder {
-    color: var(--color-decorative-shadow);
   }
 
   .sr-only {
@@ -191,31 +305,151 @@ const languages = [
     white-space: nowrap;
     border-width: 0;
   }
+
+  @media (min-width: 768px) {
+    .hamburger-overlay__link {
+      font-size: var(--type-lg);
+      padding: var(--space-6) 0;
+      padding-left: var(--space-4);
+      padding-right: var(--space-2);
+    }
+
+    .hamburger-overlay__secondary {
+      padding-top: 48px;
+    }
+
+    .hamburger-overlay__secondary-item {
+      border: none;
+    }
+
+    .hamburger-overlay__secondary-item:first-child {
+      border: none;
+    }
+  }
 </style>
 
 <script>
+  import { gsap } from 'gsap';
+
   function initHamburgerOverlay() {
     const overlay = document.getElementById('hamburger-overlay');
     const closeBtn = overlay?.querySelector('.hamburger-overlay__close');
     const langBtns = overlay?.querySelectorAll('.hamburger-overlay__lang-btn');
+    const navItems = overlay?.querySelectorAll('.hamburger-overlay__item');
+    const body = overlay?.querySelector('.hamburger-overlay__body');
+    const langGroup = overlay?.querySelector('.hamburger-overlay__lang');
 
-    function open() {
+    const inner = overlay?.querySelector('.hamburger-overlay__inner') as HTMLElement;
+
+    function open(swap = false) {
       if (!overlay) return;
       overlay.classList.add('is-open');
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
       (window as any).__lenis?.stop?.();
+
+      if (!swap) {
+        // Full open: fade in backdrop + content
+        gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+      } else {
+        // Swap: backdrop already visible, just show
+        gsap.set(overlay, { opacity: 1 });
+      }
+
+      // Animate content in
+      const tl = gsap.timeline();
+      if (navItems?.length) {
+        gsap.set(navItems, { opacity: 0, x: -20 });
+        tl.to(navItems, {
+          opacity: 1,
+          x: 0,
+          duration: 0.4,
+          ease: 'power3.out',
+          stagger: 0.06,
+        }, swap ? 0 : 0.15);
+      }
+      if (langGroup) {
+        gsap.set(langGroup, { opacity: 0 });
+        tl.to(langGroup, { opacity: 1, duration: 0.3, ease: 'power2.out' }, swap ? 0.15 : 0.35);
+      }
+
+      requestAnimationFrame(slideLangPill);
     }
 
-    function close() {
+    function close(swap = false) {
       if (!overlay) return;
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      (window as any).__lenis?.start?.();
+      if (swap) {
+        // Swap: just hide content quickly, keep backdrop
+        gsap.to(inner, {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.in',
+          onComplete: () => {
+            overlay.classList.remove('is-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            gsap.set(inner, { opacity: 1 });
+          },
+        });
+      } else {
+        // Full close: fade out everything
+        gsap.to(overlay, {
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.in',
+          onComplete: () => {
+            overlay.classList.remove('is-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            (window as any).__lenis?.start?.();
+          },
+        });
+      }
     }
 
-    closeBtn?.addEventListener('click', close);
+    closeBtn?.addEventListener('click', () => close(false));
+
+    // Search button — swap to search overlay
+    const searchBtn = overlay?.querySelector('.hamburger-overlay__search-btn');
+    searchBtn?.addEventListener('click', () => {
+      // Immediately open the other overlay behind this one
+      (window as any).__searchOverlay?.open(true);
+      // Then fade out this content
+      close(true);
+    });
+
+    // Language pill slider
+    const langToggle = overlay?.querySelector('[data-lang-toggle]') as HTMLElement;
+    const langPill = langToggle?.querySelector('.hamburger-overlay__lang-pill') as HTMLElement;
+
+    function slideLangPill() {
+      if (!langToggle || !langPill) return;
+      const active = langToggle.querySelector('.is-active') as HTMLElement;
+      if (!active) return;
+      const toggleRect = langToggle.getBoundingClientRect();
+      const activeRect = active.getBoundingClientRect();
+      gsap.to(langPill, {
+        x: activeRect.left - toggleRect.left - 3,
+        width: activeRect.width,
+        duration: 0.35,
+        ease: 'power3.out',
+      });
+    }
+
+    // Set initial pill position
+    if (langToggle && langPill) {
+      const initActive = langToggle.querySelector('.is-active') as HTMLElement;
+      if (initActive) {
+        // Defer to next frame so layout is computed
+        requestAnimationFrame(() => {
+          const toggleRect = langToggle.getBoundingClientRect();
+          const activeRect = initActive.getBoundingClientRect();
+          gsap.set(langPill, {
+            x: activeRect.left - toggleRect.left - 3,
+            width: activeRect.width,
+          });
+        });
+      }
+    }
 
     // Language buttons
     langBtns?.forEach(btn => {
@@ -226,6 +460,7 @@ const languages = [
           localStorage.setItem('kunsthaus-lang', lang);
           langBtns.forEach(b => b.classList.remove('is-active'));
           btn.classList.add('is-active');
+          slideLangPill();
         }
       });
     });
