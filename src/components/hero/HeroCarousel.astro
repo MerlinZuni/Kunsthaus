@@ -5,6 +5,7 @@
 
 import HeroSlide from './HeroSlide.astro';
 import CarouselTabs from './CarouselTabs.astro';
+import GridOverlay from '../GridOverlay.tsx';
 
 interface Props {
   slides: Array<{
@@ -36,6 +37,9 @@ const playLabel = getString('carousel-play');
 
 <section class="hero-pinned" aria-roledescription="carousel" aria-label="Featured exhibitions">
   <div class="hero-carousel">
+    {/* Grid overlay — background layer */}
+    <GridOverlay client:only="react" />
+
     {/* Slides container */}
     <div class="hero-carousel__slides">
       {slides.map((slide, i) => (
@@ -64,25 +68,8 @@ const playLabel = getString('carousel-play');
     {/* Gradient scrim for tab/CTA legibility */}
     <div class="hero-carousel__scrim" aria-hidden="true"></div>
 
-    {/* Carousel progress tabs */}
-    <CarouselTabs slides={slides} lang={lang} />
-
-    {/* Pause/play toggle -- WCAG 2.2.2 */}
-    <button
-      class="hero-carousel__pause touch-target"
-      id="carousel-pause-btn"
-      aria-label={pauseLabel}
-      data-pause-label={pauseLabel}
-      data-play-label={playLabel}
-    >
-      <svg class="hero-carousel__pause-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <rect x="4" y="3" width="4" height="14" rx="1"/>
-        <rect x="12" y="3" width="4" height="14" rx="1"/>
-      </svg>
-      <svg class="hero-carousel__play-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display:none">
-        <polygon points="5,3 17,10 5,17"/>
-      </svg>
-    </button>
+    {/* Carousel progress tabs with pause/counter */}
+    <CarouselTabs slides={slides} lang={lang} pauseLabel={pauseLabel} playLabel={playLabel} />
 
     {/* Live region for screen readers */}
     <div class="sr-only" aria-live="polite" aria-atomic="true" id="carousel-live-region">
@@ -122,7 +109,7 @@ const playLabel = getString('carousel-play');
     display: flex;
     flex-direction: column;
     text-align: right;
-    font-size: clamp(var(--type-3xl), 8vw, var(--type-4xl));
+    font-size: clamp(var(--type-4xl), 11vw, 9rem);
     font-weight: var(--weight-bold);
     line-height: var(--leading-tight);
     text-transform: uppercase;
@@ -138,29 +125,6 @@ const playLabel = getString('carousel-play');
     display: none;
   }
 
-  /* Pause/play button */
-  .hero-carousel__pause {
-    position: absolute;
-    bottom: var(--space-4);
-    right: var(--space-8);
-    z-index: 4;
-    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: none;
-    cursor: pointer;
-    color: var(--color-text);
-    padding: var(--space-2);
-    border-radius: 2px;
-  }
-
-  .hero-carousel__pause.is-paused .hero-carousel__pause-icon {
-    display: none;
-  }
-  .hero-carousel__pause.is-paused .hero-carousel__play-icon {
-    display: block;
-  }
-
   .sr-only {
     position: absolute;
     width: 1px;
@@ -174,12 +138,15 @@ const playLabel = getString('carousel-play');
   }
 
   @media (max-width: 767px) {
-    .hero-carousel__text {
-      padding-right: var(--space-4);
+    .hero-carousel {
+      height: 100vh;
     }
 
-    .hero-carousel__pause {
-      right: var(--space-4);
+    .hero-carousel__text {
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-right: var(--space-4);
+      padding-top: 100px;
     }
   }
 </style>
@@ -196,6 +163,9 @@ const playLabel = getString('carousel-play');
     const fills = carousel.querySelectorAll('[data-tab-fill]');
     const pauseBtn = document.getElementById('carousel-pause-btn');
     const liveRegion = document.getElementById('carousel-live-region');
+    const counter = document.getElementById('carousel-counter');
+    const subtitleEl = document.getElementById('carousel-subtitle');
+    const slideData = (window as any).__carouselSlideData || [];
     const slideCount = slides.length;
 
     if (slideCount <= 1) return;
@@ -207,23 +177,34 @@ const playLabel = getString('carousel-play');
     // Build GSAP timeline for auto-play
     const tl = gsap.timeline({ repeat: -1 });
 
+    // Get all tab title elements
+    const tabTitles = Array.from(tabs).map(tab =>
+      tab.querySelector('.carousel-tabs__title') as HTMLElement
+    );
+
     for (let i = 0; i < slideCount; i++) {
       const fill = fills[i] as HTMLElement;
+      const title = tabTitles[i];
+      const nextTitle = tabTitles[i + 1] || tabTitles[0];
 
       // Show slide i
       tl.call(() => activateSlide(i), [], i === 0 ? 0 : undefined);
 
-      // Animate fill bar from 0 to 1
+      // Animate fill bar and fade in next title near the end
       tl.fromTo(
         fill,
         { scaleX: 0 },
         { scaleX: 1, duration: SLIDE_DURATION, ease: 'none' },
       );
 
+      // Near end of fill, start fading in next title and fading out current
+      tl.to(title, { opacity: 0.5, duration: 0.4, ease: 'power2.inOut' }, `-=0.5`);
+      tl.to(nextTitle, { opacity: 0.8, duration: 0.4, ease: 'power2.inOut' }, `-=0.4`);
+
       // Reset fill after transition
       if (i < slideCount - 1) {
         tl.call(() => {
-          gsap.set(fill, { scaleX: 0 });
+          gsap.to(fill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
         });
       }
     }
@@ -231,37 +212,95 @@ const playLabel = getString('carousel-play');
     // Reset last fill at repeat
     tl.call(() => {
       const lastFill = fills[slideCount - 1] as HTMLElement;
-      gsap.set(lastFill, { scaleX: 0 });
+      gsap.to(lastFill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
     });
 
     function activateSlide(index: number) {
       currentIndex = index;
 
-      // Toggle slides
+      // Stacking mode: previous slides stay visible, new ones drop on top
       slides.forEach((slide, i) => {
         const el = slide as HTMLElement;
-        if (i === index) {
+        const images = el.querySelectorAll('.hero-slide__image-slot');
+
+        if (i <= index) {
+          // Show this slide and keep it visible
           el.classList.add('hero-slide--active');
           el.style.opacity = '1';
-          el.style.pointerEvents = 'auto';
+          el.style.pointerEvents = i === index ? 'auto' : 'none';
+          // Bump z-index so later slides stack on top
+          el.style.zIndex = String(i);
+
+          // Only show CTA on the active slide, hide on previous
+          const cta = el.querySelector('.hero-slide__cta') as HTMLElement;
+          if (cta) {
+            cta.style.display = i === index ? '' : 'none';
+          }
+
+          if (i === index) {
+            // Animate new slide's images dropping in
+            gsap.set(images, { opacity: 0, scale: 1.35 });
+            gsap.to(images, {
+              opacity: 1,
+              scale: 1,
+              duration: 1.4,
+              ease: 'power3.out',
+              stagger: 0.4,
+            });
+          }
+          // Previous slides' images stay as they are
         } else {
+          // Future slides: hidden and reset
           el.classList.remove('hero-slide--active');
           el.style.opacity = '0';
           el.style.pointerEvents = 'none';
+          gsap.set(images, { opacity: 0, scale: 1.35 });
         }
       });
 
-      // Toggle tabs
+      // On loop restart (index 0), reset all slides so stack starts fresh
+      if (index === 0) {
+        slides.forEach((slide, i) => {
+          if (i > 0) {
+            const el = slide as HTMLElement;
+            el.style.opacity = '0';
+            el.style.pointerEvents = 'none';
+            el.classList.remove('hero-slide--active');
+            const images = el.querySelectorAll('.hero-slide__image-slot');
+            gsap.set(images, { opacity: 0, scale: 1.35 });
+          }
+        });
+      }
+
+      // Toggle tabs with smooth title transitions
       tabs.forEach((tab, i) => {
+        const title = tab.querySelector('.carousel-tabs__title') as HTMLElement;
         if (i === index) {
           tab.classList.add('carousel-tabs__tab--active');
+          if (title) {
+            gsap.to(title, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+          }
         } else {
           tab.classList.remove('carousel-tabs__tab--active');
+          if (title) {
+            gsap.to(title, { opacity: 0.5, duration: 0.5, ease: 'power2.out' });
+          }
           // Reset inactive fills
           const fill = fills[i] as HTMLElement;
-          gsap.set(fill, { scaleX: 0 });
+          gsap.to(fill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
         }
       });
+
+      // Update counter
+      if (counter) {
+        counter.textContent = `${index + 1}/${slideCount}`;
+      }
+
+      // Update subtitle
+      const data = slideData[index];
+      if (data && subtitleEl) {
+        subtitleEl.textContent = data.subtitle;
+      }
 
       // Update live region
       if (liveRegion) {

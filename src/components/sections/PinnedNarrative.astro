@@ -4,6 +4,7 @@
 // Mobile: cards stack vertically with normal scroll
 
 import ExhibitionCard from './ExhibitionCard.astro';
+import StatusAccordion from '../ui/StatusAccordion.astro';
 
 interface Props {
   contentType: string;
@@ -12,8 +13,13 @@ interface Props {
     title: { de: string; en: string };
     description?: { de: string; en: string };
     image?: string;
+    images?: string[];
     date?: string;
     link?: string;
+    linkLabel?: { de: string; en: string };
+    secondaryLink?: string;
+    secondaryLinkLabel?: { de: string; en: string };
+    schedule?: Array<{ day: number; label: { de: string; en: string }; open?: string; close?: string; closed?: boolean }>;
   }>;
   lang: 'en' | 'de';
 }
@@ -43,9 +49,17 @@ const isExhibition = contentType === 'exhibitions';
           />
         ) : (
           <article class="pinned-narrative__card">
-            {item.image && (
-              <div class="pinned-narrative__card-image">
-                <img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${item.image}`} alt={item.title[lang]} loading="lazy" />
+            {(item.images?.length ? item.images : item.image ? [item.image] : []).length > 0 && (
+              <div class="pinned-narrative__card-stack" data-stack>
+                {(item.images || (item.image ? [item.image] : [])).map((src, imgIdx) => (
+                  <div
+                    class="pinned-narrative__card-stack-img"
+                    data-stack-img={imgIdx}
+                    style={`--stack-offset: ${imgIdx}`}
+                  >
+                    <img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${src}`} alt={`${item.title[lang]} ${imgIdx + 1}`} loading="lazy" />
+                  </div>
+                ))}
               </div>
             )}
             <div class="pinned-narrative__card-content">
@@ -56,9 +70,26 @@ const isExhibition = contentType === 'exhibitions';
               {item.description && (
                 <p class="pinned-narrative__card-desc">{item.description[lang]}</p>
               )}
+              {item.schedule && (
+                <StatusAccordion
+                  schedule={item.schedule.map(d => ({
+                    ...d,
+                    label: d.label[lang]
+                  }))}
+                  closedLabel={lang === 'de' ? 'Heute geschlossen' : 'Closed today'}
+                  lang={lang}
+                />
+              )}
               {item.link && (
-                <a href={item.link} class="pinned-narrative__card-link link-underline hover-wipe touch-pulse">
-                  <span>{lang === 'de' ? 'Mehr erfahren' : 'Learn more'}</span>
+                <a href={item.link} class="pinned-narrative__card-link btn-link touch-pulse" target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
+                  <span>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
+                  <span class="icon">arrow_forward</span>
+                </a>
+              )}
+              {item.secondaryLink && (
+                <a href={item.secondaryLink} class="pinned-narrative__card-link btn-link touch-pulse" target="_blank" rel="noopener">
+                  <span>{item.secondaryLinkLabel ? item.secondaryLinkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
+                  <span class="icon">arrow_forward</span>
                 </a>
               )}
             </div>
@@ -91,75 +122,47 @@ const isExhibition = contentType === 'exhibitions';
 
       const cardCount = cards.length;
 
-      ScrollTrigger.matchMedia({
-        // Desktop: pin section, crossfade cards
-        '(min-width: 768px)': function () {
-          // Set total scroll distance
-          const totalHeight = cardCount * 100; // vh per card
-          narrative.style.height = `${totalHeight}vh`;
+      // All cards visible, fade in on scroll
+      narrative.style.height = 'auto';
 
-          const cardsContainer = narrative.querySelector('.pinned-narrative__cards') as HTMLElement;
-          if (!cardsContainer) return;
+      cards.forEach((card) => {
+        gsap.set(card, { opacity: 1, y: 0, zIndex: 'auto' });
 
-          // Initially show only first card, hide others
-          cards.forEach((card, i) => {
-            if (i > 0) {
-              gsap.set(card, { opacity: 0, y: 60 });
-            }
-          });
-
-          ScrollTrigger.create({
-            trigger: narrative,
-            start: 'top top',
-            end: `+=${totalHeight}vh`,
-            pin: true,
-            pinSpacing: true,
-            scrub: true,
-            onUpdate: (self) => {
-              const progress = self.progress * cardCount;
-              const activeIndex = Math.min(Math.floor(progress), cardCount - 1);
-              const cardProgress = progress - activeIndex;
-
-              cards.forEach((card, i) => {
-                if (i === activeIndex) {
-                  // Current card: visible, fading out as we progress
-                  const fadeOut = i < cardCount - 1 ? 1 - cardProgress * 0.8 : 1;
-                  const slideOut = i < cardCount - 1 ? -cardProgress * 40 : 0;
-                  gsap.set(card, { opacity: fadeOut, y: slideOut, zIndex: 2 });
-                } else if (i === activeIndex + 1) {
-                  // Next card: fading in
-                  gsap.set(card, { opacity: cardProgress, y: 60 * (1 - cardProgress), zIndex: 3 });
-                } else if (i < activeIndex) {
-                  // Past cards: hidden
-                  gsap.set(card, { opacity: 0, y: -40, zIndex: 1 });
-                } else {
-                  // Future cards: hidden below
-                  gsap.set(card, { opacity: 0, y: 60, zIndex: 1 });
-                }
-              });
+        // Fade in the card content
+        const content = card.querySelector('.pinned-narrative__card-content');
+        if (content) {
+          gsap.from(content, {
+            opacity: 0,
+            y: 30,
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+              end: 'top 60%',
+              scrub: true,
             },
           });
-        },
+        }
 
-        // Mobile: normal stacked scroll
-        '(max-width: 767px)': function () {
-          narrative.style.height = 'auto';
+        // Stagger in stacked images (drop-onto-table effect)
+        const stackImgs = card.querySelectorAll('[data-stack-img]');
+        if (stackImgs.length) {
+          gsap.set(stackImgs, { opacity: 0, scale: 1.2 });
 
-          cards.forEach((card) => {
-            gsap.set(card, { opacity: 1, y: 0, zIndex: 'auto' });
-
-            gsap.from(card, {
-              opacity: 0,
-              y: 30,
-              scrollTrigger: {
-                trigger: card,
-                start: 'top 85%',
-                end: 'top 60%',
-                scrub: true,
-              },
-            });
+          ScrollTrigger.create({
+            trigger: card,
+            start: 'top 80%',
+            onEnter: () => {
+              gsap.to(stackImgs, {
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                ease: 'power3.out',
+                stagger: 0.25,
+              });
+            },
+            once: true,
           });
-        },
+        }
       });
     });
   }
@@ -182,24 +185,7 @@ const isExhibition = contentType === 'exhibitions';
 
   @media (min-width: 768px) {
     .pinned-narrative__cards {
-      position: relative;
-      min-height: 80vh;
-    }
-
-    .pinned-narrative__card-wrap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      will-change: transform, opacity;
-    }
-
-    .pinned-narrative__card-wrap--even {
-      padding-right: 40%;
-    }
-
-    .pinned-narrative__card-wrap--odd {
-      padding-left: 40%;
+      gap: var(--space-24);
     }
   }
 
@@ -211,32 +197,174 @@ const isExhibition = contentType === 'exhibitions';
     .pinned-narrative__cards {
       gap: var(--space-16);
     }
+
+    .pinned-narrative__card {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .pinned-narrative__card-stack {
+      aspect-ratio: 3 / 2;
+    }
+
+    .pinned-narrative__card-wrap--odd .pinned-narrative__card {
+      direction: ltr;
+    }
   }
 
   /* Generic card styles (non-exhibition content) */
   .pinned-narrative__card {
     display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: var(--space-8);
-    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: start;
+    min-height: 400px;
   }
 
-  .pinned-narrative__card-image {
+  /* Stacked image cluster */
+  .pinned-narrative__card-stack {
+    position: relative;
+    aspect-ratio: 4 / 3;
+  }
+
+  .pinned-narrative__card-stack-img {
+    position: absolute;
     overflow: hidden;
-    aspect-ratio: 3 / 2;
     background: #d1d5db;
   }
 
-  .pinned-narrative__card-image img {
+  /* Variant A (cards 0, 4): large 3:2 top-left, smaller 2:3 offset down-right */
+  [data-card-index="0"] .pinned-narrative__card-stack-img[data-stack-img="0"],
+  [data-card-index="4"] .pinned-narrative__card-stack-img[data-stack-img="0"] {
+    width: 80%;
+    top: 0;
+    left: 0;
+    aspect-ratio: 3 / 2;
+    z-index: 1;
+  }
+  [data-card-index="0"] .pinned-narrative__card-stack-img[data-stack-img="1"],
+  [data-card-index="4"] .pinned-narrative__card-stack-img[data-stack-img="1"] {
+    width: 45%;
+    top: 35%;
+    right: 0;
+    aspect-ratio: 2 / 3;
+    z-index: 2;
+  }
+
+  /* 3rd image for Variant A: small 3:2 tucked mid-right */
+  [data-card-index="0"] .pinned-narrative__card-stack-img[data-stack-img="2"],
+  [data-card-index="4"] .pinned-narrative__card-stack-img[data-stack-img="2"] {
+    width: 35%;
+    top: 10%;
+    right: 5%;
+    aspect-ratio: 3 / 2;
+    z-index: 0;
+  }
+
+  /* Variant B (cards 1, 5): tall 2:3 offset down-left, 3:2 landscape top-right */
+  [data-card-index="1"] .pinned-narrative__card-stack-img[data-stack-img="0"],
+  [data-card-index="5"] .pinned-narrative__card-stack-img[data-stack-img="0"] {
+    width: 50%;
+    top: 20%;
+    left: 0;
+    aspect-ratio: 2 / 3;
+    z-index: 2;
+  }
+  [data-card-index="1"] .pinned-narrative__card-stack-img[data-stack-img="1"],
+  [data-card-index="5"] .pinned-narrative__card-stack-img[data-stack-img="1"] {
+    width: 70%;
+    top: 0;
+    right: 0;
+    aspect-ratio: 3 / 2;
+    z-index: 1;
+  }
+
+  /* 3rd image for Variant B: small 2:3 bottom-left */
+  [data-card-index="1"] .pinned-narrative__card-stack-img[data-stack-img="2"],
+  [data-card-index="5"] .pinned-narrative__card-stack-img[data-stack-img="2"] {
+    width: 30%;
+    bottom: 0;
+    left: 5%;
+    aspect-ratio: 2 / 3;
+    z-index: 3;
+  }
+
+  /* Variant C (cards 2, 6): 3:2 offset down-right, 2:3 top-left */
+  [data-card-index="2"] .pinned-narrative__card-stack-img[data-stack-img="0"],
+  [data-card-index="6"] .pinned-narrative__card-stack-img[data-stack-img="0"] {
+    width: 65%;
+    top: 25%;
+    right: 0;
+    aspect-ratio: 3 / 2;
+    z-index: 2;
+  }
+  [data-card-index="2"] .pinned-narrative__card-stack-img[data-stack-img="1"],
+  [data-card-index="6"] .pinned-narrative__card-stack-img[data-stack-img="1"] {
+    width: 50%;
+    top: 0;
+    left: 0;
+    aspect-ratio: 2 / 3;
+    z-index: 1;
+  }
+
+  /* 3rd image for Variant C: small 3:2 bottom-right */
+  [data-card-index="2"] .pinned-narrative__card-stack-img[data-stack-img="2"],
+  [data-card-index="6"] .pinned-narrative__card-stack-img[data-stack-img="2"] {
+    width: 38%;
+    bottom: 5%;
+    right: 5%;
+    aspect-ratio: 3 / 2;
+    z-index: 3;
+  }
+
+  /* Variant D (cards 3, 7): small 2:3 top-right, large 3:2 offset down-left */
+  [data-card-index="3"] .pinned-narrative__card-stack-img[data-stack-img="0"],
+  [data-card-index="7"] .pinned-narrative__card-stack-img[data-stack-img="0"] {
+    width: 40%;
+    top: 0;
+    right: 10%;
+    aspect-ratio: 2 / 3;
+    z-index: 1;
+  }
+  [data-card-index="3"] .pinned-narrative__card-stack-img[data-stack-img="1"],
+  [data-card-index="7"] .pinned-narrative__card-stack-img[data-stack-img="1"] {
+    width: 75%;
+    top: 30%;
+    left: 0;
+    aspect-ratio: 3 / 2;
+    z-index: 2;
+  }
+
+  /* 3rd image for Variant D: small 2:3 mid-right */
+  [data-card-index="3"] .pinned-narrative__card-stack-img[data-stack-img="2"],
+  [data-card-index="7"] .pinned-narrative__card-stack-img[data-stack-img="2"] {
+    width: 32%;
+    top: 8%;
+    right: 0;
+    aspect-ratio: 2 / 3;
+    z-index: 3;
+  }
+
+  .pinned-narrative__card-stack-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
+  }
+
+  /* Alternate: text first on odd cards */
+  .pinned-narrative__card-wrap--odd .pinned-narrative__card {
+    direction: rtl;
+  }
+  .pinned-narrative__card-wrap--odd .pinned-narrative__card > * {
+    direction: ltr;
   }
 
   .pinned-narrative__card-content {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    padding-top: var(--space-8);
   }
 
   .pinned-narrative__card-title {

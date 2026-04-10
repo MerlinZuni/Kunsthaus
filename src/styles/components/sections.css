@@ -5,12 +5,12 @@
   .stacking-section[data-bg-step="2"] { background-color: #ffffff; }
   .stacking-section[data-bg-step="3"] {
     background-color: #EBEBEB;
-    background-image: url(/textures/concrete-wall.png);
+    background-image: url(/Kunsthaus/textures/concrete-wall.png);
     background-repeat: repeat;
   }
   .stacking-section[data-bg-step="4"] {
     background-color: #C1BFB2;
-    background-image: url(/textures/asfalt-dark.png);
+    background-image: url(/Kunsthaus/textures/asfalt-dark.png);
     background-repeat: repeat;
   }
 
@@ -19,13 +19,13 @@
   html[data-mode="onsite"] .stacking-section[data-bg-step="2"] { background-color: #1e1c1a; }
   html[data-mode="onsite"] .stacking-section[data-bg-step="3"] {
     background-color: #A4A197;
-    background-image: url(/textures/concrete-wall.png);
+    background-image: url(/Kunsthaus/textures/concrete-wall.png);
     background-repeat: repeat;
     background-blend-mode: multiply;
   }
   html[data-mode="onsite"] .stacking-section[data-bg-step="4"] {
     background-color: #272523;
-    background-image: url(/textures/asfalt-dark.png);
+    background-image: url(/Kunsthaus/textures/asfalt-dark.png);
     background-repeat: repeat;
     background-blend-mode: luminosity;
   }
@@ -35,24 +35,13 @@
     mix-blend-mode: screen !important;
   }
 
-  /* Section stacking base styles — sticky cards scroll over each other */
+  /* Section stacking base styles */
   .stacking-section {
-    position: sticky;
-    top: 0;
+    position: relative;
     width: 100%;
     min-height: 100vh;
     height: auto;
-    will-change: transform, opacity;
-  }
-
-  /* Long-content sections: disable sticky so all content is scrollable */
-  .stacking-section[data-section="exhibitions"],
-  .stacking-section[data-section="offerings"],
-  .stacking-section[data-section="education"],
-  .stacking-section[data-section="events"],
-  .stacking-section[data-section="key-info"],
-  .stacking-section[data-section="planning-details"] {
-    position: relative;
+    will-change: transform;
   }
 
   /* D-24: Section vertical spacing */
@@ -83,7 +72,7 @@
     width: 100%;
     height: 85vh;
     min-height: 500px;
-    z-index: 10;
+    z-index: 12;
   }
 
   /* Hero spacer pushes content below fixed hero */
@@ -94,6 +83,19 @@
     z-index: 1;
   }
 
+  /* Opaque backdrop: covers fixed hero when sections scale/rotate */
+  .hero-backdrop {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    margin-top: -100vh;
+    z-index: 15;
+    background: var(--color-concrete-warm);
+    pointer-events: none;
+    opacity: 0;
+  }
+
   /* D-25: Mobile stacking - no pinning, native scroll */
   @media (max-width: 767px) {
     .hero-pinned {
@@ -102,6 +104,9 @@
       min-height: 100vh;
     }
     .hero-spacer {
+      display: none;
+    }
+    .hero-backdrop {
       display: none;
     }
   }

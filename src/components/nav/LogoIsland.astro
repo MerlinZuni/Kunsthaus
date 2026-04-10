@@ -4,7 +4,7 @@
 
 <div class="logo-island" id="logo-island" aria-hidden="true">
   <a href="/" class="logo-island__link" tabindex="-1">
-    Kunsthaus Zurich
+    <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="logo-island__img" />
   </a>
 </div>
 
@@ -30,20 +30,20 @@
   }
 
   .logo-island__link {
-    font-size: var(--type-md);
-    font-weight: var(--weight-bold);
     text-decoration: none;
-    color: var(--color-text);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    mix-blend-mode: exclusion;
-    white-space: nowrap;
     padding: var(--space-2) var(--space-4);
     display: block;
   }
 
+  .logo-island__img {
+    width: 200px;
+    height: auto;
+    display: block;
+    mix-blend-mode: exclusion;
+  }
+
   /* Desktop only */
-  @media (max-width: 767px) {
+  @media (max-width: 1200px) {
     .logo-island {
       display: none;
     }

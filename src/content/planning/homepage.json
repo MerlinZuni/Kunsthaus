@@ -35,8 +35,8 @@
         "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/sammlung-highlights" },
         "images": [
           { "src": "/images/exhibitions/sammlung-highlights-1.jpg", "alt": { "de": "Sammlung Highlights Hauptwerk", "en": "Collection highlights main piece" }, "gridCol": "3/8", "gridRow": "1/4" },
-          { "src": "/images/exhibitions/sammlung-highlights-2.jpg", "alt": { "de": "Sammlung Highlights Detail", "en": "Collection highlights detail" }, "gridCol": "6/11", "gridRow": "3/6" },
-          { "src": "/images/exhibitions/sammlung-highlights-3.jpg", "alt": { "de": "Sammlung Highlights Raum", "en": "Collection highlights gallery view" }, "gridCol": "1/5", "gridRow": "5/8" }
+          { "src": "/images/exhibitions/sammlung-highlights-2.jpg", "alt": { "de": "Sammlung Highlights Detail", "en": "Collection highlights detail" }, "gridCol": "8/13", "gridRow": "3/6" },
+          { "src": "/images/exhibitions/sammlung-highlights-3.jpg", "alt": { "de": "Sammlung Highlights Raum", "en": "Collection highlights gallery view" }, "gridCol": "4/8", "gridRow": "4/7" }
         ]
       },
       {
@@ -45,7 +45,7 @@
         "subtitle": { "de": "Schweizer Meister im Dialog", "en": "Swiss masters in dialogue" },
         "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/giacometti-hodler" },
         "images": [
-          { "src": "/images/exhibitions/giacometti-hodler-1.jpg", "alt": { "de": "Giacometti Skulptur", "en": "Giacometti sculpture" }, "gridCol": "4/9", "gridRow": "2/6" },
+          { "src": "/images/exhibitions/giacometti-hodler-1.jpg", "alt": { "de": "Giacometti Skulptur", "en": "Giacometti sculpture" }, "gridCol": "4/9", "gridRow": "3/7" },
           { "src": "/images/exhibitions/giacometti-hodler-2.jpg", "alt": { "de": "Hodler Landschaft", "en": "Hodler landscape" }, "gridCol": "7/12", "gridRow": "1/4" }
         ]
       },
@@ -74,17 +74,55 @@
       {
         "id": "hours",
         "title": { "de": "\u00d6ffnungszeiten", "en": "Opening Hours" },
-        "description": { "de": "Di/Mi/Fr/Sa/So 10\u201318 Uhr, Do 10\u201320 Uhr, Mo geschlossen", "en": "Tue/Wed/Fri/Sat/Sun 10am\u20136pm, Thu 10am\u20138pm, Mon closed" }
+        "description": { "de": "Das Kunsthaus Z\u00fcrich ist sechs Tage die Woche ge\u00f6ffnet.", "en": "The Kunsthaus Z\u00fcrich is open six days a week." },
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "10:00", "close": "20:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "10:00", "close": "18:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "10:00", "close": "18:00" },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "10:00", "close": "18:00" }
+        ],
+        "holidays": [
+          { "date": "2026-04-03", "label": { "de": "Karfreitag", "en": "Good Friday" }, "open": "10:00", "close": "18:00" },
+          { "date": "2026-04-05", "label": { "de": "Ostersonntag", "en": "Easter Sunday" }, "open": "10:00", "close": "18:00" },
+          { "date": "2026-04-06", "label": { "de": "Ostermontag", "en": "Easter Monday" }, "open": "10:00", "close": "18:00" },
+          { "date": "2026-05-01", "label": { "de": "Tag der Arbeit", "en": "Labour Day" }, "open": "10:00", "close": "18:00" },
+          { "date": "2026-05-14", "label": { "de": "Auffahrt", "en": "Ascension Day" }, "open": "10:00", "close": "18:00" },
+          { "date": "2026-05-25", "label": { "de": "Pfingstmontag", "en": "Whit Monday" }, "open": "10:00", "close": "18:00" },
+          { "date": "2026-12-24", "label": { "de": "Heiligabend", "en": "Christmas Eve" }, "open": "10:00", "close": "16:00" },
+          { "date": "2026-12-25", "label": { "de": "Weihnachten", "en": "Christmas Day" }, "closed": true },
+          { "date": "2026-12-31", "label": { "de": "Silvester", "en": "New Year's Eve" }, "open": "10:00", "close": "16:00" },
+          { "date": "2027-01-01", "label": { "de": "Neujahr", "en": "New Year's Day" }, "closed": true }
+        ]
       },
       {
         "id": "tickets",
         "title": { "de": "Eintritt", "en": "Admission" },
-        "description": { "de": "CHF 23.\u2013 / Reduziert CHF 18.\u2013 / Unter 17 gratis", "en": "CHF 23.\u2013 / Reduced CHF 18.\u2013 / Under 17 free" }
+        "description": { "de": "Audioguide gratis bei Online-Kauf", "en": "Free audio guide with online tickets" },
+        "pricing": [
+          { "label": { "de": "Erwachsene", "en": "Adults" }, "value": "CHF 24.\u2013" },
+          { "label": { "de": "Erm\u00e4ssigt", "en": "Reduced" }, "value": "CHF 17.\u2013" },
+          { "label": { "de": "Sonderausstellungen", "en": "Special exhibitions" }, "value": "CHF 31.\u2013" },
+          { "label": { "de": "Unter 14", "en": "Under 14" }, "value": { "de": "Gratis", "en": "Free" } },
+          { "label": { "de": "Mittwoch", "en": "Wednesdays" }, "value": { "de": "Jeder gratis", "en": "Everyone Free" } }
+        ],
+        "link": "https://tickets.kunsthaus.ch/en/home",
+        "linkLabel": { "de": "Tickets kaufen", "en": "Buy tickets" }
       },
       {
         "id": "location",
         "title": { "de": "Anreise", "en": "Getting Here" },
-        "description": { "de": "Heimplatz 1, 8001 Z\u00fcrich. Tram 3, 5, 8, 9 bis Kunsthaus", "en": "Heimplatz 1, 8001 Zurich. Tram 3, 5, 8, 9 to Kunsthaus" }
+        "description": { "de": "Heimplatz 1 + 5, 8001 Z\u00fcrich", "en": "Heimplatz 1 + 5, 8001 Zurich" },
+        "transport": [
+          { "label": { "de": "Tram 3", "en": "Tram 3" }, "value": { "de": "Haltestelle Kunsthaus", "en": "Kunsthaus stop" } },
+          { "label": { "de": "Tram 5", "en": "Tram 5" }, "value": { "de": "Haltestelle Kunsthaus", "en": "Kunsthaus stop" } },
+          { "label": { "de": "Tram 9", "en": "Tram 9" }, "value": { "de": "Haltestelle Kunsthaus", "en": "Kunsthaus stop" } },
+          { "label": { "de": "Bus 31", "en": "Bus 31" }, "value": { "de": "Haltestelle Kunsthaus", "en": "Kunsthaus stop" } }
+        ],
+        "link": "https://maps.google.com/?q=Kunsthaus+Zurich+Heimplatz",
+        "linkLabel": { "de": "Karte anzeigen", "en": "View on map" }
       }
     ]
   },
@@ -144,36 +182,90 @@
         "id": "membership",
         "title": { "de": "Mitgliedschaft", "en": "Membership" },
         "description": { "de": "Werden Sie Mitglied und geniessen Sie exklusive Vorteile und unbegrenzten Eintritt.", "en": "Become a member and enjoy exclusive benefits and unlimited access." },
+        "images": ["/images/offerings/membership-1.jpg", "/images/offerings/membership-2.jpg"],
         "link": "/membership"
       },
       {
         "id": "design-shop",
         "title": { "de": "Design Shop", "en": "Design Shop" },
         "description": { "de": "Ausgew\u00e4hlte Designobjekte, K\u00fcnstlereditionen und besondere Geschenke.", "en": "Curated design objects, artist editions and special gifts." },
+        "images": ["/images/offerings/design-shop-1.jpg", "/images/offerings/design-shop-2.jpg"],
         "link": "/shop/design"
       },
       {
         "id": "art-shop",
         "title": { "de": "Art Shop", "en": "Art Shop" },
         "description": { "de": "Kunstb\u00fccher, Poster, Kataloge und Reproduktionen aus unserem Sortiment.", "en": "Art books, posters, catalogues and reproductions from our collection." },
+        "images": ["/images/offerings/art-shop-1.jpg", "/images/offerings/art-shop-2.jpg"],
         "link": "/shop/art"
       },
       {
         "id": "restaurant",
-        "title": { "de": "Restaurant Kunsthaus", "en": "Restaurant Kunsthaus" },
-        "description": { "de": "Geniessen Sie saisonale K\u00fcche mit Blick auf den Heimplatz.", "en": "Enjoy seasonal cuisine with views of Heimplatz." },
-        "link": "/visit/restaurant"
+        "title": { "de": "Restaurant Bei Moudi", "en": "Restaurant Bei Moudi" },
+        "description": { "de": "Mediterrane und orientalische Spezialit\u00e4ten im Moser-Bau \u2014 farbenfrohe Mezze, warme Gerichte und eine Terrasse mit Blick auf den Heimplatz.", "en": "Mediterranean and Oriental specialties in the Moser building \u2014 colorful mezze, warm dishes, and a terrace overlooking Heimplatz." },
+        "images": ["/images/offerings/restaurant-1.jpg", "/images/offerings/restaurant-2.jpg", "/images/offerings/restaurant-3.jpg"],
+        "link": "https://www.beimoudi.ch/",
+        "linkLabel": { "de": "Reservierung vornehmen", "en": "Make a reservation" },
+        "secondaryLink": "https://visitorguide.kunsthaus.ch/ch-en/51825547/-30/-/false/0/-/-/-/-",
+        "secondaryLinkLabel": { "de": "Im Museum finden", "en": "Find in the museum" },
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "23:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "10:00", "close": "23:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "10:00", "close": "23:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "10:00", "close": "23:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "10:00", "close": "23:00" },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "10:00", "close": "21:00" }
+        ]
       },
       {
         "id": "bar",
         "title": { "de": "Kunsthaus Bar", "en": "Kunsthaus Bar" },
-        "description": { "de": "Kaffee, Kuchen und leichte Gerichte im Herzen des Museums.", "en": "Coffee, pastries and light meals in the heart of the museum." },
-        "link": "/visit/bar"
+        "description": { "de": "Aperitifs, Cocktails und Barfood im Chipperfield-Bau \u2014 unter einem Original von Max Ernst.", "en": "Aperitifs, cocktails and bar food in the Chipperfield building \u2014 beneath an original Max Ernst artwork." },
+        "images": ["/images/offerings/bar-1.jpg", "/images/offerings/bar-2.jpg", "/images/offerings/bar-3.jpg"],
+        "link": "https://www.kunsthausbar.ch/",
+        "linkLabel": { "de": "Reservierung vornehmen", "en": "Make a reservation" },
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "8:00", "close": "19:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "8:00", "close": "21:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "8:00", "close": "21:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "8:00", "close": "21:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "9:00", "close": "21:00" },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "9:00", "close": "19:00" }
+        ]
+      },
+      {
+        "id": "cafe",
+        "title": { "de": "Caf\u00e9 & Miro-Garten", "en": "Caf\u00e9 & Miro Garden" },
+        "description": { "de": "Kaffee, Kuchen und leichte Snacks im Moser-Foyer \u2014 mit Zugang zum gr\u00fcnen Miro-Garten.", "en": "Coffee, cakes and light snacks in the Moser foyer \u2014 with access to the green Miro Garden terrace." },
+        "images": ["/images/offerings/cafe-1.jpg", "/images/offerings/cafe-2.jpg", "/images/offerings/cafe-3.jpg"],
+        "link": "/visit/cafe",
+        "linkLabel": { "de": "Mehr erfahren", "en": "Learn more" },
+        "secondaryLink": "https://visitorguide.kunsthaus.ch/ch-en/51825514/-30/-/false/0/-/-/-/-",
+        "secondaryLinkLabel": { "de": "Im Museum finden", "en": "Find in the museum" },
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "10:00", "close": "20:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "10:00", "close": "18:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "10:00", "close": "18:00" },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "10:00", "close": "18:00" }
+        ]
+      },
+      {
+        "id": "workshops",
+        "title": { "de": "Workshops & Kurse", "en": "Workshops & Classes" },
+        "description": { "de": "Kreative Workshops und Kurse f\u00fcr alle Altersgruppen \u2014 von Malerei bis digitale Kunst.", "en": "Creative workshops and classes for all ages \u2014 from painting to digital art." },
+        "images": ["/images/offerings/workshops-1.jpg", "/images/offerings/workshops-2.jpg"],
+        "link": "/education/workshops"
       },
       {
         "id": "guided-tours",
         "title": { "de": "F\u00fchrungen", "en": "Guided Tours" },
         "description": { "de": "Entdecken Sie die Sammlung und Sonderausstellungen mit unseren erfahrenen Guides.", "en": "Explore the collection and special exhibitions with our experienced guides." },
+        "images": ["/images/offerings/guided-tours-1.jpg", "/images/offerings/guided-tours-2.jpg"],
         "link": "/visit/guided-tours"
       }
     ]
@@ -214,22 +306,30 @@
       {
         "id": "workshops",
         "title": { "de": "Workshops", "en": "Workshops" },
-        "description": { "de": "Praktische K\u00fcnstlerworkshops f\u00fcr Erwachsene und Jugendliche, geleitet von professionellen K\u00fcnstlern.", "en": "Hands-on artist workshops for adults and young people, led by professional artists." }
+        "description": { "de": "Praktische K\u00fcnstlerworkshops f\u00fcr Erwachsene und Jugendliche, geleitet von professionellen K\u00fcnstlern.", "en": "Hands-on artist workshops for adults and young people, led by professional artists." },
+        "images": ["/images/education/workshops-1.jpg", "/images/education/workshops-2.jpg"],
+        "link": "/education/workshops"
       },
       {
         "id": "school-programs",
         "title": { "de": "Schulprogramme", "en": "School Programs" },
-        "description": { "de": "Massgeschneiderte F\u00fchrungen und Workshops f\u00fcr Schulklassen aller Stufen.", "en": "Tailored tours and workshops for school groups of all levels." }
+        "description": { "de": "Massgeschneiderte F\u00fchrungen und Workshops f\u00fcr Schulklassen aller Stufen.", "en": "Tailored tours and workshops for school groups of all levels." },
+        "images": ["/images/education/school-programs-1.jpg", "/images/education/school-programs-2.jpg"],
+        "link": "/education/schools"
       },
       {
         "id": "family-programs",
         "title": { "de": "Familienprogramme", "en": "Family Programs" },
-        "description": { "de": "Interaktive Erlebnisse f\u00fcr Familien mit Kindern \u2013 jeden Sonntag.", "en": "Interactive experiences for families with children \u2013 every Sunday." }
+        "description": { "de": "Interaktive Erlebnisse f\u00fcr Familien mit Kindern \u2013 jeden Sonntag.", "en": "Interactive experiences for families with children \u2013 every Sunday." },
+        "images": ["/images/education/family-1.jpg", "/images/education/family-2.jpg"],
+        "link": "/education/families"
       },
       {
         "id": "lectures",
         "title": { "de": "Vortr\u00e4ge & Gespr\u00e4che", "en": "Lectures & Talks" },
-        "description": { "de": "K\u00fcnstlergespr\u00e4che, Podiumsdiskussionen und Vortragsreihen zu aktuellen Themen.", "en": "Artist talks, panel discussions and lecture series on current topics." }
+        "description": { "de": "K\u00fcnstlergespr\u00e4che, Podiumsdiskussionen und Vortragsreihen zu aktuellen Themen.", "en": "Artist talks, panel discussions and lecture series on current topics." },
+        "images": ["/images/education/lectures-1.jpg", "/images/education/lectures-2.jpg"],
+        "link": "/education/lectures"
       }
     ]
   },

@@ -5,42 +5,100 @@ interface Props {
   slides: Array<{
     id: string;
     title: { de: string; en: string };
+    subtitle?: { de: string; en: string };
+    cta: { label: { de: string; en: string }; href: string };
   }>;
   lang: 'en' | 'de';
+  pauseLabel: string;
+  playLabel: string;
 }
 
-const { slides, lang } = Astro.props;
+const { slides, lang, pauseLabel, playLabel } = Astro.props;
+const firstSlide = slides[0];
 ---
 
+<script is:inline define:vars={{ slideData: slides.map(s => ({ subtitle: s.subtitle?.[lang] || '', ctaLabel: s.cta?.label?.[lang] || '', ctaHref: s.cta?.href || '#' })) }}>
+  window.__carouselSlideData = slideData;
+</script>
+
 <nav class="carousel-tabs" aria-label="Exhibition slides">
-  {slides.map((slide, i) => (
-    <button
-      class:list={['carousel-tabs__tab', { 'carousel-tabs__tab--active': i === 0 }]}
-      data-tab={i}
-      aria-label={`Go to slide ${i + 1}: ${slide.title[lang]}`}
-    >
-      <span class="carousel-tabs__title">{slide.title[lang]}</span>
-      <div class="carousel-tabs__progress">
-        <div class="carousel-tabs__tab-fill" data-tab-fill={i} />
-      </div>
-    </button>
-  ))}
+  {/* Mobile label */}
+  <span class="carousel-tabs__label">{lang === 'de' ? 'Ausstellungen' : 'Exhibitions'}</span>
+
+  {/* Row 1: Subtitle */}
+  <p class="carousel-tabs__subtitle sub-heading" id="carousel-subtitle">{firstSlide?.subtitle?.[lang] || ''}</p>
+
+  {/* Row 2: Tab buttons + controls */}
+  <div class="carousel-tabs__row">
+    {slides.map((slide, i) => (
+      <button
+        class:list={['carousel-tabs__tab', { 'carousel-tabs__tab--active': i === 0 }]}
+        data-tab={i}
+        aria-label={`Go to slide ${i + 1}: ${slide.title[lang]}`}
+      >
+        <span class="carousel-tabs__title">{slide.title[lang]}</span>
+        <div class="carousel-tabs__progress">
+          <div class="carousel-tabs__tab-fill" data-tab-fill={i} />
+        </div>
+      </button>
+    ))}
+
+    {/* Pause/play + counter */}
+    <div class="carousel-tabs__controls">
+      <button
+        class="carousel-tabs__pause touch-target"
+        id="carousel-pause-btn"
+        aria-label={pauseLabel}
+        data-pause-label={pauseLabel}
+        data-play-label={playLabel}
+      >
+        <svg class="carousel-tabs__pause-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <rect x="4" y="3" width="4" height="14" rx="1"/>
+          <rect x="12" y="3" width="4" height="14" rx="1"/>
+        </svg>
+        <svg class="carousel-tabs__play-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <polygon points="5,3 17,10 5,17"/>
+        </svg>
+      </button>
+      <span class="carousel-tabs__counter" id="carousel-counter">1/{slides.length}</span>
+    </div>
+  </div>
 </nav>
 
 <style>
   .carousel-tabs {
     position: absolute;
-    bottom: var(--space-4);
-    left: var(--space-8);
-    display: inline-flex;
-    width: fit-content;
-    gap: var(--space-4);
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
     z-index: 3;
     background: color-mix(in srgb, var(--color-surface) 70%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding: var(--space-3) var(--space-4);
-    border-radius: 2px;
+    padding: var(--space-6) var(--space-8);
+  }
+
+  /* Mobile-only label */
+  .carousel-tabs__label {
+    display: none;
+    font-size: 16px;
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  /* Row 1: Subtitle */
+  .carousel-tabs__subtitle {
+    margin: 0;
+  }
+
+  /* Row 2: Tabs + controls inline */
+  .carousel-tabs__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
   }
 
   .carousel-tabs__tab {
@@ -60,6 +118,7 @@ const { slides, lang } = Astro.props;
     margin-bottom: var(--space-1);
     opacity: 0.5;
     white-space: nowrap;
+    transition: opacity 0.4s ease, font-weight 0.4s ease;
   }
 
   .carousel-tabs__tab--active .carousel-tabs__title {
@@ -85,36 +144,104 @@ const { slides, lang } = Astro.props;
     transform: scaleX(1);
   }
 
-  /* Mobile: active title visible, inactive as dots */
+  /* Pause + counter inline controls */
+  .carousel-tabs__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-left: var(--space-2);
+    padding-left: var(--space-4);
+    border-left: 1px solid var(--color-decorative);
+  }
+
+  .carousel-tabs__pause {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .carousel-tabs__play-icon {
+    display: none;
+  }
+
+  .carousel-tabs__pause.is-paused .carousel-tabs__pause-icon {
+    display: none;
+  }
+  .carousel-tabs__pause.is-paused .carousel-tabs__play-icon {
+    display: block;
+  }
+
+  .carousel-tabs__counter {
+    font-size: var(--type-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+    opacity: 0.7;
+    white-space: nowrap;
+    display: none;
+  }
+
+  @media (max-width: 1200px) {
+    .carousel-tabs__counter {
+      display: block;
+    }
+  }
+
+  /* Mobile */
   @media (max-width: 767px) {
     .carousel-tabs {
-      left: var(--space-4);
-      right: var(--space-4);
-      bottom: var(--space-4);
-      gap: var(--space-2);
-      justify-content: center;
+      right: 0;
+      bottom: 0;
+      padding: 16px 16px 72px;
+      gap: 12px;
+    }
+
+    .carousel-tabs__subtitle {
+      display: none;
+    }
+
+    .carousel-tabs__label {
+      display: none;
+    }
+
+    .carousel-tabs__row {
+      flex-direction: column;
+      gap: 0;
+      align-items: stretch;
     }
 
     .carousel-tabs__tab {
       min-width: auto;
-      padding: var(--space-2);
+      padding: 14px 0;
     }
 
     .carousel-tabs__title {
-      display: none;
-    }
-
-    .carousel-tabs__tab--active .carousel-tabs__title {
       display: block;
-      font-size: var(--type-sm);
+      font-size: 16px;
+      text-transform: uppercase;
+      margin-bottom: 0;
     }
 
+    /* Progress bars become thin separator lines */
     .carousel-tabs__progress {
-      width: 40px;
+      width: 100%;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.1);
+      margin-top: 14px;
     }
 
-    .carousel-tabs__tab--active .carousel-tabs__progress {
-      width: 80px;
+    .carousel-tabs__tab-fill {
+      height: 2px;
+      margin-top: -1px;
+    }
+
+    /* Hide pause/counter on mobile */
+    .carousel-tabs__controls {
+      display: none;
     }
   }
 </style>

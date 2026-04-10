@@ -30,7 +30,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 
     {/* Center: Logo */}
     <a href="/" class="navbar__logo">
-      Kunsthaus Zurich
+      <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="navbar__logo-img" />
     </a>
 
     {/* Right: Desktop nav links + language switcher */}
@@ -86,7 +86,10 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--color-concrete-light);
+    background-color: var(--color-concrete-light);
+    background-image: url(/Kunsthaus/textures/concrete-wall.png);
+    background-repeat: repeat;
+    background-blend-mode: multiply;
     padding: var(--space-2) var(--space-4);
     pointer-events: auto;
   }
@@ -105,14 +108,16 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-size: var(--type-md);
-    font-weight: var(--weight-bold);
     text-decoration: none;
-    color: var(--color-text);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    mix-blend-mode: exclusion;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar__logo-img {
+    width: 200px;
+    height: auto;
+    display: block;
+    filter: invert(1);
   }
 
   /* Desktop nav links */
@@ -165,8 +170,8 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     pointer-events: auto;
   }
 
-  /* Mobile: simplified bar */
-  @media (max-width: 767px) {
+  /* Mobile/tablet: simplified bar */
+  @media (max-width: 1200px) {
     .navbar__links {
       display: none;
     }
@@ -191,7 +196,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     const navbar = document.getElementById('navbar');
     const logoIsland = document.getElementById('logo-island');
     const searchMigrated = document.getElementById('search-migrated');
-    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    const isMobile = window.matchMedia('(max-width: 1200px)').matches;
 
     if (!navbar) return;
 
@@ -209,65 +214,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       });
     });
 
-    // Desktop velocity-aware scroll behavior (D-10)
-    if (isMobile) return;
-
-    let navHidden = false;
-
-    ScrollTrigger.create({
-      start: 'top -100',
-      onUpdate: (self) => {
-        const velocity = Math.abs(self.getVelocity());
-        const direction = self.direction; // 1 = down, -1 = up
-        const scrollY = window.scrollY;
-
-        // Above threshold: always show nav
-        if (scrollY < 100) {
-          if (navHidden) {
-            showNav();
-          }
-          return;
-        }
-
-        // Fast scroll down (velocity > 1500): hide nav instantly
-        if (velocity > 1500 && direction === 1 && !navHidden) {
-          hideNav();
-        }
-        // Slow scroll up or micro-pause: reveal nav
-        else if (velocity < 300 && direction === -1 && navHidden) {
-          showNav();
-        }
-      },
-    });
-
-    function hideNav() {
-      navHidden = true;
-      gsap.to(navbar, { opacity: 0, duration: 0.15, ease: 'power2.in' });
-      if (logoIsland) {
-        logoIsland.classList.add('is-visible');
-        gsap.to(logoIsland, { opacity: 1, duration: 0.3 });
-      }
-      if (searchMigrated) {
-        searchMigrated.classList.add('is-visible');
-      }
-    }
-
-    function showNav() {
-      navHidden = false;
-      gsap.to(navbar, {
-        opacity: 1,
-        filter: 'blur(0px)',
-        duration: 0.4,
-        ease: 'power2.out',
-      });
-      if (logoIsland) {
-        logoIsland.classList.remove('is-visible');
-        gsap.to(logoIsland, { opacity: 0, duration: 0.2 });
-      }
-      if (searchMigrated) {
-        searchMigrated.classList.remove('is-visible');
-      }
-    }
+    // Nav always visible — no scroll hide/show behavior
   }
 
   document.addEventListener('DOMContentLoaded', initNavBar);

@@ -8,7 +8,6 @@ import StandardGrid from '../components/sections/StandardGrid.astro';
 import ExhibitionList from '../components/sections/ExhibitionList.astro';
 import EventsList from '../components/sections/EventsList.astro';
 import StickyCTA from '../components/ui/StickyCTA.astro';
-import SectionProgress from '../components/ui/SectionProgress.tsx';
 import Footer from '../components/footer/Footer.astro';
 import { getCollection } from 'astro:content';
 import uiStringsJson from '../content/shared/ui-strings.json';
@@ -43,11 +42,6 @@ const sectionComponent: Record<string, string> = {
 // D-26: Background rotation - 4 step cycle
 const bgSteps = [2, 3, 4, 1] as const;
 
-// Section names for progress indicator
-const sectionNames = sections.map(s => s.title[lang]);
-
-// Slide titles for mobile progress display
-const slideNames = (hero?.slides || []).map(s => s.title[lang]);
 ---
 
 <BaseLayout title="Kunsthaus Zurich" lang={lang}>
@@ -56,6 +50,9 @@ const slideNames = (hero?.slides || []).map(s => s.title[lang]);
 
   {/* Spacer: pushes stacking sections below fixed hero */}
   <div class="hero-spacer"></div>
+
+  {/* Opaque backdrop: covers hero when sections scale down */}
+  <div class="hero-backdrop" aria-hidden="true"></div>
 
   {/* Content sections with stacking scroll effect */}
   {sections.map((section, i) => {
@@ -110,11 +107,5 @@ const slideNames = (hero?.slides || []).map(s => s.title[lang]);
     }}
     ticketsLabel={getString('tickets')}
     lang={lang}
-  />
-  <SectionProgress
-    client:visible
-    totalSections={slideNames.length}
-    sectionNames={sectionNames}
-    slideNames={slideNames}
   />
 </BaseLayout>

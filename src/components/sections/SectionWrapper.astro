@@ -59,31 +59,48 @@ const zIndex = 20 + index;
 
     const lastIndex = sections.length - 1;
 
+    const OVERLAP = 300; // px: how far next section overlaps before shrink starts
+
     ScrollTrigger.matchMedia({
-      // Desktop: full stacking effect with pin, scale, rotate, opacity
+      // Desktop: scroll through content, then pin, next slides over, then shrink/skew
       '(min-width: 1024px)': function () {
         sections.forEach((section, i) => {
-          if (i === lastIndex) return; // Last section does NOT pin
+          if (i === lastIndex) return;
 
+          const nextSection = sections[i + 1];
+
+          // Pin once user has scrolled through all content
+          // (bottom of section reaches bottom of viewport)
           ScrollTrigger.create({
             trigger: section,
-            start: 'top top',
-            end: 'bottom top',
-            pin: false,
+            start: 'bottom bottom',
+            endTrigger: nextSection,
+            end: `top ${OVERLAP}px`,
+            pin: true,
             pinSpacing: false,
+            _stackingSection: true,
+          } as ScrollTrigger.Vars & { _stackingSection: boolean });
+
+          // Shrink/skew: only starts once next section reaches the overlap point
+          ScrollTrigger.create({
+            trigger: nextSection,
+            start: `top ${OVERLAP}px`,
+            end: 'top top',
             scrub: true,
             _stackingSection: true,
             onUpdate: (self) => {
               const progress = self.progress;
-              const scale = 1 - progress * 0.1;
-              const rotation = progress * (i % 2 === 0 ? 2 : -3);
-              const opacity = 1 - progress * 0.6;
+              const scale = 1 - progress * 0.08;
+              const rotation = progress * (i % 2 === 0 ? 1.5 : -2);
+
+              const shadowBlur = progress * 40;
+              const shadowOpacity = progress * 0.3;
 
               gsap.set(section, {
                 scale,
                 rotation,
-                opacity,
                 transformOrigin: 'center center',
+                boxShadow: `0 ${shadowBlur * 0.5}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`,
               });
             },
           } as ScrollTrigger.Vars & { _stackingSection: boolean });
@@ -92,26 +109,40 @@ const zIndex = 20 + index;
         ScrollTrigger.refresh();
       },
 
-      // Tablet: scale + opacity only, no rotation
+      // Tablet: same pinning, scale only (no rotation)
       '(min-width: 768px) and (max-width: 1023px)': function () {
         sections.forEach((section, i) => {
           if (i === lastIndex) return;
 
+          const nextSection = sections[i + 1];
+
           ScrollTrigger.create({
             trigger: section,
-            start: 'top top',
-            end: 'bottom top',
+            start: 'bottom bottom',
+            endTrigger: nextSection,
+            end: `top ${OVERLAP}px`,
+            pin: true,
+            pinSpacing: false,
+            _stackingSection: true,
+          } as ScrollTrigger.Vars & { _stackingSection: boolean });
+
+          ScrollTrigger.create({
+            trigger: nextSection,
+            start: `top ${OVERLAP}px`,
+            end: 'top top',
             scrub: true,
             _stackingSection: true,
             onUpdate: (self) => {
               const progress = self.progress;
-              const scale = 1 - progress * 0.1;
-              const opacity = 1 - progress * 0.6;
+              const scale = 1 - progress * 0.08;
+
+              const shadowBlur = progress * 40;
+              const shadowOpacity = progress * 0.3;
 
               gsap.set(section, {
                 scale,
-                opacity,
                 transformOrigin: 'center center',
+                boxShadow: `0 ${shadowBlur * 0.5}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})`,
               });
             },
           } as ScrollTrigger.Vars & { _stackingSection: boolean });
@@ -139,6 +170,23 @@ const zIndex = 20 + index;
         ScrollTrigger.refresh();
       },
     });
+
+    // Fade in hero backdrop once first section covers the hero
+    const backdrop = document.querySelector('.hero-backdrop') as HTMLElement;
+    if (backdrop && sections.length > 0) {
+      ScrollTrigger.create({
+        trigger: sections[0],
+        start: 'top 20%',
+        end: 'top top',
+        scrub: true,
+        onUpdate: (self) => {
+          gsap.set(backdrop, { opacity: self.progress });
+        },
+        onLeaveBack: () => {
+          gsap.set(backdrop, { opacity: 0 });
+        },
+      });
+    }
 
     // Dispatch sectionchange events for SectionProgress
     sections.forEach((section, i) => {

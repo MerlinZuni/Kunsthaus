@@ -47,10 +47,10 @@ export default function GridOverlay() {
   return (
     <div
       style={{
-        position: 'fixed',
+        position: 'absolute',
         inset: 0,
         pointerEvents: 'none',
-        zIndex: 15,
+        zIndex: 0,
         display: 'grid',
         gridTemplateColumns: `repeat(${activeTracks}, 1fr)`,
         gridTemplateRows: rowSizes.map(s => `${s}px`).join(' '),

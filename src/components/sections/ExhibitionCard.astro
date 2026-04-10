@@ -40,9 +40,9 @@ const imageSrc = image ? `${base}${image}` : '';
       <p class="exhibition-card__description">{description[lang]}</p>
     )}
     {cta && (
-      <a href={cta.href} class="exhibition-card__cta hover-wipe-inverse touch-pulse touch-target">
+      <a href={cta.href} class="exhibition-card__cta btn hover-wipe-inverse touch-pulse touch-target">
         <span>{typeof cta.label === 'object' ? cta.label[lang] : cta.label}</span>
-        <span class="icon">chevron_right</span>
+        <span class="icon">arrow_forward</span>
       </a>
     )}
   </div>

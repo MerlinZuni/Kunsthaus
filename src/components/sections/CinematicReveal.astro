@@ -49,9 +49,9 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
       <p class="cinematic-reveal__description">{data.description[lang]}</p>
     )}
     {data.cta && (
-      <a href={data.cta.href} class="cinematic-reveal__cta hover-wipe-inverse touch-pulse touch-target">
+      <a href={data.cta.href} class="cinematic-reveal__cta btn hover-wipe-inverse touch-pulse touch-target">
         <span>{typeof data.cta.label === 'object' ? data.cta.label[lang] : data.cta.label}</span>
-        <span class="icon">chevron_right</span>
+        <span class="icon">arrow_forward</span>
       </a>
     )}
   </div>

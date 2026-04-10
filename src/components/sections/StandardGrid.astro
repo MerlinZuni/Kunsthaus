@@ -2,6 +2,8 @@
 // StandardGrid.astro -- D-29: Standard grid layout for informational sections
 // Used by: key-info, events, planning-details
 
+import StatusAccordion from '../ui/StatusAccordion.astro';
+
 interface Props {
   title: { de: string; en: string };
   body?: { de: string; en: string };
@@ -12,6 +14,11 @@ interface Props {
     image?: string;
     date?: string;
     link?: string;
+    linkLabel?: { de: string; en: string };
+    schedule?: Array<{ day: number; label: { de: string; en: string }; open?: string; close?: string; closed?: boolean }>;
+    holidays?: Array<{ date: string; label: { de: string; en: string }; open?: string; close?: string; closed?: boolean }>;
+    pricing?: Array<{ label: { de: string; en: string }; value: string | { de: string; en: string } }>;
+    transport?: Array<{ label: { de: string; en: string }; value: { de: string; en: string } }>;
   }>;
   lang: 'en' | 'de';
   columns?: 2 | 3 | 4;
@@ -36,15 +43,94 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
           </div>
         )}
         <h3 class="standard-grid__item-title sub-heading">{item.title[lang]}</h3>
-        {item.description && (
+        {item.description && !item.schedule && !item.pricing && !item.transport && (
           <p class="standard-grid__item-desc">{item.description[lang]}</p>
+        )}
+        {item.pricing && (
+          <>
+            {item.description && (
+              <p class="standard-grid__status">
+                <span class="standard-grid__status-text">{item.description[lang]}</span>
+              </p>
+            )}
+            <dl class="standard-grid__schedule">
+              {item.pricing.map(p => (
+                <div class="standard-grid__schedule-row">
+                  <dt class="standard-grid__schedule-label">{p.label[lang]}</dt>
+                  <dd class="standard-grid__schedule-value">{typeof p.value === 'object' ? p.value[lang] : p.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        )}
+        {item.transport && (
+          <>
+            {item.description && (
+              <p class="standard-grid__status">
+                <span class="standard-grid__status-text">{item.description[lang]}</span>
+              </p>
+            )}
+            <dl class="standard-grid__schedule">
+              {item.transport.map(t => (
+                <div class="standard-grid__schedule-row">
+                  <dt class="standard-grid__schedule-label">{t.label[lang]}</dt>
+                  <dd class="standard-grid__schedule-value">{t.value[lang]}</dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        )}
+        {item.schedule && (
+          <p class="standard-grid__status"
+            data-schedule-status={JSON.stringify(item.schedule.map(d => ({ day: d.day, open: d.open, close: d.close, closed: d.closed })))}
+            data-holidays={item.holidays ? JSON.stringify(item.holidays.map(h => ({ date: h.date, label: h.label[lang], open: h.open, close: h.close, closed: h.closed }))) : '[]'}
+            data-open-label={lang === 'de' ? 'Heute geöffnet bis' : 'Open today until'}
+            data-closed-label={lang === 'de' ? 'Heute geschlossen' : 'Closed today'}
+            data-closed-for-label={lang === 'de' ? 'Geschlossen –' : 'Closed –'}
+          >
+            <span class="standard-grid__status-dot"></span>
+            <span class="standard-grid__status-text">...</span>
+          </p>
+        )}
+        {item.schedule && (
+          <dl class="standard-grid__schedule">
+            {item.schedule.map(d => (
+              <div class:list={['standard-grid__schedule-row', { 'standard-grid__schedule-row--closed': d.closed }]} data-schedule-day={d.day}>
+                <dt class="standard-grid__schedule-label">{d.label[lang]}</dt>
+                <dd class="standard-grid__schedule-value">{d.closed ? (lang === 'de' ? 'Geschlossen' : 'Closed') : `${d.open} – ${d.close}`}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+        {item.holidays && item.holidays.length > 0 && (
+          <div class="standard-grid__holidays" data-holidays-accordion>
+            <button class="standard-grid__holidays-trigger" aria-expanded="false">
+              <span class="standard-grid__holidays-title sub-heading">{lang === 'de' ? 'Feiertagszeiten' : 'Holiday Hours'}</span>
+              <span class="standard-grid__holidays-icon icon">add</span>
+            </button>
+            <div class="standard-grid__holidays-panel" aria-hidden="true">
+              <dl class="standard-grid__schedule">
+                {item.holidays.filter(h => new Date(h.date) >= new Date()).slice(0, 4).map(h => {
+                  const d = new Date(h.date);
+                  const dayName = d.toLocaleDateString(lang === 'de' ? 'de-CH' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+                  return (
+                    <div class:list={['standard-grid__schedule-row', { 'standard-grid__schedule-row--closed': h.closed }]}>
+                      <dt class="standard-grid__schedule-label">{h.label[lang]} <span class="standard-grid__schedule-date">({dayName})</span></dt>
+                      <dd class="standard-grid__schedule-value">{h.closed ? (lang === 'de' ? 'Geschlossen' : 'Closed') : `${h.open} – ${h.close}`}</dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            </div>
+          </div>
         )}
         {item.date && (
           <span class="standard-grid__item-date">{item.date}</span>
         )}
         {item.link && (
-          <a href={item.link} class="standard-grid__item-link link-underline hover-wipe touch-pulse">
-            <span>{lang === 'de' ? 'Mehr erfahren' : 'Learn more'}</span>
+          <a href={item.link} class="standard-grid__item-link btn-link touch-pulse" target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
+            <span>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
+            <span class="icon">arrow_forward</span>
           </a>
         )}
       </article>
@@ -133,4 +219,240 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
       grid-template-columns: 1fr;
     }
   }
+
+  /* Schedule list (inline, no accordion) */
+  .standard-grid__schedule {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .standard-grid__schedule-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    white-space: nowrap;
+  }
+
+  .standard-grid__schedule-label {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    flex-shrink: 0;
+  }
+
+  .standard-grid__schedule-value {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    opacity: 0.7;
+    flex-shrink: 0;
+    margin: 0;
+    text-align: right;
+  }
+
+  .standard-grid__schedule-row--today {
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+    border-radius: 4px;
+    margin: 0 -8px;
+    padding: 4px 8px;
+  }
+
+  .standard-grid__schedule-row--today .standard-grid__schedule-label {
+    font-weight: var(--weight-medium);
+  }
+
+  .standard-grid__schedule-row--today .standard-grid__schedule-value {
+    opacity: 1;
+  }
+
+  .standard-grid__schedule-row--closed .standard-grid__schedule-value {
+    color: #b91c1c;
+    opacity: 1;
+    font-weight: var(--weight-medium);
+  }
+
+  html[data-mode="onsite"] .standard-grid__schedule-row--closed .standard-grid__schedule-value {
+    color: #f87171;
+  }
+
+  /* Inline status indicator */
+  .standard-grid__status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .standard-grid__status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .standard-grid__status-dot--open {
+    background: #22c55e;
+  }
+
+  .standard-grid__status-dot--closed {
+    background: #b91c1c;
+  }
+
+  html[data-mode="onsite"] .standard-grid__status-dot--open {
+    background: #4ade80;
+  }
+
+  html[data-mode="onsite"] .standard-grid__status-dot--closed {
+    background: #f87171;
+  }
+
+  /* Holidays accordion */
+  .standard-grid__holidays {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .standard-grid__holidays-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--color-text);
+  }
+
+  .standard-grid__holidays-title {
+    margin: 0;
+  }
+
+  .standard-grid__holidays-icon {
+    font-size: 20px;
+    opacity: 0.5;
+    transition: transform 0.3s ease;
+  }
+
+  .standard-grid__holidays.is-expanded .standard-grid__holidays-icon {
+    transform: rotate(45deg);
+  }
+
+  .standard-grid__holidays-panel {
+    height: 0;
+    overflow: hidden;
+  }
+
+  .standard-grid__holidays.is-expanded .standard-grid__holidays-panel {
+    padding-top: var(--space-3);
+  }
+
+  .standard-grid__schedule-date {
+    opacity: 0.5;
+    font-weight: var(--weight-regular);
+  }
 </style>
+
+<script>
+  const now = new Date();
+  const today = now.getDay();
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+  // Highlight today's row in schedule lists
+  document.querySelectorAll('.standard-grid__schedule').forEach(list => {
+    const todayRow = list.querySelector(`[data-schedule-day="${today}"]`);
+    if (todayRow) {
+      todayRow.classList.add('standard-grid__schedule-row--today');
+    }
+  });
+
+  // Compute status for inline indicators
+  const todayStr = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+  document.querySelectorAll('[data-schedule-status]').forEach(el => {
+    const schedule = JSON.parse(el.getAttribute('data-schedule-status') || '[]');
+    const holidays = JSON.parse(el.getAttribute('data-holidays') || '[]');
+    const openLabel = el.getAttribute('data-open-label') || 'Open today until';
+    const closedLabel = el.getAttribute('data-closed-label') || 'Closed today';
+    const closedForLabel = el.getAttribute('data-closed-for-label') || 'Closed –';
+    const dot = el.querySelector('.standard-grid__status-dot') as HTMLElement;
+    const text = el.querySelector('.standard-grid__status-text') as HTMLElement;
+    if (!dot || !text) return;
+
+    let isOpen = false;
+    let statusText = closedLabel;
+
+    // Check holidays first — they override the regular schedule
+    const todayHoliday = holidays.find((h: any) => h.date === todayStr);
+
+    if (todayHoliday) {
+      if (todayHoliday.closed) {
+        statusText = `${closedForLabel} ${todayHoliday.label}`;
+      } else if (todayHoliday.open && todayHoliday.close) {
+        const [openH, openM] = todayHoliday.open.split(':').map(Number);
+        const [closeH, closeM] = todayHoliday.close.split(':').map(Number);
+        const openMins = openH * 60 + (openM || 0);
+        const closeMins = closeH * 60 + (closeM || 0);
+
+        if (nowMinutes >= openMins && nowMinutes < closeMins) {
+          isOpen = true;
+          statusText = `${todayHoliday.label} · ${openLabel} ${todayHoliday.close}`;
+        } else {
+          statusText = `${todayHoliday.label} · ${todayHoliday.open} – ${todayHoliday.close}`;
+        }
+      }
+    } else {
+      // Regular schedule
+      const todaySchedule = schedule.find((d: any) => d.day === today);
+
+      if (todaySchedule && !todaySchedule.closed && todaySchedule.open && todaySchedule.close) {
+        const [openH, openM] = todaySchedule.open.split(':').map(Number);
+        const [closeH, closeM] = todaySchedule.close.split(':').map(Number);
+        const openMins = openH * 60 + (openM || 0);
+        const closeMins = closeH * 60 + (closeM || 0);
+
+        if (nowMinutes >= openMins && nowMinutes < closeMins) {
+          isOpen = true;
+          statusText = `${openLabel} ${todaySchedule.close}`;
+        }
+      }
+    }
+
+    dot.classList.add(isOpen ? 'standard-grid__status-dot--open' : 'standard-grid__status-dot--closed');
+    text.textContent = statusText;
+  });
+
+  // Holidays accordion
+  import { gsap } from 'gsap';
+
+  document.querySelectorAll('[data-holidays-accordion]').forEach(accordion => {
+    const el = accordion as HTMLElement;
+    const trigger = el.querySelector('.standard-grid__holidays-trigger');
+    const panel = el.querySelector('.standard-grid__holidays-panel') as HTMLElement;
+    if (!trigger || !panel) return;
+
+    let expanded = false;
+
+    trigger.addEventListener('click', () => {
+      expanded = !expanded;
+      trigger.setAttribute('aria-expanded', String(expanded));
+      panel.setAttribute('aria-hidden', String(!expanded));
+      el.classList.toggle('is-expanded', expanded);
+
+      if (expanded) {
+        panel.style.height = 'auto';
+        const naturalHeight = panel.scrollHeight;
+        panel.style.height = '0px';
+        gsap.to(panel, { height: naturalHeight, duration: 0.35, ease: 'power2.out' });
+      } else {
+        gsap.to(panel, { height: 0, duration: 0.3, ease: 'power2.inOut' });
+      }
+    });
+  });
+</script>
