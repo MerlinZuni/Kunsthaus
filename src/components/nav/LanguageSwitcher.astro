@@ -44,7 +44,7 @@ const current = languages.find(l => l.code === lang) || languages[0];
   .lang-switcher__trigger {
     background: none;
     border: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
-    border-radius: 999px;
+    border-radius: var(--btn-radius);
     cursor: pointer;
     color: var(--color-text);
     font-size: var(--type-md);

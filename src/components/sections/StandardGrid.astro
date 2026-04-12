@@ -106,7 +106,9 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
           <div class="standard-grid__holidays" data-holidays-accordion>
             <button class="standard-grid__holidays-trigger" aria-expanded="false">
               <span class="standard-grid__holidays-title sub-heading">{lang === 'de' ? 'Feiertagszeiten' : 'Holiday Hours'}</span>
-              <span class="standard-grid__holidays-icon icon">add</span>
+              <svg class="standard-grid__holidays-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
             </button>
             <div class="standard-grid__holidays-panel" aria-hidden="true">
               <dl class="standard-grid__schedule">
@@ -335,13 +337,13 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
   }
 
   .standard-grid__holidays-icon {
-    font-size: 20px;
+    flex-shrink: 0;
     opacity: 0.5;
     transition: transform 0.3s ease;
   }
 
   .standard-grid__holidays.is-expanded .standard-grid__holidays-icon {
-    transform: rotate(45deg);
+    transform: rotate(180deg);
   }
 
   .standard-grid__holidays-panel {

@@ -15,6 +15,11 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 ---
 
 <header class="navbar" id="navbar">
+  {/* Center: Logo — outside inner so it persists when bar fades */}
+  <a href="/" class="navbar__logo">
+    <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="navbar__logo-img" />
+  </a>
+
   <div class="navbar__inner">
     {/* Left: Search icon */}
     <button
@@ -28,10 +33,8 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       </svg>
     </button>
 
-    {/* Center: Logo */}
-    <a href="/" class="navbar__logo">
-      <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="navbar__logo-img" />
-    </a>
+    {/* Center: spacer to maintain layout where logo was */}
+    <div class="navbar__logo-spacer" aria-hidden="true"></div>
 
     {/* Right: Desktop nav links + language switcher */}
     <nav class="navbar__links" aria-label="Main navigation">
@@ -86,12 +89,35 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--color-concrete-light);
+    background-color: #ede7de;
     background-image: url(/Kunsthaus/textures/concrete-wall.png);
     background-repeat: repeat;
     background-blend-mode: multiply;
     padding: var(--space-2) var(--space-4);
     pointer-events: auto;
+    position: relative;
+    overflow: hidden;
+    transition: opacity 0.6s ease;
+  }
+
+  /* Faded state: bar disappears, logo stays */
+  .navbar--faded .navbar__inner {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Bevel — top highlight, right highlight, bottom shadow, left shadow */
+  .navbar__inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, #fcfcfb, transparent 4px),
+      linear-gradient(to left, #fcfcfb, transparent 4px),
+      linear-gradient(to top, #e4d9cc, transparent 4px),
+      linear-gradient(to right, #e4d9cc, transparent 4px);
+    pointer-events: none;
+    z-index: 1;
   }
 
   /* Search button */
@@ -103,14 +129,18 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     padding: var(--space-2);
   }
 
-  /* Logo center */
+  /* Logo center — positioned relative to navbar, persists when bar fades */
   .navbar__logo {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     text-decoration: none;
     display: flex;
     align-items: center;
+    z-index: 2;
+    pointer-events: auto;
+    transition: mix-blend-mode 0.6s ease;
   }
 
   .navbar__logo-img {
@@ -118,27 +148,33 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     height: auto;
     display: block;
     filter: invert(1);
+    transition: filter 0.6s ease;
   }
 
-  /* Desktop nav links */
+  /* Spacer keeps inner bar layout balanced */
+  .navbar__logo-spacer {
+    width: 200px;
+    flex-shrink: 0;
+  }
+
+  /* When faded: logo stays visible, keeps inverted filter (dark on light) */
+  .navbar--faded .navbar__logo-img {
+    filter: invert(1);
+  }
+
+  /* Dark mode faded: logo goes white (no invert) for visibility on dark sections */
+  html[data-mode="onsite"] .navbar--faded .navbar__logo-img {
+    filter: none;
+  }
+
+  /* Desktop nav links — hidden, hamburger used at all breakpoints */
   .navbar__links {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-  }
-
-  .navbar__link {
-    font-size: var(--type-md);
-    font-weight: var(--weight-regular);
-    color: var(--color-text);
-    text-decoration: none;
-    padding: var(--space-2) var(--space-3);
-    white-space: nowrap;
-  }
-
-  /* Hamburger -- mobile only */
-  .navbar__hamburger {
     display: none;
+  }
+
+  /* Hamburger -- all breakpoints */
+  .navbar__hamburger {
+    display: inline-flex;
     background: none;
     border: none;
     cursor: pointer;
@@ -170,19 +206,28 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     pointer-events: auto;
   }
 
+  /* Onsite/dark mode: dark textured nav like footer */
+  html[data-mode="onsite"] .navbar__inner {
+    background-color: #272523;
+    background-image: url(/Kunsthaus/textures/dark-wall.png);
+    background-blend-mode: normal;
+  }
+
+  html[data-mode="onsite"] .navbar__inner::before {
+    background:
+      linear-gradient(to bottom, #3a3835, transparent 4px),
+      linear-gradient(to left, #3a3835, transparent 4px),
+      linear-gradient(to top, #1a1816, transparent 4px),
+      linear-gradient(to right, #1a1816, transparent 4px);
+  }
+
+  html[data-mode="onsite"] .navbar__logo-img {
+    filter: none;
+  }
+
   /* Mobile/tablet: simplified bar */
-  @media (max-width: 1200px) {
-    .navbar__links {
-      display: none;
-    }
-
-    .navbar__hamburger {
-      display: inline-flex;
-    }
-
-    .navbar__search-migrated {
-      display: none;
-    }
+  .navbar__search-migrated {
+    display: none;
   }
 </style>
 
@@ -214,7 +259,39 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       });
     });
 
-    // Nav always visible — no scroll hide/show behavior
+    // Fade navbar on scroll down, restore on scroll up
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        if (currentY > lastScrollY && currentY > 80) {
+          navbar.classList.add('navbar--faded');
+        } else {
+          navbar.classList.remove('navbar--faded');
+        }
+        lastScrollY = currentY;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Show navbar when mouse enters the top area (even when faded)
+    const onMouseMove = (e: MouseEvent) => {
+      const navHeight = navbar.offsetHeight + 20; // navbar height + small buffer
+      if (e.clientY <= navHeight) {
+        navbar.classList.remove('navbar--faded');
+      } else if (window.scrollY > 80) {
+        // Only re-fade if scrolled past threshold and not near top
+        navbar.classList.add('navbar--faded');
+      }
+    };
+
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
   }
 
   document.addEventListener('DOMContentLoaded', initNavBar);

@@ -14,21 +14,10 @@
     background-repeat: repeat;
   }
 
-  /* Onsite mode (dark) */
+  /* Onsite mode (dark) — inverse of planning light backgrounds */
   html[data-mode="onsite"] .stacking-section[data-bg-step="1"] { background-color: #272523; }
   html[data-mode="onsite"] .stacking-section[data-bg-step="2"] { background-color: #1e1c1a; }
-  html[data-mode="onsite"] .stacking-section[data-bg-step="3"] {
-    background-color: #A4A197;
-    background-image: url(/Kunsthaus/textures/concrete-wall.png);
-    background-repeat: repeat;
-    background-blend-mode: multiply;
-  }
-  html[data-mode="onsite"] .stacking-section[data-bg-step="4"] {
-    background-color: #272523;
-    background-image: url(/Kunsthaus/textures/asfalt-dark.png);
-    background-repeat: repeat;
-    background-blend-mode: luminosity;
-  }
+  html[data-mode="onsite"] .stacking-section[data-bg-step="3"] { background-color: #333130; }
 
   /* Onsite mode: hero title — screen makes dark text visible on dark bg */
   html[data-mode="onsite"] .hero-carousel__text {
@@ -39,7 +28,6 @@
   .stacking-section {
     position: relative;
     width: 100%;
-    min-height: 100vh;
     height: auto;
     will-change: transform;
   }
@@ -47,20 +35,20 @@
   /* D-24: Section vertical spacing */
   .section-spacing {
     padding-top: var(--space-32);    /* 128px desktop */
-    padding-bottom: var(--space-32);
+    padding-bottom: 180px;
   }
 
   @media (max-width: 1023px) {
     .section-spacing {
       padding-top: var(--space-24);  /* 96px tablet */
-      padding-bottom: var(--space-24);
+      padding-bottom: 180px;
     }
   }
 
   @media (max-width: 767px) {
     .section-spacing {
       padding-top: var(--space-16);  /* 64px mobile */
-      padding-bottom: var(--space-16);
+      padding-bottom: 180px;
     }
   }
 

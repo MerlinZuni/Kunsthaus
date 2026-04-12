@@ -133,11 +133,11 @@ const isExhibition = contentType === 'exhibitions';
         if (content) {
           gsap.from(content, {
             opacity: 0,
-            y: 30,
+            y: 20,
             scrollTrigger: {
               trigger: card,
-              start: 'top 85%',
-              end: 'top 60%',
+              start: 'top 95%',
+              end: 'top 80%',
               scrub: true,
             },
           });
@@ -218,7 +218,7 @@ const isExhibition = contentType === 'exhibitions';
     grid-template-columns: 1fr 1fr;
     gap: var(--space-12);
     align-items: start;
-    min-height: 400px;
+    min-height: auto;
   }
 
   /* Stacked image cluster */

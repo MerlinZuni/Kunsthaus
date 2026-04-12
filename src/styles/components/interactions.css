@@ -39,7 +39,7 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     color: var(--color-surface);
-    border-radius: 999px;
+    border-radius: var(--btn-radius);
   }
   .hover-wipe-inverse > * { position: relative; z-index: 1; }
 
@@ -64,7 +64,7 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     color: #ffffff;
-    border-radius: 999px;
+    border-radius: var(--btn-radius);
   }
   .hover-wipe-secondary > * { position: relative; z-index: 1; }
 
@@ -88,12 +88,39 @@
     }
   }
 
+  /* Brushed brass button — muted warm metallic */
+  .brushed-brass {
+    position: relative;
+    overflow: hidden;
+    background: color-mix(in srgb, #7d7042 75%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #faf6ee;
+    border-radius: var(--btn-radius);
+    transition: background 0.3s ease;
+  }
+
+  .brushed-brass > * { position: relative; z-index: 1; }
+
+  .brushed-brass .icon {
+    transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @media (hover: hover) {
+    .brushed-brass:hover {
+      background: color-mix(in srgb, #5f5530 85%, transparent);
+    }
+    .brushed-brass:hover .icon {
+      transform: translateX(4px);
+    }
+  }
+
   /* Unified button base — all CTA buttons share these properties */
   .btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 16px 20px;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
     font-size: var(--type-md);
     font-weight: var(--weight-regular);
     font-family: inherit;
@@ -102,6 +129,7 @@
     white-space: nowrap;
     cursor: pointer;
     border: none;
+    border-radius: var(--btn-radius);
   }
 
   .btn .icon {
@@ -147,7 +175,7 @@
 
   /* D-39: Footer link underline style */
   .link-underline {
-    border-bottom: 2px solid currentColor;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
     text-decoration: none;
   }
 

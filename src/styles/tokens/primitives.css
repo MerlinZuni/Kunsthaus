@@ -18,5 +18,17 @@
     --space-16: 4rem;     /* 64px */
     --space-24: 6rem;     /* 96px */
     --space-32: 8rem;     /* 128px */
+
+    /* Button tokens */
+    --btn-padding-y: 14px;
+    --btn-padding-x: 20px;
+    --btn-radius: 10px;
+    --btn-radius-inner: 7px;
+  }
+
+  @media (max-width: 767px) {
+    :root {
+      --btn-padding-y: 12px;
+    }
   }
 }

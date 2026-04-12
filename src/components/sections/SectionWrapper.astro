@@ -156,12 +156,12 @@ const zIndex = 20 + index;
         sections.forEach((section) => {
           gsap.from(section, {
             opacity: 0,
-            y: 40,
+            y: 20,
             scrollTrigger: {
               trigger: section,
               scrub: true,
-              start: 'top 80%',
-              end: 'top 40%',
+              start: 'top 60%',
+              end: 'top 50%',
               _stackingSection: true,
             } as ScrollTrigger.Vars & { _stackingSection: boolean },
           });

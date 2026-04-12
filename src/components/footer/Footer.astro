@@ -7,7 +7,6 @@ import FooterMarquee from './FooterMarquee.astro';
 import FooterColumns from './FooterColumns.astro';
 import FooterBottomBar from './FooterBottomBar.astro';
 import ReduceMotionToggle from '../ui/ReduceMotionToggle.astro';
-import GridOverlay from '../GridOverlay.tsx';
 import footerJson from '../../content/shared/footer.json';
 
 interface Props {
@@ -29,7 +28,6 @@ const footerData = footerJson[0];
 ---
 
 <footer class="site-footer">
-  <GridOverlay client:only="react" />
   <FooterMarquee />
 
   <FooterColumns footerData={footerData} lang={lang} modeLabels={modeLabels} />
@@ -45,9 +43,21 @@ const footerData = footerJson[0];
   .site-footer {
     position: relative;
     border-top: 1px solid rgba(34, 34, 34, 0.2);
-    background: var(--color-surface);
+    background-color: #272523;
+    background-image: url(/Kunsthaus/textures/dark-wall.png);
+    background-repeat: repeat;
+    /* Force onsite-style text colors regardless of mode */
+    --color-text: var(--color-offwhite);
+    --color-surface: var(--color-softblack);
+    --color-decorative-shadow: var(--color-concrete-light);
+    color: var(--color-offwhite);
     z-index: 30;
     overflow: hidden;
+  }
+
+  html[data-mode="onsite"] .site-footer {
+    background-color: #1e1c1a;
+    background-image: none;
   }
 
   .site-footer__utilities {

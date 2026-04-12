@@ -30,7 +30,7 @@ const toggleLabels = {
     href={ticketsHref}
     target="_blank"
     rel="noopener"
-    class="sticky-cta__tickets btn hover-wipe-inverse touch-pulse touch-target"
+    class="sticky-cta__tickets btn brushed-brass touch-pulse touch-target"
   >
     <span>{ticketsLabel}</span>
     <span class="icon">arrow_forward</span>
@@ -62,7 +62,7 @@ const toggleLabels = {
     href={ticketsHref}
     target="_blank"
     rel="noopener"
-    class="sticky-cta__tickets btn hover-wipe-inverse touch-pulse touch-target"
+    class="sticky-cta__tickets btn brushed-brass touch-pulse touch-target"
   >
     <span>{ticketsLabel}</span>
     <span class="icon">arrow_forward</span>
@@ -198,7 +198,7 @@ const toggleLabels = {
     background: color-mix(in srgb, var(--color-text) 75%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-radius: 999px;
+    border-radius: var(--btn-radius);
     padding: 4px;
     gap: 0;
   }
@@ -208,7 +208,7 @@ const toggleLabels = {
     top: 4px;
     left: 4px;
     height: calc(100% - 8px);
-    border-radius: 999px;
+    border-radius: var(--btn-radius-inner);
     background: color-mix(in srgb, var(--color-surface) 85%, transparent);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -224,12 +224,12 @@ const toggleLabels = {
     background: transparent;
     color: var(--color-surface);
     border: none;
-    padding: 16px 20px;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
     font-size: var(--type-sm);
     font-weight: var(--weight-regular);
     cursor: pointer;
     white-space: nowrap;
-    border-radius: 999px;
+    border-radius: var(--btn-radius-inner);
     transition: color 0.3s ease;
   }
 

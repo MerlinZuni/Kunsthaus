@@ -42,6 +42,14 @@ const sectionComponent: Record<string, string> = {
 // D-26: Background rotation - 4 step cycle
 const bgSteps = [2, 3, 4, 1] as const;
 
+// Per-section background overrides
+const bgOverrides: Record<string, 1 | 2 | 3 | 4> = {
+  'offerings': 1,
+  'events': 2,
+  'education': 3,
+  'planning-details': 1,
+};
+
 ---
 
 <BaseLayout title="Kunsthaus Zurich" lang={lang}>
@@ -56,7 +64,7 @@ const bgSteps = [2, 3, 4, 1] as const;
 
   {/* Content sections with stacking scroll effect */}
   {sections.map((section, i) => {
-    const bgStep = bgSteps[i % 4];
+    const bgStep = bgOverrides[section.section] ?? bgSteps[i % 4];
     const componentType = sectionComponent[section.section] || 'standard-grid';
 
     return (

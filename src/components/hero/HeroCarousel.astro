@@ -168,11 +168,43 @@ const playLabel = getString('carousel-play');
     const slideData = (window as any).__carouselSlideData || [];
     const slideCount = slides.length;
 
+    const mobileTabsEl = document.getElementById('carousel-tabs-mobile');
+
+    const mobileCounter = document.getElementById('carousel-counter-mobile');
+    const mobileTitle = document.getElementById('carousel-title-mobile');
+    const mobileTabs = document.querySelectorAll('[data-mobile-tab]');
+    const mobileFills = document.querySelectorAll('[data-mobile-fill]');
+    const mobileTitles = Array.from(tabs).map(tab =>
+      tab.querySelector('.carousel-tabs__title')?.textContent || ''
+    );
+
     if (slideCount <= 1) return;
 
     const SLIDE_DURATION = 5; // seconds per slide
-    let currentIndex = 0;
+    const WELCOME_TEXT = 'Welcome to the Kunsthaus';
+    let currentIndex = -1; // -1 = empty/welcome state
     let isPaused = false;
+
+    // Start with everything hidden — empty welcome state
+    slides.forEach((slide) => {
+      const el = slide as HTMLElement;
+      el.style.opacity = '0';
+      el.style.pointerEvents = 'none';
+      el.classList.remove('hero-slide--active');
+      const images = el.querySelectorAll('.hero-slide__image-slot');
+      gsap.set(images, { opacity: 0, scale: 1.35 });
+    });
+    tabs.forEach((tab) => {
+      tab.classList.remove('carousel-tabs__tab--active');
+      const title = tab.querySelector('.carousel-tabs__title') as HTMLElement;
+      if (title) gsap.set(title, { opacity: 0.5 });
+    });
+    fills.forEach((fill) => gsap.set(fill, { scaleX: 0 }));
+    mobileFills.forEach((fill) => gsap.set(fill, { scaleX: 0 }));
+    if (subtitleEl) subtitleEl.textContent = WELCOME_TEXT;
+    if (counter) counter.textContent = '';
+    if (mobileCounter) mobileCounter.textContent = '';
+    if (mobileTitle) mobileTitle.textContent = WELCOME_TEXT;
 
     // Build GSAP timeline for auto-play
     const tl = gsap.timeline({ repeat: -1 });
@@ -182,38 +214,101 @@ const playLabel = getString('carousel-play');
       tab.querySelector('.carousel-tabs__title') as HTMLElement
     );
 
+    // Phase 0: Empty welcome state
+    tl.call(() => clearToWelcome());
+    tl.to({}, { duration: SLIDE_DURATION }); // hold for same duration
+
+    // Phases 1–N: Actual slides
     for (let i = 0; i < slideCount; i++) {
       const fill = fills[i] as HTMLElement;
+      const mFill = mobileFills[i] as HTMLElement;
       const title = tabTitles[i];
       const nextTitle = tabTitles[i + 1] || tabTitles[0];
 
       // Show slide i
-      tl.call(() => activateSlide(i), [], i === 0 ? 0 : undefined);
+      tl.call(() => activateSlide(i));
 
-      // Animate fill bar and fade in next title near the end
+      // Animate fill bar (desktop + mobile in sync)
+      const fillStart = tl.duration();
       tl.fromTo(
         fill,
         { scaleX: 0 },
         { scaleX: 1, duration: SLIDE_DURATION, ease: 'none' },
       );
+      if (mFill) {
+        tl.fromTo(
+          mFill,
+          { scaleX: 0 },
+          { scaleX: 1, duration: SLIDE_DURATION, ease: 'none' },
+          fillStart,
+        );
+      }
 
-      // Near end of fill, start fading in next title and fading out current
+      // Near end of fill, start fading out current title
       tl.to(title, { opacity: 0.5, duration: 0.4, ease: 'power2.inOut' }, `-=0.5`);
-      tl.to(nextTitle, { opacity: 0.8, duration: 0.4, ease: 'power2.inOut' }, `-=0.4`);
+      if (i < slideCount - 1) {
+        tl.to(nextTitle, { opacity: 0.8, duration: 0.4, ease: 'power2.inOut' }, `-=0.4`);
+      }
 
       // Reset fill after transition
       if (i < slideCount - 1) {
         tl.call(() => {
           gsap.to(fill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
+          if (mFill) gsap.to(mFill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
         });
       }
     }
 
-    // Reset last fill at repeat
+    // After last slide: reset fills and return to welcome
     tl.call(() => {
       const lastFill = fills[slideCount - 1] as HTMLElement;
+      const lastMFill = mobileFills[slideCount - 1] as HTMLElement;
       gsap.to(lastFill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
+      if (lastMFill) gsap.to(lastMFill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
     });
+
+    function clearToWelcome() {
+      currentIndex = -1;
+
+      // Hide all slides
+      slides.forEach((slide) => {
+        const el = slide as HTMLElement;
+        gsap.to(el, { opacity: 0, duration: 0.6, ease: 'power2.out' });
+        el.style.pointerEvents = 'none';
+        el.classList.remove('hero-slide--active');
+      });
+
+      // Deactivate all tabs
+      tabs.forEach((tab) => {
+        tab.classList.remove('carousel-tabs__tab--active');
+        const title = tab.querySelector('.carousel-tabs__title') as HTMLElement;
+        if (title) gsap.to(title, { opacity: 0.5, duration: 0.5, ease: 'power2.out' });
+        const fill = fills[Array.from(tabs).indexOf(tab)] as HTMLElement;
+        gsap.to(fill, { scaleX: 0, duration: 0.3, ease: 'power2.out' });
+      });
+
+      // Reset mobile tabs
+      mobileTabs.forEach((tab, i) => {
+        tab.classList.remove('carousel-tabs-mobile__segment--active');
+        const fill = mobileFills[i] as HTMLElement;
+        gsap.set(fill, { scaleX: 0 });
+      });
+
+      // Update text
+      if (subtitleEl) subtitleEl.textContent = WELCOME_TEXT;
+      if (counter) counter.textContent = '';
+      if (mobileCounter) mobileCounter.textContent = '';
+      if (mobileTitle) {
+        gsap.to(mobileTitle, {
+          opacity: 0, duration: 0.15,
+          onComplete: () => {
+            mobileTitle.textContent = WELCOME_TEXT;
+            gsap.to(mobileTitle, { opacity: 1, duration: 0.25 });
+          },
+        });
+      }
+      if (liveRegion) liveRegion.textContent = 'Welcome to the Kunsthaus';
+    }
 
     function activateSlide(index: number) {
       currentIndex = index;
@@ -258,11 +353,11 @@ const playLabel = getString('carousel-play');
         }
       });
 
-      // On loop restart (index 0), reset all slides so stack starts fresh
+      // On first slide (after welcome), reset all slides so stack starts fresh
       if (index === 0) {
         slides.forEach((slide, i) => {
+          const el = slide as HTMLElement;
           if (i > 0) {
-            const el = slide as HTMLElement;
             el.style.opacity = '0';
             el.style.pointerEvents = 'none';
             el.classList.remove('hero-slide--active');
@@ -296,6 +391,29 @@ const playLabel = getString('carousel-play');
         counter.textContent = `${index + 1}/${slideCount}`;
       }
 
+      // Update mobile condensed tabs
+      if (mobileCounter) {
+        mobileCounter.textContent = `${String(index + 1).padStart(2, '0')}/${String(slideCount).padStart(2, '0')}`;
+      }
+      if (mobileTitle) {
+        gsap.to(mobileTitle, {
+          opacity: 0,
+          duration: 0.15,
+          onComplete: () => {
+            mobileTitle.textContent = mobileTitles[index] || '';
+            gsap.to(mobileTitle, { opacity: 1, duration: 0.25 });
+          },
+        });
+      }
+      // Sync mobile progress segments — only active bar fills, rest are empty
+      mobileTabs.forEach((tab, i) => {
+        tab.classList.toggle('carousel-tabs-mobile__segment--active', i === index);
+        const fill = mobileFills[i] as HTMLElement;
+        if (i !== index) {
+          gsap.set(fill, { scaleX: 0 });
+        }
+      });
+
       // Update subtitle
       const data = slideData[index];
       if (data && subtitleEl) {
@@ -309,17 +427,23 @@ const playLabel = getString('carousel-play');
       }
     }
 
-    // Tab click: jump to slide
+    // Tab click: jump to slide (offset by welcome phase duration)
     tabs.forEach((tab, i) => {
       tab.addEventListener('click', () => {
-        // Seek timeline to the start of this slide
-        const seekTime = i * SLIDE_DURATION;
+        const seekTime = SLIDE_DURATION + (i * SLIDE_DURATION);
         tl.seek(seekTime);
         activateSlide(i);
-        if (isPaused) {
-          // Stay paused but show correct slide
-          tl.pause();
-        }
+        if (isPaused) tl.pause();
+      });
+    });
+
+    // Mobile tab click: jump to slide
+    mobileTabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        const seekTime = SLIDE_DURATION + (i * SLIDE_DURATION);
+        tl.seek(seekTime);
+        activateSlide(i);
+        if (isPaused) tl.pause();
       });
     });
 

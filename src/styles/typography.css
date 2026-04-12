@@ -76,7 +76,8 @@
   :root {
     --font-primary: 'DINNextW1G', 'DIN Alternate', 'DIN Next', system-ui, -apple-system, sans-serif;
     --type-base: 1rem;
-    --type-sm: 0.75rem;
+    --type-xs: 0.75rem;
+    --type-sm: 0.875rem;
     --type-md: 1rem;
     --type-lg: 1.333rem;
     --type-xl: 1.777rem;

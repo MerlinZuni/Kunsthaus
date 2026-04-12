@@ -65,6 +65,26 @@ const firstSlide = slides[0];
   </div>
 </nav>
 
+{/* Mobile condensed tabs: counter + title + segmented progress, above sticky bar */}
+{/* Moved to <body> via script so position:fixed escapes hero overflow/transforms */}
+<div class="carousel-tabs-mobile" id="carousel-tabs-mobile">
+  <div class="carousel-tabs-mobile__header">
+    <span class="carousel-tabs-mobile__counter" id="carousel-counter-mobile">01/{String(slides.length).padStart(2, '0')}</span>
+    <span class="carousel-tabs-mobile__title" id="carousel-title-mobile">{firstSlide?.title?.[lang] || ''}</span>
+  </div>
+  <div class="carousel-tabs-mobile__progress">
+    {slides.map((_, i) => (
+      <button
+        class:list={['carousel-tabs-mobile__segment', { 'carousel-tabs-mobile__segment--active': i === 0 }]}
+        data-mobile-tab={i}
+        aria-label={`Go to slide ${i + 1}`}
+      >
+        <div class="carousel-tabs-mobile__fill" data-mobile-fill={i} />
+      </button>
+    ))}
+  </div>
+</div>
+
 <style>
   .carousel-tabs {
     position: absolute;
@@ -242,6 +262,86 @@ const firstSlide = slides[0];
     /* Hide pause/counter on mobile */
     .carousel-tabs__controls {
       display: none;
+    }
+
+    /* Hide desktop tabs on mobile */
+    .carousel-tabs {
+      display: none;
+    }
+  }
+
+  /* Mobile condensed tabs */
+  .carousel-tabs-mobile {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .carousel-tabs-mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 6;
+      padding: 20px 16px 80px;
+      pointer-events: auto;
+      background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .carousel-tabs-mobile__header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .carousel-tabs-mobile__counter {
+      font-size: var(--type-sm);
+      font-weight: var(--weight-medium);
+      font-variant-numeric: tabular-nums;
+      color: var(--color-text);
+      opacity: 0.5;
+    }
+
+    .carousel-tabs-mobile__title {
+      font-size: var(--type-sm);
+      font-weight: var(--weight-bold);
+      color: var(--color-text);
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .carousel-tabs-mobile__progress {
+      display: flex;
+      gap: 4px;
+    }
+
+    .carousel-tabs-mobile__segment {
+      flex: 1;
+      height: 2px;
+      background: color-mix(in srgb, var(--color-text) 15%, transparent);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-tabs-mobile__fill {
+      position: absolute;
+      inset: 0;
+      background: var(--color-text);
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+
+    .carousel-tabs-mobile__segment--active .carousel-tabs-mobile__fill {
+      transform: scaleX(1);
     }
   }
 </style>

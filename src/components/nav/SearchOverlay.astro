@@ -45,13 +45,17 @@ const suggestions = [
       {/* Search field — pill with go button */}
       <div class="search-overlay__field">
         <label for="search-input" class="sr-only">{searchLabel}</label>
-        <input
-          type="text"
-          id="search-input"
-          class="search-overlay__input"
-          placeholder={`${searchLabel}...`}
-          autocomplete="off"
-        />
+        <div class="search-overlay__input-wrap">
+          <input
+            type="text"
+            id="search-input"
+            class="search-overlay__input"
+            autocomplete="off"
+          />
+          <span class="search-overlay__placeholder" id="search-placeholder" aria-hidden="true">
+            Search for "<span class="search-overlay__rotating-text" id="search-rotating">exhibitions</span>"
+          </span>
+        </div>
         <button class="search-overlay__go" type="button" aria-label="Search">
           <span class="search-overlay__go-label">{searchLabel}</span>
           <span class="icon">search</span>
@@ -148,17 +152,21 @@ const suggestions = [
     padding: var(--space-8) var(--space-4) 0;
   }
 
-  /* Search field — pill shaped */
+  /* Search field — fully round pill */
   .search-overlay__field {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
     border-radius: 999px;
     padding: 4px 4px 4px var(--space-6);
-    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  /* Dark mode: near-white inverted */
+  html[data-mode="onsite"] .search-overlay__field {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: color-mix(in srgb, var(--color-text) 20%, transparent);
   }
 
   .search-overlay__go {
@@ -166,15 +174,15 @@ const suggestions = [
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 12px 20px;
     border: none;
     cursor: pointer;
-    background: color-mix(in srgb, var(--color-text) 75%, transparent);
+    background: color-mix(in srgb, #7d7042 75%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    color: var(--color-surface);
+    color: #faf6ee;
     transition: background 0.3s ease;
   }
 
@@ -183,7 +191,13 @@ const suggestions = [
   }
 
   .search-overlay__go:hover {
-    background: color-mix(in srgb, var(--color-text) 90%, transparent);
+    background: color-mix(in srgb, #5f5530 85%, transparent);
+  }
+
+  .search-overlay__input-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 0;
   }
 
   .search-overlay__input {
@@ -191,15 +205,41 @@ const suggestions = [
     background: none;
     border: none;
     padding: 0;
-    font-size: var(--type-xl);
+    font-size: var(--type-lg);
     font-weight: var(--weight-light);
     color: var(--color-text);
     outline: none;
     font-family: inherit;
+    position: relative;
+    z-index: 1;
   }
 
-  .search-overlay__input::placeholder {
-    color: var(--color-decorative-shadow);
+  .search-overlay__placeholder {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: var(--type-lg);
+    font-weight: var(--weight-light);
+    color: #8a8578;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 0;
+  }
+
+  .search-overlay__rotating-text {
+    display: inline-block;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .search-overlay__rotating-text.is-exiting {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  .search-overlay__rotating-text.is-entering {
+    opacity: 0;
+    transform: translateY(8px);
   }
 
   /* Suggestions */
@@ -228,9 +268,25 @@ const suggestions = [
     padding-left: var(--space-4);
   }
 
-  /* Hide go label on mobile — just icon */
+  /* Go button label — hidden on smallest breakpoint */
   .search-overlay__go-label {
-    display: none;
+    display: inline;
+    font-size: var(--type-sm);
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 767px) {
+    .search-overlay__go-label {
+      display: none;
+    }
+
+    .search-overlay__go {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+    }
   }
 
   .sr-only {
@@ -254,31 +310,46 @@ const suggestions = [
       padding: 0;
       border-radius: 4px;
       overflow: hidden;
-      background: color-mix(in srgb, var(--color-surface) 85%, transparent);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background-color: #ede7de;
+      background-image: url(/Kunsthaus/textures/concrete-wall.png);
+      background-repeat: repeat;
+      background-blend-mode: multiply;
+      position: relative;
+    }
+
+    /* Bevel effect matching navbar */
+    .search-overlay__inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, #fcfcfb, transparent 4px),
+        linear-gradient(to left, #fcfcfb, transparent 4px),
+        linear-gradient(to top, #e4d9cc, transparent 4px),
+        linear-gradient(to right, #e4d9cc, transparent 4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Dark mode bevel */
+    html[data-mode="onsite"] .search-overlay__inner {
+      background-color: #272523;
+      background-image: url(/Kunsthaus/textures/dark-wall.png);
+      background-blend-mode: normal;
+    }
+
+    html[data-mode="onsite"] .search-overlay__inner::before {
+      background:
+        linear-gradient(to bottom, #3a3835, transparent 4px),
+        linear-gradient(to left, #3a3835, transparent 4px),
+        linear-gradient(to top, #1a1816, transparent 4px),
+        linear-gradient(to right, #1a1816, transparent 4px);
     }
 
     .search-overlay {
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-    }
-
-    .search-overlay__go {
-      width: auto;
-      height: auto;
-      border-radius: 999px;
-      padding: 12px 20px;
-      gap: 6px;
-    }
-
-    .search-overlay__go-label {
-      display: inline;
-      font-size: var(--type-sm);
-      font-family: inherit;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
     }
 
     .search-overlay__hamburger {
@@ -360,14 +431,8 @@ const suggestions = [
       }
     }
 
-    closeBtn?.addEventListener('click', () => close(false));
-
-    // Hamburger button — swap to hamburger overlay
+    // Hamburger button ref (listeners added below after wrapping)
     const hamburgerBtn = overlay?.querySelector('.search-overlay__hamburger');
-    hamburgerBtn?.addEventListener('click', () => {
-      (window as any).__hamburgerOverlay?.open(true);
-      close(true);
-    });
 
     // Close on click outside the inner container
     overlay?.addEventListener('click', (e) => {
@@ -383,8 +448,83 @@ const suggestions = [
       }
     });
 
+    // Rotating placeholder text
+    const placeholder = document.getElementById('search-placeholder');
+    const rotatingEl = document.getElementById('search-rotating');
+    const phrases = ['exhibitions', 'upcoming events', 'member benefits', 'a map of the Kunsthaus', 'something to eat or drink', 'educational resources', 'family/holiday activities', 'a specific artist'];
+    let phraseIndex = 0;
+    let rotateInterval: ReturnType<typeof setInterval> | null = null;
+
+    function rotatePlaceholder() {
+      if (!rotatingEl) return;
+      // Exit current
+      rotatingEl.classList.add('is-exiting');
+      setTimeout(() => {
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        rotatingEl.textContent = phrases[phraseIndex];
+        rotatingEl.classList.remove('is-exiting');
+        rotatingEl.classList.add('is-entering');
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            rotatingEl.classList.remove('is-entering');
+          }, 20);
+        });
+      }, 300);
+    }
+
+    function startRotation() {
+      if (rotateInterval) return;
+      rotateInterval = setInterval(rotatePlaceholder, 2500);
+    }
+
+    function stopRotation() {
+      if (rotateInterval) {
+        clearInterval(rotateInterval);
+        rotateInterval = null;
+      }
+    }
+
+    // Hide placeholder when user types, show when empty
+    if (input && placeholder) {
+      input.addEventListener('input', () => {
+        if (input.value.length > 0) {
+          placeholder.style.display = 'none';
+          stopRotation();
+        } else {
+          placeholder.style.display = '';
+          startRotation();
+        }
+      });
+    }
+
+    // Start rotation when overlay opens, stop when it closes
+    const origOpen = open;
+    const wrappedOpen = (swap = false) => {
+      origOpen(swap);
+      if (input) input.value = '';
+      if (placeholder) placeholder.style.display = '';
+      if (rotatingEl) {
+        phraseIndex = 0;
+        rotatingEl.textContent = phrases[0];
+        rotatingEl.classList.remove('is-exiting', 'is-entering');
+      }
+      startRotation();
+    };
+
+    const origClose = close;
+    const wrappedClose = (swap = false) => {
+      stopRotation();
+      origClose(swap);
+    };
+
+    closeBtn?.addEventListener('click', () => wrappedClose(false));
+    hamburgerBtn?.addEventListener('click', () => {
+      (window as any).__hamburgerOverlay?.open(true);
+      wrappedClose(true);
+    });
+
     // Expose open/close for NavBar buttons
-    (window as any).__searchOverlay = { open, close };
+    (window as any).__searchOverlay = { open: wrappedOpen, close: wrappedClose };
   }
 
   document.addEventListener('DOMContentLoaded', initSearchOverlay);
