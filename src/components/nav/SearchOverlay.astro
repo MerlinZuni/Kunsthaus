@@ -224,12 +224,26 @@ const suggestions = [
     color: #8a8578;
     pointer-events: none;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
     z-index: 0;
   }
 
   .search-overlay__rotating-text {
     display: inline-block;
     transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  @media (max-width: 767px) {
+    .search-overlay__input {
+      font-size: var(--type-sm);
+    }
+
+    .search-overlay__placeholder {
+      font-size: var(--type-sm);
+      color: #757068;
+    }
   }
 
   .search-overlay__rotating-text.is-exiting {
