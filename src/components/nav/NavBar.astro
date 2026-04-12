@@ -87,14 +87,19 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     height: calc(env(safe-area-inset-top, 0px) + 100px);
     min-height: 110px;
     z-index: 59;
-    background: linear-gradient(to bottom, var(--color-surface) 30%, color-mix(in srgb, var(--color-surface) 50%, transparent) 60%, transparent 100%);
+    --scrim-color: var(--color-surface);
+    background: linear-gradient(to bottom, var(--scrim-color) 30%, color-mix(in srgb, var(--scrim-color) 50%, transparent) 60%, transparent 100%);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, background 0.3s ease;
+  }
+
+  .navbar-scrim.on-dark {
+    --scrim-color: #272523;
   }
 
   .navbar-scrim.is-visible {
@@ -367,11 +372,13 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       if (!match) return;
 
       const lum = getLuminance(+match[1], +match[2], +match[3]);
-      // Dark background (luminance < 0.4) → white logo, light → black logo
+      // Dark background (luminance < 0.4) → white logo + dark scrim
       if (lum < 0.4) {
         logoImg.classList.add('on-dark');
+        scrim?.classList.add('on-dark');
       } else {
         logoImg.classList.remove('on-dark');
+        scrim?.classList.remove('on-dark');
       }
     }
 
