@@ -78,7 +78,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 </button>
 
 <style>
-  /* Status bar scrim — gradient + blur to hide content behind iOS status bar */
+  /* Status bar scrim — only visible when navbar is faded */
   .navbar-scrim {
     position: fixed;
     top: 0;
@@ -91,6 +91,12 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .navbar-scrim.is-visible {
+    opacity: 1;
   }
 
   .navbar {
@@ -277,6 +283,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     });
 
     // Fade navbar on scroll down, restore on scroll up
+    const scrim = document.querySelector('.navbar-scrim');
     let lastScrollY = window.scrollY;
     let ticking = false;
 
@@ -287,8 +294,10 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
         const currentY = window.scrollY;
         if (currentY > lastScrollY && currentY > 80) {
           navbar.classList.add('navbar--faded');
+          scrim?.classList.add('is-visible');
         } else {
           navbar.classList.remove('navbar--faded');
+          scrim?.classList.remove('is-visible');
         }
         lastScrollY = currentY;
         ticking = false;
@@ -299,12 +308,13 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 
     // Show navbar when mouse enters the top area (even when faded)
     const onMouseMove = (e: MouseEvent) => {
-      const navHeight = navbar.offsetHeight + 20; // navbar height + small buffer
+      const navHeight = navbar.offsetHeight + 20;
       if (e.clientY <= navHeight) {
         navbar.classList.remove('navbar--faded');
+        scrim?.classList.remove('is-visible');
       } else if (window.scrollY > 80) {
-        // Only re-fade if scrolled past threshold and not near top
         navbar.classList.add('navbar--faded');
+        scrim?.classList.add('is-visible');
       }
     };
 
