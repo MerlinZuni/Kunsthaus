@@ -157,13 +157,12 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     flex-shrink: 0;
   }
 
-  /* When faded: logo stays visible, keeps inverted filter (dark on light) */
+  /* When faded: logo adapts to background via JS class toggle */
   .navbar--faded .navbar__logo-img {
     filter: invert(1);
   }
 
-  /* Dark mode faded: logo goes white (no invert) for visibility on dark sections */
-  html[data-mode="onsite"] .navbar--faded .navbar__logo-img {
+  .navbar--faded .navbar__logo-img.on-dark {
     filter: none;
   }
 
@@ -292,6 +291,62 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
+
+    // Detect background behind logo and toggle light/dark logo
+    const logoImg = navbar.querySelector('.navbar__logo-img') as HTMLElement;
+    const logoLink = navbar.querySelector('.navbar__logo') as HTMLElement;
+
+    function getLuminance(r: number, g: number, b: number) {
+      const [rs, gs, bs] = [r, g, b].map(c => {
+        c = c / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+    }
+
+    function checkLogoBg() {
+      if (!logoImg || !logoLink || !navbar.classList.contains('navbar--faded')) return;
+
+      const logoRect = logoLink.getBoundingClientRect();
+      const cx = logoRect.left + logoRect.width / 2;
+      const cy = logoRect.top + logoRect.height / 2;
+
+      // Temporarily hide logo to sample what's behind it
+      logoLink.style.visibility = 'hidden';
+      const el = document.elementFromPoint(cx, cy) as HTMLElement;
+      logoLink.style.visibility = '';
+
+      if (!el) return;
+
+      // Walk up to find an element with a background color
+      let target: HTMLElement | null = el;
+      let bgColor = '';
+      while (target && target !== document.documentElement) {
+        const bg = getComputedStyle(target).backgroundColor;
+        if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+          bgColor = bg;
+          break;
+        }
+        target = target.parentElement;
+      }
+
+      if (!bgColor) return;
+
+      // Parse rgb/rgba
+      const match = bgColor.match(/(\d+),\s*(\d+),\s*(\d+)/);
+      if (!match) return;
+
+      const lum = getLuminance(+match[1], +match[2], +match[3]);
+      // Dark background (luminance < 0.4) → white logo, light → black logo
+      if (lum < 0.4) {
+        logoImg.classList.add('on-dark');
+      } else {
+        logoImg.classList.remove('on-dark');
+      }
+    }
+
+    window.addEventListener('scroll', checkLogoBg, { passive: true });
+    checkLogoBg();
   }
 
   document.addEventListener('DOMContentLoaded', initNavBar);
