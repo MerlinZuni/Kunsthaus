@@ -109,7 +109,8 @@
           { "label": { "de": "Mittwoch", "en": "Wednesdays" }, "value": { "de": "Jeder gratis", "en": "Everyone Free" } }
         ],
         "link": "https://tickets.kunsthaus.ch/en/home",
-        "linkLabel": { "de": "Tickets kaufen", "en": "Buy tickets" }
+        "linkLabel": { "de": "Tickets kaufen", "en": "Buy tickets" },
+        "phone": "+41 44 253 84 84"
       },
       {
         "id": "location",
@@ -177,54 +178,21 @@
       "de": "Unser Angebot",
       "en": "Our Offerings"
     },
+    "storytelling": {
+      "title": { "de": "Dine, Shop & Discover", "en": "Dine, Shop & Discover" },
+      "description": { "de": "Gönnen Sie sich eine Pause zwischen den Ausstellungen. Mediterrane Küche, Cocktails, Kaffee im Miro-Garten und zwei einzigartige Shops – alles an einem Museum. Mitglieder geniessen 10 % Rabatt auf Speisen, Getränke und im Shop.", "en": "Take a break between exhibitions. Mediterranean cuisine, cocktails, coffee in the Miro Garden, and two unique shops – all at one museum. Members enjoy 10% off all dining and shopping." },
+      "cta": { "label": { "de": "Mitglied werden", "en": "Become a member" }, "href": "/membership" },
+      "image": "/images/offerings/kunsthaus-bar-hero.jpg"
+    },
     "items": [
-      {
-        "id": "membership",
-        "title": { "de": "Mitgliedschaft", "en": "Membership" },
-        "description": { "de": "Werden Sie Mitglied und geniessen Sie exklusive Vorteile und unbegrenzten Eintritt.", "en": "Become a member and enjoy exclusive benefits and unlimited access." },
-        "images": ["/images/offerings/membership-1.jpg", "/images/offerings/membership-2.jpg"],
-        "link": "/membership"
-      },
-      {
-        "id": "design-shop",
-        "title": { "de": "Design Shop", "en": "Design Shop" },
-        "description": { "de": "Ausgew\u00e4hlte Designobjekte, K\u00fcnstlereditionen und besondere Geschenke.", "en": "Curated design objects, artist editions and special gifts." },
-        "images": ["/images/offerings/design-shop-1.jpg", "/images/offerings/design-shop-2.jpg"],
-        "link": "/shop/design"
-      },
-      {
-        "id": "art-shop",
-        "title": { "de": "Art Shop", "en": "Art Shop" },
-        "description": { "de": "Kunstb\u00fccher, Poster, Kataloge und Reproduktionen aus unserem Sortiment.", "en": "Art books, posters, catalogues and reproductions from our collection." },
-        "images": ["/images/offerings/art-shop-1.jpg", "/images/offerings/art-shop-2.jpg"],
-        "link": "/shop/art"
-      },
-      {
-        "id": "restaurant",
-        "title": { "de": "Restaurant Bei Moudi", "en": "Restaurant Bei Moudi" },
-        "description": { "de": "Mediterrane und orientalische Spezialit\u00e4ten im Moser-Bau \u2014 farbenfrohe Mezze, warme Gerichte und eine Terrasse mit Blick auf den Heimplatz.", "en": "Mediterranean and Oriental specialties in the Moser building \u2014 colorful mezze, warm dishes, and a terrace overlooking Heimplatz." },
-        "images": ["/images/offerings/restaurant-1.jpg", "/images/offerings/restaurant-2.jpg", "/images/offerings/restaurant-3.jpg"],
-        "link": "https://www.beimoudi.ch/",
-        "linkLabel": { "de": "Reservierung vornehmen", "en": "Make a reservation" },
-        "secondaryLink": "https://visitorguide.kunsthaus.ch/ch-en/51825547/-30/-/false/0/-/-/-/-",
-        "secondaryLinkLabel": { "de": "Im Museum finden", "en": "Find in the museum" },
-        "schedule": [
-          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
-          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "23:00" },
-          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "10:00", "close": "23:00" },
-          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "10:00", "close": "23:00" },
-          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "10:00", "close": "23:00" },
-          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "10:00", "close": "23:00" },
-          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "10:00", "close": "21:00" }
-        ]
-      },
       {
         "id": "bar",
         "title": { "de": "Kunsthaus Bar", "en": "Kunsthaus Bar" },
         "description": { "de": "Aperitifs, Cocktails und Barfood im Chipperfield-Bau \u2014 unter einem Original von Max Ernst.", "en": "Aperitifs, cocktails and bar food in the Chipperfield building \u2014 beneath an original Max Ernst artwork." },
-        "images": ["/images/offerings/bar-1.jpg", "/images/offerings/bar-2.jpg", "/images/offerings/bar-3.jpg"],
+        "images": ["/images/offerings/bar-3.jpg", "/images/offerings/bar-2.jpg"],
         "link": "https://www.kunsthausbar.ch/",
         "linkLabel": { "de": "Reservierung vornehmen", "en": "Make a reservation" },
+        "phone": "+41 44 253 87 30",
         "schedule": [
           { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
           { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "8:00", "close": "19:00" },
@@ -236,14 +204,31 @@
         ]
       },
       {
+        "id": "restaurant",
+        "title": { "de": "Restaurant Bei Moudi", "en": "Restaurant Bei Moudi" },
+        "description": { "de": "Mediterrane und orientalische Spezialit\u00e4ten im Moser-Bau \u2014 farbenfrohe Mezze, warme Gerichte und eine Terrasse mit Blick auf den Heimplatz.", "en": "Mediterranean and Oriental specialties in the Moser building \u2014 colorful mezze, warm dishes, and a terrace overlooking Heimplatz." },
+        "images": ["/images/offerings/restaurant-1.jpg", "/images/offerings/restaurant-2.jpg"],
+        "link": "https://www.beimoudi.ch/",
+        "linkLabel": { "de": "Reservierung vornehmen", "en": "Make a reservation" },
+        "phone": "+41 44 251 53 53",
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "23:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "10:00", "close": "23:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "10:00", "close": "23:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "10:00", "close": "23:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "10:00", "close": "23:00" },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "10:00", "close": "21:00" }
+        ]
+      },
+      {
         "id": "cafe",
         "title": { "de": "Caf\u00e9 & Miro-Garten", "en": "Caf\u00e9 & Miro Garden" },
         "description": { "de": "Kaffee, Kuchen und leichte Snacks im Moser-Foyer \u2014 mit Zugang zum gr\u00fcnen Miro-Garten.", "en": "Coffee, cakes and light snacks in the Moser foyer \u2014 with access to the green Miro Garden terrace." },
         "images": ["/images/offerings/cafe-1.jpg", "/images/offerings/cafe-2.jpg", "/images/offerings/cafe-3.jpg"],
         "link": "/visit/cafe",
         "linkLabel": { "de": "Mehr erfahren", "en": "Learn more" },
-        "secondaryLink": "https://visitorguide.kunsthaus.ch/ch-en/51825514/-30/-/false/0/-/-/-/-",
-        "secondaryLinkLabel": { "de": "Im Museum finden", "en": "Find in the museum" },
+        "phone": "+41 44 253 84 84",
         "schedule": [
           { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
           { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "18:00" },
@@ -255,18 +240,40 @@
         ]
       },
       {
-        "id": "workshops",
-        "title": { "de": "Workshops & Kurse", "en": "Workshops & Classes" },
-        "description": { "de": "Kreative Workshops und Kurse f\u00fcr alle Altersgruppen \u2014 von Malerei bis digitale Kunst.", "en": "Creative workshops and classes for all ages \u2014 from painting to digital art." },
-        "images": ["/images/offerings/workshops-1.jpg", "/images/offerings/workshops-2.jpg"],
-        "link": "/education/workshops"
+        "id": "art-shop",
+        "title": { "de": "Art Shop", "en": "Art Shop" },
+        "description": { "de": "Kunstb\u00fccher, Reproduktionen, signierte K\u00fcnstlereditionen und kreative Geschenke im Moser-Bau.", "en": "Art books, reproductions, signed artist editions and creative gifts in the Moser building." },
+        "phone": "+41 44 253 84 84",
+        "images": ["/images/offerings/art-shop-1.jpg", "/images/offerings/art-shop-2.jpg"],
+        "link": "/shop/art",
+        "linkLabel": { "de": "Zum Art Shop", "en": "Visit Art Shop" },
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "10:00", "close": "20:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "10:00", "close": "18:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "10:00", "close": "18:00" },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "10:00", "close": "18:00" }
+        ]
       },
       {
-        "id": "guided-tours",
-        "title": { "de": "F\u00fchrungen", "en": "Guided Tours" },
-        "description": { "de": "Entdecken Sie die Sammlung und Sonderausstellungen mit unseren erfahrenen Guides.", "en": "Explore the collection and special exhibitions with our experienced guides." },
-        "images": ["/images/offerings/guided-tours-1.jpg", "/images/offerings/guided-tours-2.jpg"],
-        "link": "/visit/guided-tours"
+        "id": "design-shop",
+        "title": { "de": "Design Shop", "en": "Design Shop" },
+        "description": { "de": "Handgemachte Keramik, Designobjekte, Schmuck und ausgew\u00e4hlte Kunstb\u00fccher im Chipperfield-Bau.", "en": "Handmade ceramics, design objects, jewellery and curated art books in the Chipperfield building." },
+        "phone": "+41 44 253 84 84",
+        "images": ["/images/offerings/design-shop-1.jpg", "/images/offerings/design-shop-2.jpg"],
+        "link": "/shop/design",
+        "linkLabel": { "de": "Zum Design Shop", "en": "Visit Design Shop" },
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "closed": true },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "10:00", "close": "18:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "10:00", "close": "20:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "10:00", "close": "18:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "open": "10:00", "close": "18:00" },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "open": "10:00", "close": "18:00" }
+        ]
       }
     ]
   },
@@ -295,19 +302,32 @@
     "section": "education",
     "priority": 6,
     "title": {
-      "de": "Bildung & Vermittlung",
-      "en": "Education & Learning"
+      "de": "Engage & Entdecken",
+      "en": "Engage & Discover"
     },
     "body": {
-      "de": "Kreative Programme f\u00fcr alle Altersgruppen \u2013 vom Kindergarten bis zur Universit\u00e4t.",
-      "en": "Creative programs for all ages \u2013 from kindergarten to university."
+      "de": "Werden Sie Teil der Kunsthaus-Gemeinschaft \u2013 mit Mitgliedschaft, Workshops, F\u00fchrungen und Programmen f\u00fcr alle.",
+      "en": "Become part of the Kunsthaus community \u2013 with membership, workshops, guided tours and programs for everyone."
+    },
+    "storytelling": {
+      "title": { "de": "Mehr als ein Museum", "en": "More Than a Museum" },
+      "description": { "de": "Workshops, F\u00fchrungen, Familientage und exklusive Previews \u2013 das Kunsthaus lebt. Mitglieder geniessen freien Eintritt, Einladungen zu Er\u00f6ffnungen, bis zu 20 % Rabatt in Shops und Restaurants sowie das Kunsthaus-Magazin frei Haus.", "en": "Workshops, guided tours, family days and exclusive previews \u2013 the Kunsthaus is alive. Members enjoy free admission, opening invitations, up to 20% off in shops and restaurants, and the Kunsthaus magazine delivered to your door." },
+      "cta": { "label": { "de": "Mitglied werden ab CHF 135", "en": "Join from CHF 135" }, "href": "/membership" },
+      "image": "/images/education/engage-hero.jpg"
     },
     "items": [
       {
+        "id": "membership",
+        "title": { "de": "Mitgliedschaft", "en": "Membership" },
+        "description": { "de": "Werden Sie Mitglied und geniessen Sie exklusive Vorteile, unbegrenzten Eintritt und Einladungen zu Previews und Veranstaltungen.", "en": "Become a member and enjoy exclusive benefits, unlimited access, and invitations to previews and events." },
+        "images": ["/images/offerings/membership-1.jpg", "/images/offerings/membership-2.jpg"],
+        "link": "/membership"
+      },
+      {
         "id": "workshops",
-        "title": { "de": "Workshops", "en": "Workshops" },
-        "description": { "de": "Praktische K\u00fcnstlerworkshops f\u00fcr Erwachsene und Jugendliche, geleitet von professionellen K\u00fcnstlern.", "en": "Hands-on artist workshops for adults and young people, led by professional artists." },
-        "images": ["/images/education/workshops-1.jpg", "/images/education/workshops-2.jpg"],
+        "title": { "de": "Workshops, Kurse & F\u00fchrungen", "en": "Workshops, Classes & Guided Tours" },
+        "description": { "de": "Kreative Workshops und Kurse f\u00fcr alle Altersgruppen, plus \u00f6ffentliche und private F\u00fchrungen durch Sammlung und Sonderausstellungen.", "en": "Creative workshops and classes for all ages, plus public and private guided tours through the collection and special exhibitions." },
+        "images": ["/images/education/workshops-1.jpg", "/images/offerings/guided-tours-1.jpg"],
         "link": "/education/workshops"
       },
       {

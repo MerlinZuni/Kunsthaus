@@ -129,11 +129,21 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
         {item.date && (
           <span class="standard-grid__item-date">{item.date}</span>
         )}
-        {item.link && (
-          <a href={item.link} class="standard-grid__item-link btn-link touch-pulse" target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
-            <span>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
-            <span class="icon">arrow_forward</span>
-          </a>
+        {(item.link || item.phone) && (
+          <div class="standard-grid__item-actions">
+            {item.link && (
+              <a href={item.link} class="standard-grid__item-link btn-link touch-pulse" target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
+                <span>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
+                <span class="icon">arrow_forward</span>
+              </a>
+            )}
+            {item.phone && (
+              <a href={`tel:${item.phone.replace(/\s/g, '')}`} class="standard-grid__item-phone touch-pulse">
+                <span class="icon">call</span>
+                <span>{item.phone}</span>
+              </a>
+            )}
+          </div>
         )}
       </article>
     ))}
@@ -201,6 +211,13 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
     color: var(--color-decorative-shadow);
   }
 
+  .standard-grid__item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
   .standard-grid__item-link {
     display: inline-flex;
     align-self: flex-start;
@@ -208,6 +225,27 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
     font-size: var(--type-md);
     text-decoration: none;
     color: var(--color-text);
+  }
+
+  .standard-grid__item-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .standard-grid__item-phone .icon {
+    font-size: 18px;
+    transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .standard-grid__item-phone:hover {
+    opacity: 1;
   }
 
   @media (max-width: 1023px) {
@@ -219,6 +257,7 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
   @media (max-width: 767px) {
     .standard-grid__items {
       grid-template-columns: 1fr;
+      gap: var(--space-16);
     }
   }
 

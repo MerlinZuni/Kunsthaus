@@ -68,6 +68,21 @@ const bgOverrides: Record<string, 1 | 2 | 3 | 4> = {
     const componentType = sectionComponent[section.section] || 'standard-grid';
 
     return (
+      <>
+      {/* Cinematic reveal as standalone section before the main section */}
+      {section.storytelling && (
+        <section
+          class="stacking-section cinematic-reveal-section"
+          data-section={`${section.section}-reveal`}
+          style={`z-index: ${20 + i}; background: transparent;`}
+        >
+          <CinematicReveal
+            contentType={section.section}
+            data={section.storytelling}
+            lang={lang}
+          />
+        </section>
+      )}
       <SectionWrapper
         index={i}
         bgStep={bgStep}
@@ -97,6 +112,7 @@ const bgOverrides: Record<string, 1 | 2 | 3 | 4> = {
           />
         )}
       </SectionWrapper>
+      </>
     );
   })}
 

@@ -1,6 +1,7 @@
 ---
-// CinematicReveal.astro -- D-28: Full-bleed image with cinematic scroll reveal
-// GSAP ScrollTrigger: clipPath expansion, overlay fade, text slide-in
+// CinematicReveal.astro — Scroll-driven expanding image with overlaid content
+// Uses position:sticky + scroll height to create pinned effect without GSAP pin
+// Starts small and centered, expands to full browser width, reveals content card
 
 interface Props {
   contentType: string;
@@ -10,6 +11,7 @@ interface Props {
     image?: string;
     description?: { de: string; en: string };
     cta?: { label: { de: string; en: string }; href: string };
+    tagline?: { de: string; en: string };
   };
   lang: 'en' | 'de';
 }
@@ -19,41 +21,48 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const imageSrc = data.image ? `${base}${data.image}` : '';
 ---
 
-<div class="cinematic-reveal" data-content-type={contentType}>
-  <div class="cinematic-reveal__visual">
-    <div class="cinematic-reveal__image-wrap">
-      {imageSrc ? (
-        <img
-          src={imageSrc}
-          alt={data.title?.[lang] || ''}
-          class="cinematic-reveal__img"
-          loading="lazy"
-        />
-      ) : (
-        <div class="cinematic-reveal__placeholder" aria-label={data.title?.[lang] || ''}>
-          <span class="icon" style="font-size: 48px; opacity: 0.3;">image</span>
-        </div>
-      )}
-      <div class="cinematic-reveal__overlay" aria-hidden="true"></div>
-    </div>
-  </div>
+{/* Scroll container — tall enough to drive the animation */}
+<div class="cinematic-reveal" data-cinematic-reveal data-content-type={contentType}>
+  {/* Sticky viewport — stays fixed while user scrolls through the tall container */}
+  <div class="cinematic-reveal__viewport">
+    {/* Tagline — visible beneath small image, covered as it expands */}
+    <p class="cinematic-reveal__tagline" set:html={data.tagline?.[lang] || (contentType === 'offerings'
+      ? 'Where art meets appetite, culture meets comfort,<br/>and every visit tells a story.'
+      : 'Every visit is a chance to see something new,<br/>learn something unexpected, and make it yours.')} />
 
-  <div class="cinematic-reveal__content">
-    {data.title && (
-      <h3 class="cinematic-reveal__title">{data.title[lang]}</h3>
-    )}
-    {data.subtitle && (
-      <p class="cinematic-reveal__subtitle">{data.subtitle[lang]}</p>
-    )}
-    {data.description && (
-      <p class="cinematic-reveal__description">{data.description[lang]}</p>
-    )}
-    {data.cta && (
-      <a href={data.cta.href} class="cinematic-reveal__cta btn hover-wipe-inverse touch-pulse touch-target">
-        <span>{typeof data.cta.label === 'object' ? data.cta.label[lang] : data.cta.label}</span>
-        <span class="icon">arrow_forward</span>
-      </a>
-    )}
+    {/* Image frame — GSAP animates width from small to 100vw */}
+    <div class="cinematic-reveal__frame">
+      <div class="cinematic-reveal__image-wrap">
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt={data.title?.[lang] || ''}
+            class="cinematic-reveal__img"
+            loading="lazy"
+          />
+        ) : (
+          <div class="cinematic-reveal__placeholder" aria-label={data.title?.[lang] || ''}>
+            <span class="icon" style="font-size: 48px; opacity: 0.3;">image</span>
+          </div>
+        )}
+      </div>
+
+      {/* Content card — inside frame, positioned relative to image */}
+      <div class="cinematic-reveal__card">
+        {data.title && (
+          <h3 class="cinematic-reveal__title">{data.title[lang]}</h3>
+        )}
+        {data.description && (
+          <p class="cinematic-reveal__description">{data.description[lang]}</p>
+        )}
+        {data.cta && (
+          <a href={data.cta.href} class="cinematic-reveal__cta btn hover-wipe-inverse touch-pulse touch-target">
+            <span>{typeof data.cta.label === 'object' ? data.cta.label[lang] : data.cta.label}</span>
+            <span class="icon">arrow_forward</span>
+          </a>
+        )}
+      </div>
+    </div>
   </div>
 </div>
 
@@ -64,65 +73,88 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
   gsap.registerPlugin(ScrollTrigger);
 
   function initCinematicReveal() {
-    const reveals = document.querySelectorAll<HTMLElement>('.cinematic-reveal');
+    ScrollTrigger.getAll()
+      .filter(st => (st.vars as any)._cinematic)
+      .forEach(st => st.kill());
+
+    const reveals = document.querySelectorAll<HTMLElement>('[data-cinematic-reveal]');
     if (!reveals.length) return;
 
     const reduceMotion =
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
       document.documentElement.classList.contains('reduce-motion');
 
-    if (reduceMotion) return;
-
     reveals.forEach((reveal) => {
-      const overlay = reveal.querySelector('.cinematic-reveal__overlay');
-      const imageWrap = reveal.querySelector('.cinematic-reveal__image-wrap');
-      const title = reveal.querySelector('.cinematic-reveal__title');
-      const subtitle = reveal.querySelector('.cinematic-reveal__subtitle');
-      const content = reveal.querySelector('.cinematic-reveal__content');
+      const frame = reveal.querySelector('.cinematic-reveal__frame') as HTMLElement;
+      const imageWrap = reveal.querySelector('.cinematic-reveal__image-wrap') as HTMLElement;
+      const card = reveal.querySelector('.cinematic-reveal__card') as HTMLElement;
 
+      if (!frame || !imageWrap) return;
+
+      // Find the parent section's title to change its color
+      const parentSection = reveal.closest('.stacking-section');
+      const sectionTitle = parentSection?.querySelector('.section-title') as HTMLElement;
+
+      if (reduceMotion) {
+        gsap.set(frame, { maxWidth: 'none', width: '100vw', marginLeft: 'calc(-50vw + 50%)' });
+        gsap.set(imageWrap, { clipPath: 'inset(0% 0% 0% 0%)', borderRadius: '0' });
+        if (card) gsap.set(card, { opacity: 1, y: 0 });
+        return;
+      }
+
+      // Initial state: small centered image with crop and uniform radius
+      gsap.set(imageWrap, { clipPath: 'inset(10% 6% 10% 6%)', borderRadius: '10px 10px 10px 10px' });
+      if (card) gsap.set(card, { opacity: 0, y: 40 });
+
+      // Scrub timeline driven by scroll position through the tall container
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: reveal,
-          scrub: true,
-          start: 'top 80%',
-          end: 'top 20%',
-        },
+          scrub: 0.3,
+          start: 'top 60%',
+          end: 'bottom bottom',
+          _cinematic: true,
+        } as ScrollTrigger.Vars & { _cinematic: boolean },
       });
 
-      // Overlay fades out
-      if (overlay) {
-        tl.fromTo(overlay, { opacity: 1 }, { opacity: 0, duration: 1 }, 0);
+      // Single continuous clip + radius animation (no jump between phases)
+      tl.to(imageWrap, {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        borderRadius: '0px 0px 0px 0px',
+        height: '100vh',
+        duration: 0.6,
+        ease: 'power1.inOut',
+      }, 0);
+
+      // Frame expands to full browser width (starts slightly later)
+      tl.to(frame, {
+        maxWidth: 'none',
+        width: '100vw',
+        marginLeft: 'calc(-50vw + 50%)',
+        duration: 0.45,
+        ease: 'power1.inOut',
+      }, 0.15);
+
+      // Section title turns white as image expands over it
+      if (sectionTitle) {
+        tl.to(sectionTitle, {
+          color: '#ffffff',
+          duration: 0.1,
+          ease: 'none',
+        }, 0.35);
       }
 
-      // Image clipPath expands from inset to full
-      if (imageWrap) {
-        const isMobile = window.innerWidth < 768;
-        const startClip = isMobile
-          ? 'inset(0% 0% 40% 0%)'   // Mobile: vertical wipe from bottom
-          : 'inset(20% 20% 20% 20%)'; // Desktop: all sides
-
-        tl.fromTo(
-          imageWrap,
-          { clipPath: startClip },
-          { clipPath: 'inset(0% 0% 0% 0%)', duration: 1 },
-          0
-        );
+      // Phase 3 (0.65–0.8): Content card fades in
+      if (card) {
+        tl.to(card, {
+          opacity: 1,
+          y: 0,
+          duration: 0.15,
+          ease: 'power2.out',
+        }, 0.65);
       }
 
-      // Title enters from left
-      if (title) {
-        tl.fromTo(title, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 0.2);
-      }
-
-      // Subtitle enters from right
-      if (subtitle) {
-        tl.fromTo(subtitle, { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 0.3);
-      }
-
-      // Content fades in
-      if (content && !title && !subtitle) {
-        tl.fromTo(content, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, 0.2);
-      }
+      // Phase 4 (0.8–1.0): Hold — final state visible while user scrolls remainder
     });
   }
 
@@ -131,29 +163,63 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
 </script>
 
 <style>
+  /* Tall scroll container — height drives the animation duration */
   .cinematic-reveal {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-12);
-    align-items: center;
-    min-height: 60vh;
+    position: relative;
+    height: 250vh;
   }
 
-  .cinematic-reveal__visual {
+  /* Sticky viewport — stays in view while user scrolls through container */
+  .cinematic-reveal__viewport {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  /* Tagline — sits below the image, covered as image expands */
+  .cinematic-reveal__tagline {
+    position: absolute;
+    bottom: 15%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text);
+    opacity: 0.7;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Frame — starts at max-width, GSAP expands to 100vw */
+  .cinematic-reveal__frame {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
     position: relative;
+    z-index: 1;
+    overflow: visible;
   }
 
   .cinematic-reveal__image-wrap {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 16 / 9;
+    height: 30vh;
     will-change: clip-path;
+    border-radius: var(--btn-radius);
   }
 
   .cinematic-reveal__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
   }
 
   .cinematic-reveal__placeholder {
@@ -165,54 +231,70 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
     justify-content: center;
   }
 
-  .cinematic-reveal__overlay {
+  /* Content card — vertically centered using inset trick (no transform needed) */
+  .cinematic-reveal__card {
     position: absolute;
-    inset: 0;
-    background: var(--color-surface);
-    pointer-events: none;
-  }
-
-  .cinematic-reveal__content {
+    right: var(--space-8);
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    height: fit-content;
+    background: white;
+    padding: var(--space-8);
+    max-width: 440px;
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    opacity: 0;
+    z-index: 2;
   }
 
   .cinematic-reveal__title {
-    font-size: var(--type-2xl);
+    font-size: var(--type-3xl);
     font-weight: var(--weight-bold);
-    line-height: var(--leading-tight);
-  }
-
-  .cinematic-reveal__subtitle {
-    font-size: var(--type-lg);
-    color: var(--color-decorative-shadow);
+    line-height: 0.98;
+    text-transform: uppercase;
+    color: #272523;
   }
 
   .cinematic-reveal__description {
     font-size: var(--type-md);
+    font-weight: var(--weight-light);
     line-height: var(--leading-normal);
-    max-width: 50ch;
+    color: #272523;
+    max-width: 45ch;
   }
 
   .cinematic-reveal__cta {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-3) var(--space-6);
-    text-decoration: none;
-    font-size: var(--type-md);
-    align-self: flex-start;
-    margin-top: var(--space-4);
+    align-self: stretch;
+    justify-content: center;
+    margin-top: var(--space-2);
   }
 
   @media (max-width: 767px) {
     .cinematic-reveal {
-      grid-template-columns: 1fr;
-      min-height: auto;
+      height: 200vh;
+    }
+
+    .cinematic-reveal__frame {
+      max-width: 75%;
     }
 
     .cinematic-reveal__image-wrap {
-      aspect-ratio: 4 / 3;
+      height: 35vh;
+    }
+
+    .cinematic-reveal__card {
+      position: absolute;
+      right: var(--space-4);
+      left: var(--space-4);
+      top: 0;
+      bottom: 0;
+      margin: auto 0;
+      height: fit-content;
+      max-width: none;
+      padding: var(--space-6);
+      background: rgba(255, 255, 255, 0.95);
     }
   }
 </style>

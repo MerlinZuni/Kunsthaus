@@ -38,6 +38,23 @@
     padding-bottom: 180px;
   }
 
+  /* Cinematic reveal section — no padding, no min-height */
+  .cinematic-reveal-section {
+    padding: 0;
+    min-height: auto;
+  }
+
+  /* Remove top padding when section follows a cinematic reveal */
+  .cinematic-reveal-section + .stacking-section.section-spacing {
+    padding-top: 0;
+  }
+
+  @media (max-width: 767px) {
+    .cinematic-reveal-section + .stacking-section.section-spacing {
+      padding-top: var(--space-24);
+    }
+  }
+
   @media (max-width: 1023px) {
     .section-spacing {
       padding-top: var(--space-24);  /* 96px tablet */
@@ -47,7 +64,7 @@
 
   @media (max-width: 767px) {
     .section-spacing {
-      padding-top: var(--space-16);  /* 64px mobile */
+      padding-top: var(--space-24);  /* 96px mobile — consistent with tablet */
       padding-bottom: 180px;
     }
   }

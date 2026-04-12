@@ -97,8 +97,8 @@ const toggleLabels = {
   import { gsap } from 'gsap';
 
   function slidePill(toggle: HTMLElement) {
-    const pill = toggle.querySelector('.sticky-cta__pill') as HTMLElement;
-    const active = toggle.querySelector('.sticky-cta__segment--active') as HTMLElement;
+    const pill = (toggle.querySelector('.sticky-cta__pill') || toggle.querySelector('.footer-col__mode-pill')) as HTMLElement;
+    const active = (toggle.querySelector('.sticky-cta__segment--active') || toggle.querySelector('.footer-col__mode-segment--active')) as HTMLElement;
     if (!pill || !active) return;
 
     const toggleRect = toggle.getBoundingClientRect();
@@ -113,10 +113,10 @@ const toggleLabels = {
   }
 
   function initPills() {
-    document.querySelectorAll('.sticky-cta__toggle').forEach(toggle => {
+    document.querySelectorAll('.sticky-cta__toggle, .footer-col__mode-toggle').forEach(toggle => {
       const el = toggle as HTMLElement;
-      const pill = el.querySelector('.sticky-cta__pill') as HTMLElement;
-      const active = el.querySelector('.sticky-cta__segment--active') as HTMLElement;
+      const pill = (el.querySelector('.sticky-cta__pill') || el.querySelector('.footer-col__mode-pill')) as HTMLElement;
+      const active = (el.querySelector('.sticky-cta__segment--active') || el.querySelector('.footer-col__mode-segment--active')) as HTMLElement;
       if (!pill || !active) return;
 
       // Set initial pill position without animation
@@ -140,16 +140,17 @@ const toggleLabels = {
         document.documentElement.setAttribute('data-mode', mode);
         localStorage.setItem('kunsthaus-mode', mode);
 
-        // Update all toggle segments across desktop + mobile
+        // Update all toggle segments across desktop + mobile + footer
         document.querySelectorAll('[data-mode-segment]').forEach((seg) => {
           const el = seg as HTMLElement;
           const isActive = el.dataset.modeSegment === mode;
           el.classList.toggle('sticky-cta__segment--active', isActive);
+          el.classList.toggle('footer-col__mode-segment--active', isActive);
           el.setAttribute('aria-checked', isActive ? 'true' : 'false');
         });
 
-        // Slide pills in all toggles
-        document.querySelectorAll('.sticky-cta__toggle').forEach(toggle => {
+        // Slide pills in all toggles (sticky CTA + footer)
+        document.querySelectorAll('.sticky-cta__toggle, .footer-col__mode-toggle').forEach(toggle => {
           slidePill(toggle as HTMLElement);
         });
       });

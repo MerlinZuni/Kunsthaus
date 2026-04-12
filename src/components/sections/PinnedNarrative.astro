@@ -19,6 +19,7 @@ interface Props {
     linkLabel?: { de: string; en: string };
     secondaryLink?: string;
     secondaryLinkLabel?: { de: string; en: string };
+    phone?: string;
     schedule?: Array<{ day: number; label: { de: string; en: string }; open?: string; close?: string; closed?: boolean }>;
   }>;
   lang: 'en' | 'de';
@@ -80,11 +81,21 @@ const isExhibition = contentType === 'exhibitions';
                   lang={lang}
                 />
               )}
-              {item.link && (
-                <a href={item.link} class="pinned-narrative__card-link btn-link touch-pulse" target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
-                  <span>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
-                  <span class="icon">arrow_forward</span>
-                </a>
+              {(item.link || item.phone) && (
+                <div class="pinned-narrative__card-actions">
+                  {item.link && (
+                    <a href={item.link} class="pinned-narrative__card-link btn-link touch-pulse" target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
+                      <span>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
+                      <span class="icon">arrow_forward</span>
+                    </a>
+                  )}
+                  {item.phone && (
+                    <a href={`tel:${item.phone.replace(/\s/g, '')}`} class="pinned-narrative__card-phone touch-pulse">
+                      <span class="icon">call</span>
+                      <span>{item.phone}</span>
+                    </a>
+                  )}
+                </div>
               )}
               {item.secondaryLink && (
                 <a href={item.secondaryLink} class="pinned-narrative__card-link btn-link touch-pulse" target="_blank" rel="noopener">
@@ -195,16 +206,50 @@ const isExhibition = contentType === 'exhibitions';
     }
 
     .pinned-narrative__cards {
-      gap: var(--space-16);
+      gap: var(--space-32);
     }
 
     .pinned-narrative__card {
       grid-template-columns: 1fr;
       min-height: auto;
+      gap: var(--space-4);
     }
 
     .pinned-narrative__card-stack {
-      aspect-ratio: 3 / 2;
+      aspect-ratio: auto;
+      height: auto;
+      min-height: 220px;
+      position: relative;
+      margin-bottom: 0;
+    }
+
+    /* Mobile: landscape image left/top, portrait peeking behind on right */
+    .pinned-narrative__card-stack-img {
+      top: auto !important;
+      bottom: auto !important;
+      left: auto !important;
+      right: auto !important;
+    }
+
+    .pinned-narrative__card-stack-img[data-stack-img="0"] {
+      position: relative !important;
+      width: 75% !important;
+      aspect-ratio: 3 / 2 !important;
+      z-index: 2 !important;
+    }
+
+    .pinned-narrative__card-stack-img[data-stack-img="1"] {
+      position: absolute !important;
+      right: 0 !important;
+      top: -10% !important;
+      width: 40% !important;
+      height: 130% !important;
+      aspect-ratio: auto !important;
+      z-index: 1 !important;
+    }
+
+    .pinned-narrative__card-stack-img[data-stack-img="2"] {
+      display: none;
     }
 
     .pinned-narrative__card-wrap--odd .pinned-narrative__card {
@@ -240,7 +285,7 @@ const isExhibition = contentType === 'exhibitions';
     top: 0;
     left: 0;
     aspect-ratio: 3 / 2;
-    z-index: 1;
+    z-index: 2;
   }
   [data-card-index="0"] .pinned-narrative__card-stack-img[data-stack-img="1"],
   [data-card-index="4"] .pinned-narrative__card-stack-img[data-stack-img="1"] {
@@ -248,7 +293,7 @@ const isExhibition = contentType === 'exhibitions';
     top: 35%;
     right: 0;
     aspect-ratio: 2 / 3;
-    z-index: 2;
+    z-index: 1;
   }
 
   /* 3rd image for Variant A: small 3:2 tucked mid-right */
@@ -293,7 +338,7 @@ const isExhibition = contentType === 'exhibitions';
   [data-card-index="2"] .pinned-narrative__card-stack-img[data-stack-img="0"],
   [data-card-index="6"] .pinned-narrative__card-stack-img[data-stack-img="0"] {
     width: 65%;
-    top: 25%;
+    top: 10%;
     right: 0;
     aspect-ratio: 3 / 2;
     z-index: 2;
@@ -301,17 +346,17 @@ const isExhibition = contentType === 'exhibitions';
   [data-card-index="2"] .pinned-narrative__card-stack-img[data-stack-img="1"],
   [data-card-index="6"] .pinned-narrative__card-stack-img[data-stack-img="1"] {
     width: 50%;
-    top: 0;
+    top: -10%;
     left: 0;
     aspect-ratio: 2 / 3;
     z-index: 1;
   }
 
-  /* 3rd image for Variant C: small 3:2 bottom-right */
+  /* 3rd image for Variant C: large 3:2 pushed well down */
   [data-card-index="2"] .pinned-narrative__card-stack-img[data-stack-img="2"],
   [data-card-index="6"] .pinned-narrative__card-stack-img[data-stack-img="2"] {
-    width: 38%;
-    bottom: 5%;
+    width: 70%;
+    bottom: -25%;
     right: 5%;
     aspect-ratio: 3 / 2;
     z-index: 3;
@@ -380,6 +425,34 @@ const isExhibition = contentType === 'exhibitions';
     font-size: var(--type-md);
     line-height: var(--leading-normal);
     max-width: 45ch;
+  }
+
+  .pinned-narrative__card-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .pinned-narrative__card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
+  .pinned-narrative__card-phone .icon {
+    font-size: 18px;
+    transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .pinned-narrative__card-phone:hover {
+    opacity: 1;
   }
 
   .pinned-narrative__card-link {

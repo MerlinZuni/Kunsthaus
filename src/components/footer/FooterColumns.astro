@@ -46,9 +46,18 @@ const newsletterHeading = 'NEWSLETTER';
       <p>{footerData.address.zip} {footerData.address.city[lang]}</p>
     </address>
     <div class="footer-col__links">
-      <a href={footerData.address.mapsUrl} class="link-underline" target="_blank" rel="noopener">Google Maps</a>
-      <a href={`mailto:${footerData.address.email}`} class="link-underline">{footerData.address.email}</a>
-      <a href={`tel:${footerData.address.phone}`} class="link-underline">{footerData.address.phone}</a>
+      <a href={footerData.address.mapsUrl} class="footer-col__link footer-col__link--icon" target="_blank" rel="noopener">
+        <span class="icon">location_on</span>
+        <span>Google Maps</span>
+      </a>
+      <a href={`mailto:${footerData.address.email}`} class="footer-col__link footer-col__link--icon">
+        <span class="icon">mail</span>
+        <span>{footerData.address.email}</span>
+      </a>
+      <a href={`tel:${footerData.address.phone}`} class="footer-col__link footer-col__link--icon">
+        <span class="icon">call</span>
+        <span>{footerData.address.phone}</span>
+      </a>
     </div>
   </div>
 
@@ -70,13 +79,13 @@ const newsletterHeading = 'NEWSLETTER';
     <h3 class="footer-col__heading sub-heading">{quickLinksHeading}</h3>
     <ul class="footer-col__link-list">
       {footerData.quickLinks.map((link) => (
-        <li><a href={link.href} class="link-underline hover-wipe touch-pulse">{link.label[lang]}</a></li>
+        <li><a href={link.href} class="footer-col__link touch-pulse">{link.label[lang]}</a></li>
       ))}
     </ul>
     <h3 class="footer-col__heading sub-heading footer-col__heading--spaced">{mediaHeading}</h3>
     <ul class="footer-col__link-list">
       {footerData.media.map((link) => (
-        <li><a href={link.href} class="link-underline hover-wipe touch-pulse">{link.label[lang]}</a></li>
+        <li><a href={link.href} class="footer-col__link touch-pulse">{link.label[lang]}</a></li>
       ))}
     </ul>
   </div>
@@ -94,6 +103,7 @@ const newsletterHeading = 'NEWSLETTER';
     </a>
 
     <div class="footer-col__mode-toggle" role="radiogroup" aria-label="Site mode">
+      <span class="footer-col__mode-pill"></span>
       <button
         class="footer-col__mode-segment footer-col__mode-segment--active"
         data-mode-segment="planning"
@@ -160,6 +170,30 @@ const newsletterHeading = 'NEWSLETTER';
     display: inline-block;
   }
 
+  .footer-col__link {
+    color: var(--color-offwhite);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer-col__link:hover {
+    opacity: 1;
+  }
+
+  .footer-col__link--icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-col__link--icon .icon {
+    font-size: 18px;
+    line-height: 1;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
   .footer-col__open-status {
     font-weight: var(--weight-bold);
     margin-bottom: var(--space-4);
@@ -209,17 +243,38 @@ const newsletterHeading = 'NEWSLETTER';
 
   .footer-col__mode-toggle {
     display: flex;
-    border: 1px solid var(--color-text);
+    position: relative;
+    background: color-mix(in srgb, var(--color-offwhite) 20%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: var(--btn-radius);
-    overflow: hidden;
+    padding: 4px;
+    gap: 0;
     margin-top: var(--space-12);
     width: 100%;
   }
 
+  .footer-col__mode-pill {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    border-radius: var(--btn-radius-inner);
+    background: color-mix(in srgb, var(--color-offwhite) 85%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    z-index: 0;
+    transition: none;
+  }
+
   .footer-col__mode-segment {
+    position: relative;
+    z-index: 1;
     flex: 1;
     background: transparent;
-    color: var(--color-text);
+    color: var(--color-offwhite);
     border: none;
     padding: var(--btn-padding-y) var(--btn-padding-x);
     font-size: var(--type-sm);
@@ -227,17 +282,13 @@ const newsletterHeading = 'NEWSLETTER';
     cursor: pointer;
     white-space: nowrap;
     text-align: center;
-    transition: background 0.2s ease, color 0.2s ease;
+    border-radius: var(--btn-radius-inner);
+    transition: color 0.3s ease;
   }
 
   .footer-col__mode-segment--active {
-    background: var(--color-text);
-    color: var(--color-surface);
+    color: var(--color-softblack);
     font-weight: var(--weight-medium);
-  }
-
-  .footer-col__mode-segment:not(.footer-col__mode-segment--active):hover {
-    background: color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 
   /* Responsive: 2 columns tablet, 1 column mobile */

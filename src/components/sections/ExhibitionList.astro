@@ -13,7 +13,7 @@ const { lang } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const data = exhibitionsJson[0];
 const memberLabel = lang === 'de' ? 'Mitglieder-Preview' : 'Members Preview';
-const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
+const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upcoming exhibitions';
 ---
 
 <div class="exhibition-list">
@@ -80,7 +80,7 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
       ))}
     </ul>
     <div class="exhibition-list__member-cta">
-      <a href="/membership" class="exhibition-list__member-link btn hover-wipe-inverse touch-pulse touch-target">
+      <a href="/exhibitions" class="exhibition-list__member-link btn hover-wipe-inverse touch-pulse touch-target">
         <span>{memberCta}</span>
         <span class="icon">arrow_forward</span>
       </a>
