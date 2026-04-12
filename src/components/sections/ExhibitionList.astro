@@ -131,7 +131,9 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
         (entries) => {
           entries.forEach((entry) => {
             const row = entry.target as HTMLElement;
-            if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+            if (entry.isIntersecting) {
+              // Deactivate all rows first, then activate only this one
+              rows.forEach(r => r.classList.remove('exhibition-list__row--active'));
               row.classList.add('exhibition-list__row--active');
               const src = row.dataset.image;
               if (src && previewImg) {
@@ -141,17 +143,10 @@ const memberCta = lang === 'de' ? 'Mitglied werden' : 'Become a Member';
                 preview.style.top = `${row.offsetTop + row.offsetHeight}px`;
                 preview.style.transform = 'translateX(-50%)';
               }
-            } else {
-              row.classList.remove('exhibition-list__row--active');
             }
           });
-          // Hide preview if no row is active
-          const anyActive = document.querySelector('.exhibition-list__row--active');
-          if (!anyActive) {
-            preview.classList.remove('exhibition-list__preview--visible');
-          }
         },
-        { threshold: 0.6, rootMargin: '-20% 0px -20% 0px' }
+        { threshold: 1.0, rootMargin: '-45% 0px -45% 0px' }
       );
       rows.forEach((row) => observer.observe(row));
     }
