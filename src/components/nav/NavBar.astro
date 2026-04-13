@@ -18,50 +18,52 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 <div class="navbar-scrim" aria-hidden="true"></div>
 
 <header class="navbar" id="navbar">
-  {/* Center: Logo — outside inner so it persists when bar fades */}
+  <div class="navbar__inner">
+    {/* Left: Search + Clock */}
+    <div class="navbar__left">
+      <button
+        class="navbar__icon-btn touch-target touch-pulse"
+        aria-label={searchLabel}
+        data-action="search"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <button class="navbar__icon-btn touch-target touch-pulse" aria-label="Opening hours">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </button>
+    </div>
+
+    {/* Right: Hamburger */}
+    <div class="navbar__right">
+      <button
+        class="navbar__icon-btn touch-target touch-pulse"
+        aria-label={menuLabel}
+        data-action="hamburger"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {/* Bar logo — visible when bar is showing */}
+  <a href="/" class="navbar__logo-inner">
+    <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="navbar__logo-inner-img" />
+  </a>
+
+  {/* Persistent logo — stays when bar fades */}
   <a href="/" class="navbar__logo">
     <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="navbar__logo-img" />
   </a>
-
-  <div class="navbar__inner">
-    {/* Left: Search icon */}
-    <button
-      class="navbar__search touch-target touch-pulse"
-      aria-label={searchLabel}
-      data-action="search"
-    >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="11" cy="11" r="8"/>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-    </button>
-
-    {/* Center: spacer to maintain layout where logo was */}
-    <div class="navbar__logo-spacer" aria-hidden="true"></div>
-
-    {/* Right: Desktop nav links + language switcher */}
-    <nav class="navbar__links" aria-label="Main navigation">
-      {navItems.map(item => (
-        <a href={item.href} class="navbar__link hover-wipe touch-pulse">
-          <span>{item.label[lang]}</span>
-        </a>
-      ))}
-      <LanguageSwitcher lang={lang} />
-    </nav>
-
-    {/* Right: Mobile hamburger */}
-    <button
-      class="navbar__hamburger touch-target touch-pulse"
-      aria-label={menuLabel}
-      data-action="hamburger"
-    >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-      </svg>
-    </button>
-  </div>
 </header>
 
 {/* Migrated search icon -- visible when nav is hidden on scroll */}
@@ -78,7 +80,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 </button>
 
 <style>
-  /* Status bar scrim — only visible when navbar is faded */
+  /* Status bar scrim — always visible, fades content under navbar */
   .navbar-scrim {
     position: fixed;
     top: 0;
@@ -87,23 +89,16 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     height: calc(env(safe-area-inset-top, 0px) + 100px);
     min-height: 110px;
     z-index: 59;
-    --scrim-color: var(--color-surface);
-    background: linear-gradient(to bottom, var(--scrim-color) 30%, color-mix(in srgb, var(--scrim-color) 50%, transparent) 60%, transparent 100%);
+    background: linear-gradient(to bottom, var(--color-surface) 30%, color-mix(in srgb, var(--color-surface) 50%, transparent) 60%, transparent 100%);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease, background 0.3s ease;
   }
 
-  .navbar-scrim.on-dark {
-    --scrim-color: #272523;
-  }
-
-  .navbar-scrim.is-visible {
-    opacity: 1;
+  html[data-mode="onsite"] .navbar-scrim {
+    background: linear-gradient(to bottom, #272523 30%, color-mix(in srgb, #272523 50%, transparent) 60%, transparent 100%);
   }
 
   .navbar {
@@ -112,7 +107,26 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     left: 0;
     width: 100%;
     z-index: 60;
-    padding: var(--space-3);
+    padding: var(--space-2);
+    pointer-events: none;
+  }
+
+  /* Bar logo — visible when bar is showing, hidden when faded */
+  .navbar__logo-inner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    z-index: 2;
+    pointer-events: auto;
+    transition: opacity 0.6s ease;
+  }
+
+  .navbar--faded .navbar__logo-inner {
+    opacity: 0;
     pointer-events: none;
   }
 
@@ -124,7 +138,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     background-image: url(/Kunsthaus/textures/concrete-wall.png);
     background-repeat: repeat;
     background-blend-mode: multiply;
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-1) var(--space-2);
     pointer-events: auto;
     position: relative;
     overflow: hidden;
@@ -132,13 +146,13 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     transition: opacity 0.6s ease;
   }
 
-  /* Faded state: bar disappears, logo stays */
+  /* Faded state: bar disappears, persistent logo stays */
   .navbar--faded .navbar__inner {
     opacity: 0;
     pointer-events: none;
   }
 
-  /* Bevel — top highlight, right highlight, bottom shadow, left shadow */
+  /* Bevel */
   .navbar__inner::before {
     content: '';
     position: absolute;
@@ -152,16 +166,40 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     z-index: 1;
   }
 
-  /* Search button */
-  .navbar__search {
+  /* Left group: search + clock */
+  .navbar__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  /* Right group: hamburger */
+  .navbar__right {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Icon buttons — shared style */
+  .navbar__icon-btn {
     background: none;
     border: none;
     cursor: pointer;
     color: var(--color-text);
-    padding: var(--space-2);
+    padding: var(--space-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* Logo center — positioned relative to navbar, persists when bar fades */
+
+  .navbar__logo-inner-img {
+    width: 150px;
+    height: auto;
+    display: block;
+    filter: invert(1);
+  }
+
+  /* Persistent logo — hidden when bar visible, shows when faded */
   .navbar__logo {
     position: absolute;
     left: 50%;
@@ -172,69 +210,28 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     align-items: center;
     z-index: 2;
     pointer-events: auto;
-    transition: mix-blend-mode 0.6s ease;
+    opacity: 0;
+  }
+
+  .navbar--faded .navbar__logo {
+    opacity: 1;
   }
 
   .navbar__logo-img {
-    width: 200px;
+    width: 150px;
     height: auto;
     display: block;
     filter: invert(1);
     transition: filter 0.25s ease;
   }
 
-  /* Spacer keeps inner bar layout balanced */
-  .navbar__logo-spacer {
-    width: 200px;
-    flex-shrink: 0;
-  }
-
-  /* When faded: logo adapts to background via JS class toggle */
+  /* When faded: persistent logo adapts */
   .navbar--faded .navbar__logo-img {
     filter: invert(1);
   }
 
   .navbar--faded .navbar__logo-img.on-dark {
     filter: none;
-  }
-
-  /* Desktop nav links — hidden, hamburger used at all breakpoints */
-  .navbar__links {
-    display: none;
-  }
-
-  /* Hamburger -- all breakpoints */
-  .navbar__hamburger {
-    display: inline-flex;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--color-text);
-    padding: var(--space-2);
-  }
-
-  /* Migrated search icon -- shown when nav hides on scroll */
-  .navbar__search-migrated {
-    position: fixed;
-    top: var(--space-4);
-    left: var(--space-4);
-    z-index: 60;
-    background: color-mix(in srgb, var(--color-surface) 80%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: none;
-    cursor: pointer;
-    color: var(--color-text);
-    padding: var(--space-2);
-    border-radius: 50%;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .navbar__search-migrated.is-visible {
-    opacity: 1;
-    pointer-events: auto;
   }
 
   /* Onsite/dark mode: dark textured nav like footer */
@@ -252,7 +249,8 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       linear-gradient(to right, #1a1816, transparent 4px);
   }
 
-  html[data-mode="onsite"] .navbar__logo-img {
+  html[data-mode="onsite"] .navbar__logo-img,
+  html[data-mode="onsite"] .navbar__logo-inner-img {
     filter: none;
   }
 
@@ -298,7 +296,6 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     if (reduceMotion) return;
 
     // Fade navbar on scroll down, restore on scroll up
-    const scrim = document.querySelector('.navbar-scrim');
     let lastScrollY = window.scrollY;
     let ticking = false;
 
@@ -309,10 +306,8 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
         const currentY = window.scrollY;
         if (currentY > lastScrollY && currentY > 80) {
           navbar.classList.add('navbar--faded');
-          scrim?.classList.add('is-visible');
         } else {
           navbar.classList.remove('navbar--faded');
-          scrim?.classList.remove('is-visible');
         }
         lastScrollY = currentY;
         ticking = false;
@@ -326,10 +321,8 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       const navHeight = navbar.offsetHeight + 20;
       if (e.clientY <= navHeight) {
         navbar.classList.remove('navbar--faded');
-        scrim?.classList.remove('is-visible');
       } else if (window.scrollY > 80) {
         navbar.classList.add('navbar--faded');
-        scrim?.classList.add('is-visible');
       }
     };
 
@@ -380,13 +373,11 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       if (!match) return;
 
       const lum = getLuminance(+match[1], +match[2], +match[3]);
-      // Dark background (luminance < 0.4) → white logo + dark scrim
+      // Dark background (luminance < 0.4) → white logo
       if (lum < 0.4) {
         logoImg.classList.add('on-dark');
-        scrim?.classList.add('on-dark');
       } else {
         logoImg.classList.remove('on-dark');
-        scrim?.classList.remove('on-dark');
       }
     }
 

@@ -108,7 +108,4 @@
     opacity: 1 !important;
   }
 
-  html.reduce-motion .navbar-scrim {
-    display: none !important;
-  }
 }
