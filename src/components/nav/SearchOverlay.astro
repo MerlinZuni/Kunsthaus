@@ -324,40 +324,15 @@ const suggestions = [
       padding: 0;
       border-radius: var(--btn-radius);
       overflow: hidden;
-      background-color: #ede7de;
-      background-image: url(/Kunsthaus/textures/concrete-wall.png);
-      background-repeat: repeat;
-      background-blend-mode: multiply;
+      background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       position: relative;
     }
 
-    /* Bevel effect matching navbar */
     .search-overlay__inner::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(to bottom, #fcfcfb, transparent 4px),
-        linear-gradient(to left, #fcfcfb, transparent 4px),
-        linear-gradient(to top, #e4d9cc, transparent 4px),
-        linear-gradient(to right, #e4d9cc, transparent 4px);
-      pointer-events: none;
+      display: none;
       z-index: 1;
-    }
-
-    /* Dark mode bevel */
-    html[data-mode="onsite"] .search-overlay__inner {
-      background-color: #272523;
-      background-image: url(/Kunsthaus/textures/dark-wall.png);
-      background-blend-mode: normal;
-    }
-
-    html[data-mode="onsite"] .search-overlay__inner::before {
-      background:
-        linear-gradient(to bottom, #3a3835, transparent 4px),
-        linear-gradient(to left, #3a3835, transparent 4px),
-        linear-gradient(to top, #1a1816, transparent 4px),
-        linear-gradient(to right, #1a1816, transparent 4px);
     }
 
     .search-overlay {
@@ -367,7 +342,7 @@ const suggestions = [
     }
 
     .search-overlay__hamburger {
-      display: none;
+      display: inline-flex;
     }
   }
 </style>
