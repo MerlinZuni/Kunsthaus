@@ -70,6 +70,22 @@
       "de": "Besucherinformationen",
       "en": "Visitor Information"
     },
+    "storytelling": {
+      "title": { "de": "Besuch planen", "en": "Plan Your Visit" },
+      "tagline": {
+        "de": "Zwei Geb\u00e4ude, ein Museum.<br/>Finden Sie uns im Herzen von Z\u00fcrich.",
+        "en": "Two buildings, one museum.<br/>Find us in the heart of Zurich."
+      },
+      "description": {
+        "de": "Erwachsene CHF 24, erm\u00e4ssigt CHF 17, Sonderausstellungen CHF 31. Unter 14 immer gratis, jeden Mittwoch ist der Eintritt f\u00fcr alle kostenlos. Heimplatz 1, 8001 Z\u00fcrich. Erreichbar mit Tram 3, 5, 9 und Bus 31 (Haltestelle Kunsthaus).",
+        "en": "Adults CHF 24, reduced CHF 17, special exhibitions CHF 31. Under 14 always free, and every Wednesday is free for everyone. Heimplatz 1, 8001 Zurich. Served by Tram 3, 5, 9 and Bus 31 at the Kunsthaus stop."
+      },
+      "cta": {
+        "label": { "de": "Auf Karte anzeigen", "en": "View on map" },
+        "href": "https://maps.google.com/?q=Kunsthaus+Zurich+Heimplatz"
+      },
+      "image": "/images/key-info/kunsthaus-exterior.png"
+    },
     "items": [
       {
         "id": "hours",

@@ -44,6 +44,7 @@ const bgSteps = [2, 3, 4, 1] as const;
 
 // Per-section background overrides
 const bgOverrides: Record<string, 1 | 2 | 3 | 4> = {
+  'exhibitions': 2,
   'offerings': 1,
   'events': 2,
   'education': 3,
@@ -83,35 +84,38 @@ const bgOverrides: Record<string, 1 | 2 | 3 | 4> = {
           />
         </section>
       )}
-      <SectionWrapper
-        index={i}
-        bgStep={bgStep}
-        sectionName={section.title[lang]}
-        sectionId={section.section}
-      >
-        {componentType === 'mixed' && (
-          <ExhibitionList lang={lang} />
-        )}
-        {componentType === 'pinned-narrative' && (
-          <PinnedNarrative
-            contentType={section.section}
-            items={section.items || []}
-            lang={lang}
-          />
-        )}
-        {componentType === 'events-list' && (
-          <EventsList lang={lang} />
-        )}
-        {componentType === 'standard-grid' && (
-          <StandardGrid
-            title={section.title}
-            body={section.body}
-            items={section.items || []}
-            lang={lang}
-            columns={3}
-          />
-        )}
-      </SectionWrapper>
+      {/* key-info now renders only as a CinematicReveal (above) — skip the grid */}
+      {section.section !== 'key-info' && (
+        <SectionWrapper
+          index={i}
+          bgStep={bgStep}
+          sectionName={section.title[lang]}
+          sectionId={section.section}
+        >
+          {componentType === 'mixed' && (
+            <ExhibitionList lang={lang} />
+          )}
+          {componentType === 'pinned-narrative' && (
+            <PinnedNarrative
+              contentType={section.section}
+              items={section.items || []}
+              lang={lang}
+            />
+          )}
+          {componentType === 'events-list' && (
+            <EventsList lang={lang} />
+          )}
+          {componentType === 'standard-grid' && (
+            <StandardGrid
+              title={section.title}
+              body={section.body}
+              items={section.items || []}
+              lang={lang}
+              columns={3}
+            />
+          )}
+        </SectionWrapper>
+      )}
       </>
     );
   })}

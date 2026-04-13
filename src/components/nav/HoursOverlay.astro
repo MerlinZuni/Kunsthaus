@@ -1,0 +1,472 @@
+---
+// HoursOverlay.astro -- Opening hours overlay, same glass style as HamburgerOverlay/SearchOverlay
+// Header is a pixel-perfect clone of NavBar so icons/logo don't move when the overlay opens.
+
+interface Props {
+  schedule: Array<{
+    day: { de: string; en: string };
+    hours: { de: string; en: string };
+    closed: boolean;
+  }>;
+  holidaySchedule: Array<{
+    date: { de: string; en: string };
+    occasion: { de: string; en: string };
+    hours: { de: string; en: string };
+    closed: boolean;
+  }>;
+  phone: string;
+  lang: 'en' | 'de';
+}
+
+const { schedule, holidaySchedule, phone, lang } = Astro.props;
+
+const holidayHeading = lang === 'de' ? 'Feiertage' : 'Public Holidays';
+
+const scheduleJson = JSON.stringify(schedule);
+---
+
+<div class="hours-overlay" id="hours-overlay" aria-hidden="true" role="dialog" aria-label="Opening hours"
+  data-schedule={scheduleJson}
+  data-lang={lang}
+>
+  <div class="hours-overlay__inner">
+    {/* Header: clone of NavBar — outer padded container + inner pill + absolute logo */}
+    <header class="hours-overlay__header">
+      <div class="hours-overlay__header-inner">
+        <div class="hours-overlay__left">
+          <button class="hours-overlay__icon-btn touch-target" aria-label="Search" data-action="open-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+          <button class="hours-overlay__icon-btn hours-overlay__close touch-target" aria-label="Close opening hours">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="hours-overlay__right">
+          <button class="hours-overlay__icon-btn touch-target" aria-label="Open menu" data-action="open-hamburger">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      {/* Logo: absolutely positioned in outer header, mirroring .navbar__logo-inner */}
+      <a href="/" class="hours-overlay__logo">
+        <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="hours-overlay__logo-img" />
+      </a>
+    </header>
+
+    {/* Body */}
+    <div class="hours-overlay__body">
+      <div class="hours-overlay__columns">
+        {/* Column 1: Status as heading, then weekly schedule */}
+        <div class="hours-overlay__col" data-hours-col="regular">
+          <p class="hours-overlay__col-heading hours-overlay__status sub-heading" id="hours-overlay-status"></p>
+          <ul class="hours-overlay__schedule">
+            {schedule.map((entry, i) => (
+              <li
+                class:list={['hours-overlay__row', { 'hours-overlay__row--closed': entry.closed }]}
+                data-hours-item={i}
+              >
+                <span class="hours-overlay__day">{entry.day[lang]}</span>
+                <span class="hours-overlay__hours">{entry.hours[lang]}</span>
+              </li>
+            ))}
+          </ul>
+          <a href={`tel:${phone.replace(/\s+/g, '')}`} class="hours-overlay__phone">
+            <span class="icon">call</span>
+            <span>{phone}</span>
+          </a>
+        </div>
+
+        {/* Column 2: Holiday hours — flat list, no expand */}
+        <div class="hours-overlay__col" data-hours-col="holiday">
+          <h2 class="hours-overlay__col-heading sub-heading">{holidayHeading}</h2>
+          <ul class="hours-overlay__schedule">
+            {holidaySchedule.map((entry, i) => (
+              <li
+                class:list={['hours-overlay__row', { 'hours-overlay__row--closed': entry.closed }]}
+                data-hours-holiday={i}
+              >
+                <span class="hours-overlay__day">
+                  {entry.date[lang]}
+                  {entry.occasion[lang] && (
+                    <span class="hours-overlay__occasion">{entry.occasion[lang]}</span>
+                  )}
+                </span>
+                <span class="hours-overlay__hours">{entry.hours[lang]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hours-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+  }
+
+  .hours-overlay.is-open {
+    visibility: visible;
+  }
+
+  .hours-overlay__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  /* ===== Header: pixel-perfect clone of .navbar ===== */
+
+  /* Outer container — mirrors .navbar (padding: var(--space-2)) */
+  .hours-overlay__header {
+    position: relative;
+    padding: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  /* Inner pill — mirrors .navbar__inner (flex space-between, space-1 space-2 padding) */
+  .hours-overlay__header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-1) var(--space-2);
+    position: relative;
+  }
+
+  /* Left group — mirrors .navbar__left */
+  .hours-overlay__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  /* Right group — mirrors .navbar__right */
+  .hours-overlay__right {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Icon buttons — mirrors .navbar__icon-btn exactly */
+  .hours-overlay__icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: var(--space-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Logo — absolutely positioned in OUTER header container, mirrors .navbar__logo-inner */
+  .hours-overlay__logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  .hours-overlay__logo-img {
+    width: 200px;
+    height: auto;
+    display: block;
+    filter: invert(1);
+  }
+
+  html[data-mode="onsite"] .hours-overlay__logo-img {
+    filter: none;
+  }
+
+  /* ===== Body ===== */
+  .hours-overlay__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-6) var(--space-4) var(--space-8);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hours-overlay__columns {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12, 3rem);
+  }
+
+  .hours-overlay__col-heading {
+    margin-bottom: var(--space-4);
+    opacity: 0.5;
+  }
+
+  /* Schedule rows */
+  .hours-overlay__schedule {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .hours-overlay__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-light);
+    color: var(--color-text);
+  }
+
+  .hours-overlay__row:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .hours-overlay__row--closed .hours-overlay__hours {
+    color: #b91c1c;
+    opacity: 1;
+    font-weight: var(--weight-medium);
+  }
+
+  html[data-mode="onsite"] .hours-overlay__row--closed .hours-overlay__hours {
+    color: #f87171;
+  }
+
+  .hours-overlay__day {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .hours-overlay__occasion {
+    font-size: var(--type-xs, 0.7rem);
+    opacity: 0.5;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: var(--weight-regular);
+  }
+
+  .hours-overlay__hours {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Phone link below the regular schedule */
+  .hours-overlay__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding: var(--space-2) 0;
+    font-size: var(--type-sm);
+    font-weight: var(--weight-light);
+    color: var(--color-text);
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+  }
+
+  .hours-overlay__phone:hover {
+    opacity: 1;
+  }
+
+  .hours-overlay__phone .icon {
+    font-size: 18px;
+    opacity: 0.6;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Tablet+: inner pill 500px (matches .navbar__inner), body wider for two tables */
+  @media (min-width: 768px) {
+    .hours-overlay__header-inner {
+      width: 500px;
+      margin: 0 auto;
+    }
+
+    .hours-overlay__columns {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-8);
+      width: 600px;
+      margin: 0 auto;
+    }
+
+    .hours-overlay__col {
+      flex: 1;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initHoursOverlay() {
+    const overlay = document.getElementById('hours-overlay');
+    const closeBtn = overlay?.querySelector('.hours-overlay__close');
+    const inner = overlay?.querySelector('.hours-overlay__inner') as HTMLElement;
+
+    const statusEl = document.getElementById('hours-overlay-status');
+
+    // Compute open/closed status dynamically from schedule
+    function computeStatus() {
+      if (!overlay || !statusEl) return;
+      const schedule = JSON.parse(overlay.getAttribute('data-schedule') || '[]');
+      const lang = overlay.getAttribute('data-lang') || 'en';
+
+      const now = new Date();
+      // getDay(): 0=Sun,1=Mon...6=Sat → map to footer.json index (0=Mon...6=Sun)
+      const dayMap = [6, 0, 1, 2, 3, 4, 5];
+      const todayEntry = schedule[dayMap[now.getDay()]];
+
+      let statusText = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
+
+      if (todayEntry && !todayEntry.closed && todayEntry.hours?.de) {
+        const parts = todayEntry.hours.de.split('\u2013'); // en-dash
+        if (parts.length === 2) {
+          const [openStr, closeStr] = parts;
+          const [openH, openM] = openStr.split(':').map(Number);
+          const [closeH, closeM] = closeStr.split(':').map(Number);
+          const nowMins = now.getHours() * 60 + now.getMinutes();
+          const openMins = openH * 60 + (openM || 0);
+          const closeMins = closeH * 60 + (closeM || 0);
+
+          if (nowMins < openMins) {
+            statusText = lang === 'de'
+              ? `Heute öffnet um ${openStr}`
+              : `Opens today at ${openStr}`;
+          } else if (nowMins >= closeMins) {
+            statusText = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
+          } else {
+            statusText = lang === 'de'
+              ? `Heute geöffnet bis ${closeStr}`
+              : `Open today until ${closeStr}`;
+          }
+        }
+      }
+
+      statusEl.textContent = statusText;
+    }
+
+    function open(swap = false) {
+      if (!overlay) return;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      (window as any).__lenis?.stop?.();
+
+      if (!swap) {
+        gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+      } else {
+        gsap.set(overlay, { opacity: 1 });
+      }
+
+      computeStatus();
+
+      const tl = gsap.timeline();
+      const delay = swap ? 0 : 0.15;
+
+      if (statusEl) {
+        gsap.set(statusEl, { opacity: 0, y: -6 });
+        tl.to(statusEl, { opacity: 0.6, y: 0, duration: 0.3, ease: 'power3.out' }, delay);
+      }
+
+      const allRows = overlay?.querySelectorAll('.hours-overlay__row');
+      if (allRows?.length) {
+        gsap.set(allRows, { opacity: 0, x: -16 });
+        tl.to(allRows, {
+          opacity: 1,
+          x: 0,
+          duration: 0.4,
+          ease: 'power3.out',
+          stagger: 0.04,
+        }, delay + 0.1);
+      }
+    }
+
+    function close(swap = false) {
+      if (!overlay) return;
+      if (swap) {
+        gsap.to(inner, {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.in',
+          onComplete: () => {
+            overlay.classList.remove('is-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            gsap.set(inner, { opacity: 1 });
+          },
+        });
+      } else {
+        gsap.to(overlay, {
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.in',
+          onComplete: () => {
+            overlay.classList.remove('is-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            (window as any).__lenis?.start?.();
+          },
+        });
+      }
+    }
+
+    closeBtn?.addEventListener('click', () => close(false));
+
+    // Search button — swap to search overlay
+    overlay?.querySelector('[data-action="open-search"]')?.addEventListener('click', () => {
+      (window as any).__searchOverlay?.open(true);
+      close(true);
+    });
+
+    // Hamburger button — swap to hamburger overlay
+    overlay?.querySelector('[data-action="open-hamburger"]')?.addEventListener('click', () => {
+      (window as any).__hamburgerOverlay?.open(true);
+      close(true);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
+        close();
+      }
+    });
+
+    (window as any).__hoursOverlay = { open, close };
+  }
+
+  document.addEventListener('DOMContentLoaded', initHoursOverlay);
+</script>

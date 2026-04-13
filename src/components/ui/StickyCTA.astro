@@ -24,7 +24,7 @@ const toggleLabels = {
 };
 ---
 
-{/* Desktop: floating buttons bottom-right */}
+{/* Desktop: floating button bottom-right */}
 <div class="sticky-cta sticky-cta--desktop">
   <a
     href={ticketsHref}
@@ -35,25 +35,6 @@ const toggleLabels = {
     <span>{ticketsLabel}</span>
     <span class="icon">arrow_forward</span>
   </a>
-  <div class="sticky-cta__toggle" role="radiogroup" aria-label="Site mode">
-    <span class="sticky-cta__pill"></span>
-    <button
-      class="sticky-cta__segment sticky-cta__segment--active"
-      data-mode-segment="planning"
-      role="radio"
-      aria-checked="true"
-    >
-      {modeLabels.planning || 'Plan a visit'}
-    </button>
-    <button
-      class="sticky-cta__segment"
-      data-mode-segment="onsite"
-      role="radio"
-      aria-checked="false"
-    >
-      {modeLabels.onsite || "I'm here"}
-    </button>
-  </div>
 </div>
 
 {/* Mobile: sticky bottom bar */}
@@ -67,30 +48,6 @@ const toggleLabels = {
     <span>{ticketsLabel}</span>
     <span class="icon">arrow_forward</span>
   </a>
-  <div class="sticky-cta__toggle" role="radiogroup" aria-label="Site mode">
-    <span class="sticky-cta__pill"></span>
-    <button
-      class="sticky-cta__segment sticky-cta__segment--active"
-      data-mode-segment="planning"
-      role="radio"
-      aria-checked="true"
-    >
-      {modeLabels.planning || 'Plan a visit'}
-    </button>
-    <button
-      class="sticky-cta__segment"
-      data-mode-segment="onsite"
-      role="radio"
-      aria-checked="false"
-    >
-      {modeLabels.onsite || "I'm here"}
-    </button>
-  </div>
-</div>
-
-{/* ModeToggle React island -- hidden, provides localStorage + data-mode sync */}
-<div class="sticky-cta__react-toggle" style="display:none;">
-  <ModeToggle client:load labels={toggleLabels} lang={lang} />
 </div>
 
 <script>

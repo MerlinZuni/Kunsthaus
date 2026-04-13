@@ -266,10 +266,17 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
     max-width: 45ch;
   }
 
+  /* CTA — card is always white, so button must stay dark in both modes */
   .cinematic-reveal__cta {
     align-self: stretch;
     justify-content: center;
     margin-top: var(--space-2);
+    background: color-mix(in srgb, #272523 75%, transparent);
+    color: #fbf8f7;
+  }
+
+  .cinematic-reveal__cta:hover {
+    background: color-mix(in srgb, #272523 90%, transparent);
   }
 
   @media (max-width: 767px) {

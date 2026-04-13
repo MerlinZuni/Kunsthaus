@@ -38,6 +38,27 @@ const languages = [
 
     {/* Navigation links + secondary + language */}
     <div class="hamburger-overlay__body">
+      {/* Mode toggle — top of the menu, above the nav items */}
+      <div class="hamburger-overlay__mode" role="radiogroup" aria-label="Site mode" data-mode-toggle>
+        <span class="hamburger-overlay__mode-pill"></span>
+        <button
+          class="hamburger-overlay__mode-btn is-active"
+          data-mode-segment="planning"
+          role="radio"
+          aria-checked="true"
+        >
+          {lang === 'de' ? 'Besuch planen' : 'Plan a Visit'}
+        </button>
+        <button
+          class="hamburger-overlay__mode-btn"
+          data-mode-segment="onsite"
+          role="radio"
+          aria-checked="false"
+        >
+          {lang === 'de' ? 'Ich bin im Museum' : "I'm at the Museum"}
+        </button>
+      </div>
+
       <nav class="hamburger-overlay__nav" aria-label="Main navigation">
         <ul>
           {navItems.map((item, i) => (
@@ -118,17 +139,17 @@ const languages = [
   .hamburger-overlay__inner {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    /* Match navbar: padding var(--space-3) around the bar */
-    padding: var(--space-3);
+    height: 100vh;
+    padding: var(--space-2);
   }
 
-  /* Header: exact same layout as .navbar__inner */
+  /* Header: matches navbar exactly, never scrolls */
   .hamburger-overlay__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-1) var(--space-2);
+    flex-shrink: 0;
   }
 
   .hamburger-overlay__search-btn {
@@ -167,12 +188,15 @@ const languages = [
     padding: var(--space-2);
   }
 
-  /* Body: nav + secondary + language */
+  /* Body: nav + secondary + language — scrolls when viewport is short */
   .hamburger-overlay__body {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     padding: var(--space-6) var(--space-4) var(--space-6);
+    -webkit-overflow-scrolling: touch;
   }
 
   .hamburger-overlay__spacer {
@@ -197,10 +221,6 @@ const languages = [
     border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 
-  .hamburger-overlay__item:first-child {
-    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
-  }
-
   .hamburger-overlay__link {
     display: flex;
     align-items: center;
@@ -214,6 +234,13 @@ const languages = [
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+  }
+
+  .hamburger-overlay__link:hover,
+  .hamburger-overlay__link:active {
+    opacity: 1;
   }
 
   .hamburger-overlay__link-arrow {
@@ -250,19 +277,66 @@ const languages = [
     font-size: var(--type-sm);
     font-weight: var(--weight-regular);
     color: var(--color-text);
-    opacity: 0.6;
+    opacity: 0.75;
     text-decoration: none;
     transition: opacity 0.2s ease;
   }
 
   .hamburger-overlay__secondary-arrow {
     font-size: 18px;
-    opacity: 0.4;
+    opacity: 0.55;
   }
 
   .hamburger-overlay__secondary-link:hover,
   .hamburger-overlay__secondary-link:active {
     opacity: 1;
+  }
+
+  /* Mode toggle */
+
+  .hamburger-overlay__mode {
+    display: flex;
+    position: relative;
+    border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+    border-radius: var(--btn-radius);
+    padding: 3px;
+    gap: 0;
+    margin-bottom: var(--space-4);
+    width: 100%;
+  }
+
+  .hamburger-overlay__mode-pill {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: calc(100% - 6px);
+    border-radius: var(--btn-radius-inner);
+    border: 1px solid var(--color-text);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hamburger-overlay__mode-btn {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    background: none;
+    border: none;
+    border-radius: var(--btn-radius-inner);
+    cursor: pointer;
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    color: color-mix(in srgb, var(--color-text) 65%, transparent);
+    padding: 8px var(--btn-padding-x);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: center;
+    transition: color 0.3s ease;
+  }
+
+  .hamburger-overlay__mode-btn.is-active {
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
   }
 
   /* Language */
@@ -299,8 +373,8 @@ const languages = [
     cursor: pointer;
     font-size: var(--type-sm);
     font-weight: var(--weight-regular);
-    color: var(--color-decorative-shadow);
-    padding: var(--btn-padding-y) var(--btn-padding-x);
+    color: color-mix(in srgb, var(--color-text) 65%, transparent);
+    padding: 8px var(--btn-padding-x);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     text-align: center;
@@ -325,15 +399,41 @@ const languages = [
   }
 
   @media (min-width: 768px) {
+    .hamburger-overlay__header {
+      width: 500px;
+      margin: 0 auto;
+      padding-left: var(--space-2);
+      padding-right: var(--space-2);
+    }
+
+    .hamburger-overlay__header svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .hamburger-overlay__body {
+      width: 500px;
+      margin: 0 auto;
+      padding-left: var(--space-2);
+      padding-right: var(--space-2);
+    }
+
     .hamburger-overlay__link {
       font-size: var(--type-md);
       padding: var(--space-6) 0;
-      padding-left: var(--space-4);
-      padding-right: var(--space-2);
+      padding-left: 0;
+      padding-right: 0;
+      justify-content: space-between;
     }
 
     .hamburger-overlay__secondary {
       padding-top: 0;
+    }
+
+    .hamburger-overlay__secondary-link {
+      padding-left: 0;
+      padding-right: 0;
+      justify-content: space-between;
     }
 
     .hamburger-overlay__secondary-item {
@@ -342,6 +442,10 @@ const languages = [
 
     .hamburger-overlay__secondary-item:first-child {
       border: none;
+    }
+
+    .hamburger-overlay__lang {
+      width: 100%;
     }
   }
 </style>
@@ -391,7 +495,10 @@ const languages = [
         tl.to(langGroup, { opacity: 1, duration: 0.3, ease: 'power2.out' }, swap ? 0.15 : 0.35);
       }
 
-      requestAnimationFrame(slideLangPill);
+      requestAnimationFrame(() => {
+        slideLangPill();
+        slideModePill();
+      });
     }
 
     function close(swap = false) {
@@ -435,6 +542,73 @@ const languages = [
       close(true);
     });
 
+    // Mode toggle pill slider
+    const modeToggle = overlay?.querySelector('[data-mode-toggle]') as HTMLElement;
+    const modePill = modeToggle?.querySelector('.hamburger-overlay__mode-pill') as HTMLElement;
+    const modeBtns = overlay?.querySelectorAll('.hamburger-overlay__mode-btn');
+
+    function slideModePill() {
+      if (!modeToggle || !modePill) return;
+      const active = modeToggle.querySelector('.is-active') as HTMLElement;
+      if (!active) return;
+      const toggleRect = modeToggle.getBoundingClientRect();
+      const activeRect = active.getBoundingClientRect();
+      gsap.to(modePill, {
+        x: activeRect.left - toggleRect.left - 3,
+        width: activeRect.width,
+        duration: 0.35,
+        ease: 'power3.out',
+      });
+    }
+
+    // Set initial mode pill position
+    if (modeToggle && modePill) {
+      // Sync with current data-mode
+      const saved = localStorage.getItem('kunsthaus-mode') || 'planning';
+      modeBtns?.forEach(btn => {
+        const el = btn as HTMLElement;
+        const isActive = el.dataset.modeSegment === saved;
+        el.classList.toggle('is-active', isActive);
+        el.setAttribute('aria-checked', isActive ? 'true' : 'false');
+      });
+      requestAnimationFrame(() => {
+        const active = modeToggle.querySelector('.is-active') as HTMLElement;
+        if (active) {
+          const toggleRect = modeToggle.getBoundingClientRect();
+          const activeRect = active.getBoundingClientRect();
+          gsap.set(modePill, {
+            x: activeRect.left - toggleRect.left - 3,
+            width: activeRect.width,
+          });
+        }
+      });
+    }
+
+    // Mode buttons
+    modeBtns?.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = (btn as HTMLElement).dataset.modeSegment;
+        if (!mode) return;
+        document.documentElement.setAttribute('data-mode', mode);
+        localStorage.setItem('kunsthaus-mode', mode);
+        modeBtns.forEach(b => {
+          const el = b as HTMLElement;
+          const isActive = el.dataset.modeSegment === mode;
+          el.classList.toggle('is-active', isActive);
+          el.setAttribute('aria-checked', isActive ? 'true' : 'false');
+        });
+        // Sync StickyCTA and footer toggles
+        document.querySelectorAll('[data-mode-segment]').forEach(seg => {
+          const el = seg as HTMLElement;
+          const isActive = el.dataset.modeSegment === mode;
+          el.classList.toggle('sticky-cta__segment--active', isActive);
+          el.classList.toggle('footer-col__mode-segment--active', isActive);
+          el.setAttribute('aria-checked', isActive ? 'true' : 'false');
+        });
+        slideModePill();
+      });
+    });
+
     // Language pill slider
     const langToggle = overlay?.querySelector('[data-lang-toggle]') as HTMLElement;
     const langPill = langToggle?.querySelector('.hamburger-overlay__lang-pill') as HTMLElement;
@@ -453,11 +627,10 @@ const languages = [
       });
     }
 
-    // Set initial pill position
+    // Set initial lang pill position
     if (langToggle && langPill) {
       const initActive = langToggle.querySelector('.is-active') as HTMLElement;
       if (initActive) {
-        // Defer to next frame so layout is computed
         requestAnimationFrame(() => {
           const toggleRect = langToggle.getBoundingClientRect();
           const activeRect = initActive.getBoundingClientRect();

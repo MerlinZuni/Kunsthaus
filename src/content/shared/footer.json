@@ -22,6 +22,17 @@
       "de": "Heute geoffnet ab 10:00",
       "en": "Open today from 10:00"
     },
+    "holidaySchedule": [
+      { "date": { "de": "1. Januar", "en": "1 January" }, "occasion": { "de": "Neujahr", "en": "New Year's Day" }, "hours": { "de": "Geschlossen", "en": "Closed" }, "closed": true },
+      { "date": { "de": "Karfreitag", "en": "Good Friday" }, "occasion": { "de": "", "en": "" }, "hours": { "de": "Geschlossen", "en": "Closed" }, "closed": true },
+      { "date": { "de": "Ostersonntag", "en": "Easter Sunday" }, "occasion": { "de": "", "en": "" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
+      { "date": { "de": "Ostermontag", "en": "Easter Monday" }, "occasion": { "de": "", "en": "" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
+      { "date": { "de": "1. August", "en": "1 August" }, "occasion": { "de": "Nationalfeiertag", "en": "National Day" }, "hours": { "de": "Geschlossen", "en": "Closed" }, "closed": true },
+      { "date": { "de": "24. Dezember", "en": "24 December" }, "occasion": { "de": "Heiligabend", "en": "Christmas Eve" }, "hours": { "de": "10:00–16:00", "en": "10am–4pm" }, "closed": false },
+      { "date": { "de": "25. Dezember", "en": "25 December" }, "occasion": { "de": "Weihnachten", "en": "Christmas Day" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
+      { "date": { "de": "26. Dezember", "en": "26 December" }, "occasion": { "de": "Stephanstag", "en": "Boxing Day" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
+      { "date": { "de": "31. Dezember", "en": "31 December" }, "occasion": { "de": "Silvester", "en": "New Year's Eve" }, "hours": { "de": "10:00–16:00", "en": "10am–4pm" }, "closed": false }
+    ],
     "quickLinks": [
       { "id": "exhibitions", "label": { "de": "Ausstellungen", "en": "Exhibitions" }, "href": "/exhibitions" },
       { "id": "tickets", "label": { "de": "Tickets kaufen", "en": "Buy Tickets" }, "href": "https://www.kunsthaus.ch/tickets" },

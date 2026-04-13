@@ -18,8 +18,10 @@ import NavBar from '../components/nav/NavBar.astro';
 import LogoIsland from '../components/nav/LogoIsland.astro';
 import SearchOverlay from '../components/nav/SearchOverlay.astro';
 import HamburgerOverlay from '../components/nav/HamburgerOverlay.astro';
+import HoursOverlay from '../components/nav/HoursOverlay.astro';
 import navItemsJson from '../content/shared/navigation.json';
 import uiStringsJson from '../content/shared/ui-strings.json';
+import footerJson from '../content/shared/footer.json';
 
 interface Props {
   title: string;
@@ -38,6 +40,7 @@ const getString = (key: string) => {
 };
 const searchLabel = getString('search-label');
 const menuLabel = getString('menu-label');
+const footerData = footerJson[0];
 ---
 
 <html lang={lang} data-mode="planning">
@@ -60,6 +63,12 @@ const menuLabel = getString('menu-label');
     <LogoIsland />
     <SearchOverlay searchLabel={searchLabel} />
     <HamburgerOverlay navItems={navItems} lang={lang} searchLabel={searchLabel} />
+    <HoursOverlay
+      schedule={footerData.schedule}
+      holidaySchedule={footerData.holidaySchedule}
+      phone={footerData.address.phone}
+      lang={lang}
+    />
 
     <main id="main" role="main">
       <slot />

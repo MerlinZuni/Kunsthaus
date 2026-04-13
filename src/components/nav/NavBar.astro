@@ -31,7 +31,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
-      <button class="navbar__icon-btn touch-target touch-pulse" aria-label="Opening hours">
+      <button class="navbar__icon-btn touch-target touch-pulse" aria-label="Opening hours" data-action="hours">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"/>
           <polyline points="12 6 12 12 16 14"/>
@@ -193,7 +193,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 
 
   .navbar__logo-inner-img {
-    width: 150px;
+    width: 200px;
     height: auto;
     display: block;
     filter: invert(1);
@@ -218,7 +218,7 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
   }
 
   .navbar__logo-img {
-    width: 150px;
+    width: 200px;
     height: auto;
     display: block;
     filter: invert(1);
@@ -254,6 +254,14 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     filter: none;
   }
 
+  /* Tablet+: fixed-width centered bar */
+  @media (min-width: 768px) {
+    .navbar__inner {
+      width: 500px;
+      margin: 0 auto;
+    }
+  }
+
   /* Mobile/tablet: simplified bar */
   .navbar__search-migrated {
     display: none;
@@ -285,6 +293,13 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     document.querySelectorAll('[data-action="hamburger"]').forEach(btn => {
       btn.addEventListener('click', () => {
         (window as any).__hamburgerOverlay?.open();
+      });
+    });
+
+    // Hours button handler
+    document.querySelectorAll('[data-action="hours"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        (window as any).__hoursOverlay?.open();
       });
     });
 

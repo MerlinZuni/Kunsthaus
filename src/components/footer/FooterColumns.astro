@@ -110,7 +110,7 @@ const newsletterHeading = 'NEWSLETTER';
         role="radio"
         aria-checked="true"
       >
-        {modeLabels.planning}
+        {lang === 'de' ? 'Besuch planen' : 'Plan a Visit'}
       </button>
       <button
         class="footer-col__mode-segment"
@@ -118,7 +118,7 @@ const newsletterHeading = 'NEWSLETTER';
         role="radio"
         aria-checked="false"
       >
-        {modeLabels.onsite}
+        {lang === 'de' ? 'Ich bin da' : "I'm Here"}
       </button>
     </div>
   </div>
@@ -244,11 +244,9 @@ const newsletterHeading = 'NEWSLETTER';
   .footer-col__mode-toggle {
     display: flex;
     position: relative;
-    background: color-mix(in srgb, var(--color-offwhite) 20%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-offwhite) 20%, transparent);
     border-radius: var(--btn-radius);
-    padding: 4px;
+    padding: 3px;
     gap: 0;
     margin-top: var(--space-12);
     width: 100%;
@@ -256,39 +254,37 @@ const newsletterHeading = 'NEWSLETTER';
 
   .footer-col__mode-pill {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    height: calc(100% - 8px);
+    top: 3px;
+    left: 3px;
+    height: calc(100% - 6px);
     border-radius: var(--btn-radius-inner);
-    background: color-mix(in srgb, var(--color-offwhite) 85%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--color-offwhite);
     pointer-events: none;
     z-index: 0;
-    transition: none;
   }
 
   .footer-col__mode-segment {
     position: relative;
     z-index: 1;
     flex: 1;
-    background: transparent;
-    color: var(--color-offwhite);
+    background: none;
     border: none;
-    padding: var(--btn-padding-y) var(--btn-padding-x);
+    border-radius: var(--btn-radius-inner);
+    cursor: pointer;
     font-size: var(--type-sm);
     font-weight: var(--weight-regular);
-    cursor: pointer;
-    white-space: nowrap;
+    color: color-mix(in srgb, var(--color-offwhite) 50%, transparent);
+    padding: 8px var(--btn-padding-x);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     text-align: center;
-    border-radius: var(--btn-radius-inner);
+    white-space: nowrap;
     transition: color 0.3s ease;
   }
 
   .footer-col__mode-segment--active {
-    color: var(--color-softblack);
     font-weight: var(--weight-medium);
+    color: var(--color-offwhite);
   }
 
   /* Responsive: 2 columns tablet, 1 column mobile */
