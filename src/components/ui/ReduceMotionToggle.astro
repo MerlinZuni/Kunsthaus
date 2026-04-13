@@ -80,9 +80,10 @@ const label = lang === 'de' ? 'Bewegung reduzieren' : 'Reduce motion';
     position: relative;
     width: 36px;
     height: 20px;
-    background: var(--color-decorative);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    transition: background 200ms ease;
+    transition: background 200ms ease, border-color 200ms ease;
     flex-shrink: 0;
   }
 
@@ -91,15 +92,20 @@ const label = lang === 'de' ? 'Bewegung reduzieren' : 'Reduce motion';
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 16px;
-    height: 16px;
-    background: #ffffff;
+    width: 14px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 50%;
-    transition: transform 200ms ease;
+    transition: transform 200ms ease, background 200ms ease;
   }
 
   .reduce-motion-toggle__input:checked + .reduce-motion-toggle__switch {
-    background: var(--color-text);
+    background: #22c55e;
+    border-color: #22c55e;
+  }
+
+  .reduce-motion-toggle__input:checked + .reduce-motion-toggle__switch::after {
+    background: #ffffff;
   }
 
   .reduce-motion-toggle__input:checked + .reduce-motion-toggle__switch::after {
