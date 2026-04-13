@@ -498,11 +498,20 @@ const playLabel = getString('carousel-play');
       });
     }
 
-    // Auto-pause on prefers-reduced-motion
+    // Auto-pause on prefers-reduced-motion — show first slide immediately
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (motionQuery.matches) {
+    const reduceMotionClass = document.documentElement.classList.contains('reduce-motion');
+    if (motionQuery.matches || reduceMotionClass) {
       tl.pause();
       isPaused = true;
+      // Skip to first slide so content is visible, not stuck on welcome
+      if (facade) gsap.set(facade, { opacity: 0 });
+      activateSlide(0);
+      // Show all slide images without animation
+      slides.forEach((slide) => {
+        const images = slide.querySelectorAll('.hero-slide__image-slot');
+        gsap.set(images, { opacity: 1, scale: 1 });
+      });
       pauseBtn?.classList.add('is-paused');
       pauseBtn?.setAttribute('aria-label', pauseBtn?.dataset.playLabel || 'Play slideshow');
     }
@@ -511,7 +520,7 @@ const playLabel = getString('carousel-play');
         tl.pause();
         isPaused = true;
         pauseBtn?.classList.add('is-paused');
-        pauseBtn?.setAttribute('aria-label', pauseBtn?.dataset.playLabel || 'Play slideshow');
+        pauseBtn?.setAttribute('aria-label', pauseBtn?.dataset.playLabel || 'Play slidesheet');
       }
     });
 

@@ -290,6 +290,13 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       });
     });
 
+    // Skip scroll-driven behaviors if reduced motion is active
+    const reduceMotion =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.classList.contains('reduce-motion');
+
+    if (reduceMotion) return;
+
     // Fade navbar on scroll down, restore on scroll up
     const scrim = document.querySelector('.navbar-scrim');
     let lastScrollY = window.scrollY;

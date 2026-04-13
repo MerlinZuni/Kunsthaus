@@ -59,4 +59,51 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
+  /* Ensure all GSAP-animated content is visible when motion is reduced */
+  html.reduce-motion .cinematic-reveal__card,
+  html.reduce-motion .pinned-narrative__card-content,
+  html.reduce-motion .pinned-narrative__card-stack-img {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html.reduce-motion .cinematic-reveal__frame {
+    width: 100vw !important;
+    max-width: none !important;
+    margin-left: calc(-50vw + 50%) !important;
+  }
+
+  html.reduce-motion .cinematic-reveal__image-wrap {
+    clip-path: inset(0%) !important;
+    border-radius: 0 !important;
+    height: 100vh !important;
+  }
+
+  html.reduce-motion .cinematic-reveal {
+    height: auto !important;
+  }
+
+  html.reduce-motion .cinematic-reveal__viewport {
+    position: relative !important;
+  }
+
+  html.reduce-motion .cinematic-reveal__tagline {
+    display: none !important;
+  }
+
+  /* Row images visible without scroll trigger */
+  html.reduce-motion .exhibition-list__row-thumb,
+  html.reduce-motion .events-list__row-thumb {
+    opacity: 1 !important;
+  }
+
+  /* Navbar: no fade, always visible */
+  html.reduce-motion .navbar__inner {
+    opacity: 1 !important;
+  }
+
+  html.reduce-motion .navbar-scrim {
+    display: none !important;
+  }
 }
