@@ -256,7 +256,8 @@
         "time": "11:00–12:00",
         "type": { "de": "Führung", "en": "Guided Tour" },
         "places": 24,
-        "tags": []
+        "tags": [],
+        "image": "/images/exhibitions/wolfgang-laib.jpg"
       }
     ]
   }
