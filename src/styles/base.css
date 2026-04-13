@@ -98,6 +98,11 @@
     opacity: 1 !important;
   }
 
+  /* Stacking sections: prevent GSAP transforms (pinning uses position, not transform) */
+  html.reduce-motion .stacking-section {
+    box-shadow: none !important;
+  }
+
   /* Navbar: no fade, always visible */
   html.reduce-motion .navbar__inner {
     opacity: 1 !important;
