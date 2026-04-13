@@ -65,7 +65,7 @@ const scheduleJson = JSON.stringify(schedule);
     </header>
 
     {/* Body */}
-    <div class="hours-overlay__body">
+    <div class="hours-overlay__body" data-lenis-prevent>
       <div class="hours-overlay__columns">
         {/* Column 1: Status as heading, then weekly schedule */}
         <div class="hours-overlay__col" data-hours-col="regular">
@@ -138,6 +138,7 @@ const scheduleJson = JSON.stringify(schedule);
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
   }
 
   /* ===== Header: pixel-perfect clone of .navbar ===== */

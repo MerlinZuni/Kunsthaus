@@ -261,12 +261,14 @@ const suggestions = [
   }
 
   @media (max-width: 767px) {
+    /* iOS Safari auto-zooms inputs whose font-size is < 16px on focus.
+       Lock to 16px to prevent the zoom-in jank that crops the header. */
     .search-overlay__input {
-      font-size: var(--type-sm);
+      font-size: 16px;
     }
 
     .search-overlay__placeholder {
-      font-size: var(--type-sm);
+      font-size: 16px;
       color: #757068;
     }
   }

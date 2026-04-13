@@ -45,7 +45,7 @@ const languages = [
     </div>
 
     {/* Navigation links + secondary + language */}
-    <div class="hamburger-overlay__body">
+    <div class="hamburger-overlay__body" data-lenis-prevent>
       {/* Mode toggle — top of the menu, above the nav items */}
       <div class="hamburger-overlay__mode" role="radiogroup" aria-label="Site mode" data-mode-toggle>
         <span class="hamburger-overlay__mode-pill"></span>
@@ -148,6 +148,7 @@ const languages = [
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
     padding: var(--space-2);
   }
 
@@ -250,7 +251,7 @@ const languages = [
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-6) 0;
+    padding: calc(var(--space-6) - 4px) 0;
     padding-left: var(--space-4);
     padding-right: var(--space-2);
     font-size: var(--type-lg);
@@ -445,7 +446,7 @@ const languages = [
 
     .hamburger-overlay__link {
       font-size: var(--type-md);
-      padding: var(--space-6) 0;
+      padding: calc(var(--space-6) - 4px) 0;
       padding-left: 0;
       padding-right: 0;
       justify-content: space-between;
