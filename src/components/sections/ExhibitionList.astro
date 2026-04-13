@@ -22,24 +22,7 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
     <p class="exhibition-list__description">{data.intro.description[lang]}</p>
   </div>
 
-  {/* Group 1: Collection */}
-  <div class="exhibition-list__group">
-    <h3 class="exhibition-list__group-title sub-heading">
-      {lang === 'de' ? 'Sammlung' : 'Collection'}
-    </h3>
-    <ul class="exhibition-list__items">
-      {data.collection.map((item) => (
-        <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
-          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
-          <span class="exhibition-list__row-meta">{item.period}</span>
-          <span class="exhibition-list__row-tags"></span>
-          <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-
-  {/* Group 2: Current Exhibitions */}
+  {/* Group 1: Current Exhibitions */}
   <div class="exhibition-list__group">
     <h3 class="exhibition-list__group-title sub-heading">
       {lang === 'de' ? 'Aktuelle Ausstellungen' : 'Current Exhibitions'}
@@ -55,12 +38,13 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
             ))}
           </span>
           <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
+          <img class="exhibition-list__row-thumb" src={`${base}${item.image}`} alt="" loading="lazy" />
         </li>
       ))}
     </ul>
   </div>
 
-  {/* Group 3: Upcoming Exhibitions */}
+  {/* Group 2: Upcoming Exhibitions */}
   <div class="exhibition-list__group">
     <h3 class="exhibition-list__group-title sub-heading">
       {lang === 'de' ? 'Vorschau' : 'Upcoming Exhibitions'}
@@ -76,6 +60,25 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
             )}
           </span>
           <span class="exhibition-list__row-location">{item.location?.building ? `${item.location.building}, ${item.location.floor}` : ''}</span>
+          <img class="exhibition-list__row-thumb" src={`${base}${item.image}`} alt="" loading="lazy" />
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Group 3: Collection */}
+  <div class="exhibition-list__group">
+    <h3 class="exhibition-list__group-title sub-heading">
+      {lang === 'de' ? 'Sammlung' : 'Collection'}
+    </h3>
+    <ul class="exhibition-list__items">
+      {data.collection.map((item) => (
+        <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
+          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
+          <span class="exhibition-list__row-meta">{item.period}</span>
+          <span class="exhibition-list__row-tags"></span>
+          <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
+          <img class="exhibition-list__row-thumb" src={`${base}${item.image}`} alt="" loading="lazy" />
         </li>
       ))}
     </ul>
@@ -269,6 +272,51 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
     justify-content: flex-end;
   }
 
+  /* Row thumbnail — mobile only */
+  .exhibition-list__row-thumb {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .exhibition-list__row {
+      position: relative;
+      grid-template-columns: 60% 1fr;
+      gap: var(--space-2);
+      overflow: visible;
+    }
+
+    .exhibition-list__row-thumb {
+      display: block;
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 45%;
+      height: 120%;
+      object-fit: cover;
+      border-radius: 4px 0 0 4px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .exhibition-list__row--active .exhibition-list__row-thumb {
+      opacity: 1;
+    }
+
+    .exhibition-list__row-title,
+    .exhibition-list__row-meta,
+    .exhibition-list__row-tags,
+    .exhibition-list__row-location {
+      grid-column: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .exhibition-list__row-location {
+      justify-content: flex-start;
+    }
+  }
+
   /* Tags */
   .exhibition-list__tag {
     display: inline-flex;
@@ -308,9 +356,11 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
     z-index: 10;
     opacity: 0;
     transition: opacity 0.25s ease;
-    width: 240px;
-    height: 160px;
+    width: 280px;
+    height: auto;
     overflow: hidden;
+    border-radius: var(--btn-radius);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   }
 
   .exhibition-list__preview--visible {

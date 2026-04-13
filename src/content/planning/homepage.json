@@ -350,6 +350,24 @@
         "description": { "de": "K\u00fcnstlergespr\u00e4che, Podiumsdiskussionen und Vortragsreihen zu aktuellen Themen.", "en": "Artist talks, panel discussions and lecture series on current topics." },
         "images": ["/images/education/lectures-1.jpg", "/images/education/lectures-2.jpg"],
         "link": "/education/lectures"
+      },
+      {
+        "id": "library",
+        "title": { "de": "Bibliothek & Graphische Sammlung", "en": "Library & Prints Collection" },
+        "description": { "de": "Über 200'000 Bände zur modernen Kunst und Kunstgeschichte, frei zugänglich für alle. Ausstellungskataloge, Künstlerbücher und über 370 Fachzeitschriften im Lesesaal oder zur Ausleihe.", "en": "Over 200,000 volumes on modern art and art history, freely accessible to all. Exhibition catalogues, artist books and over 370 journals available in the reading room or for borrowing." },
+        "images": ["/images/education/library-1.jpg", "/images/education/library-2.jpg"],
+        "phone": "+41 44 253 85 31",
+        "link": "mailto:bibliothek@kunsthaus.ch",
+        "linkLabel": { "de": "Termin vereinbaren", "en": "Make an appointment" },
+        "schedule": [
+          { "day": 1, "label": { "de": "Montag", "en": "Monday" }, "open": "13:00", "close": "18:00" },
+          { "day": 2, "label": { "de": "Dienstag", "en": "Tuesday" }, "open": "13:00", "close": "18:00" },
+          { "day": 3, "label": { "de": "Mittwoch", "en": "Wednesday" }, "open": "13:00", "close": "18:00" },
+          { "day": 4, "label": { "de": "Donnerstag", "en": "Thursday" }, "open": "13:00", "close": "18:00" },
+          { "day": 5, "label": { "de": "Freitag", "en": "Friday" }, "open": "13:00", "close": "18:00" },
+          { "day": 6, "label": { "de": "Samstag", "en": "Saturday" }, "closed": true },
+          { "day": 0, "label": { "de": "Sonntag", "en": "Sunday" }, "closed": true }
+        ]
       }
     ]
   },
@@ -369,17 +387,41 @@
       {
         "id": "accessibility",
         "title": { "de": "Barrierefreiheit", "en": "Accessibility" },
-        "description": { "de": "Das Kunsthaus ist vollst\u00e4ndig barrierefrei zug\u00e4nglich. Rollst\u00fchle stehen kostenlos zur Verf\u00fcgung.", "en": "The Kunsthaus is fully wheelchair accessible. Wheelchairs are available free of charge." }
+        "description": { "de": "Das Kunsthaus ist vollst\u00e4ndig barrierefrei zug\u00e4nglich. Rollst\u00fchle stehen kostenlos zur Verf\u00fcgung. Reservierung im Voraus empfohlen.", "en": "The Kunsthaus is fully wheelchair accessible. Wheelchairs are available free of charge. Advance reservation recommended." },
+        "phone": "+41 44 253 84 84",
+        "link": "mailto:info@kunsthaus.ch",
+        "linkLabel": { "de": "info@kunsthaus.ch", "en": "info@kunsthaus.ch" }
       },
       {
         "id": "parking",
         "title": { "de": "Anfahrt & Parkieren", "en": "Parking & Directions" },
-        "description": { "de": "Parkhaus Hohe Promenade (5 Min. Fussweg). \u00d6V: Tram 3, 5, 8, 9 bis Kunsthaus.", "en": "Hohe Promenade parking garage (5 min walk). Public transport: Tram 3, 5, 8, 9 to Kunsthaus." }
+        "description": { "de": "Parkhaus Hohe Promenade, nur 5 Gehminuten entfernt. Mit dem \u00d6V: Tram 3, 5, 8, 9 direkt bis Haltestelle Kunsthaus.", "en": "Hohe Promenade parking garage, just a 5 minute walk away. By public transport: Tram 3, 5, 8, 9 direct to Kunsthaus stop." },
+        "link": "https://www.parkingzuerich.ch/",
+        "linkLabel": { "de": "Parkhaus Hohe Promenade", "en": "Hohe Promenade car park" },
+        "secondaryLink": "https://www.google.com/maps/dir/?api=1&destination=Kunsthaus+Z%C3%BCrich&travelmode=transit",
+        "secondaryLinkLabel": { "de": "ÖV-Route in Google Maps", "en": "Public transport on Google Maps" }
       },
       {
         "id": "museum-plan",
         "title": { "de": "Museumsplan", "en": "Museum Map" },
-        "description": { "de": "Interaktiver Grundriss mit allen Ausstellungsr\u00e4umen, Einrichtungen und Servicebereichen.", "en": "Interactive floor plan with all exhibition rooms, facilities and service areas." }
+        "description": { "de": "Erkunden Sie beide Geb\u00e4ude mit unserem interaktiven Grundriss. Alle Ausstellungsr\u00e4ume, Einrichtungen und Services auf einen Blick.", "en": "Explore both buildings with our interactive floor plan. All exhibition rooms, facilities and services at a glance." },
+        "link": "https://visitorguide.kunsthaus.ch/",
+        "linkLabel": { "de": "Interaktive Karte öffnen", "en": "Open interactive map" }
+      },
+      {
+        "id": "animals",
+        "title": { "de": "Tiere", "en": "Animals" },
+        "description": { "de": "Assistenzhunde d\u00fcrfen in die Sammlungs- und Ausstellungsr\u00e4ume mitgenommen werden.", "en": "Assistance dogs may be taken into the collection and exhibition galleries." }
+      },
+      {
+        "id": "wifi",
+        "title": { "de": "Kostenloses WLAN", "en": "Free WiFi" },
+        "description": { "de": "Verbinden Sie Ihr Ger\u00e4t mit dem Netzwerk \u00abKHZ-Kunsthaus Welcome\u00bb. Kein Passwort erforderlich.", "en": "Connect your mobile device to 'KHZ-Kunsthaus Welcome'. No password is required." }
+      },
+      {
+        "id": "seating",
+        "title": { "de": "Sitzgelegenheiten", "en": "Seating" },
+        "description": { "de": "Klappst\u00fchle k\u00f6nnen kostenlos ausgeliehen werden. Wenden Sie sich an das Personal an der Kasse oder die Aufsicht.", "en": "Folding seats may be borrowed free of charge. Contact desk staff or attendants." }
       }
     ]
   }

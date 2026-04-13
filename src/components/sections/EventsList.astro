@@ -14,7 +14,7 @@ const data = exhibitionsJson[0];
 <div class="events-list">
   <ul class="events-list__items">
     {data.events.map((event) => (
-      <li class="events-list__row">
+      <li class="events-list__row" data-image={event.image ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${event.image}` : ''}>
         <span class="events-list__row-title">{event.title[lang]}</span>
         <span class="events-list__row-meta">
           <span>{event.dateLabel[lang]}</span>
@@ -34,12 +34,77 @@ const data = exhibitionsJson[0];
             </span>
           )}
         </span>
+        {event.image && (
+          <img class="events-list__row-thumb" src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}${event.image}`} alt="" loading="lazy" />
+        )}
       </li>
     ))}
   </ul>
+
+  {/* Floating image preview for desktop */}
+  <div class="events-list__preview" aria-hidden="true">
+    <img class="events-list__preview-img" src="" alt="" />
+  </div>
 </div>
 
+<script>
+  const list = document.querySelector('.events-list');
+  const preview = document.querySelector('.events-list__preview') as HTMLElement;
+  const previewImg = document.querySelector('.events-list__preview-img') as HTMLImageElement;
+  const rows = document.querySelectorAll('.events-list__row');
+  const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+  if (list && preview && previewImg) {
+    if (!isMobile) {
+      rows.forEach((row) => {
+        row.addEventListener('mouseenter', () => {
+          const src = (row as HTMLElement).dataset.image;
+          if (src) {
+            previewImg.src = src;
+            preview.classList.add('events-list__preview--visible');
+          }
+          row.classList.add('events-list__row--active');
+        });
+        row.addEventListener('mouseleave', () => {
+          preview.classList.remove('events-list__preview--visible');
+          row.classList.remove('events-list__row--active');
+        });
+        row.addEventListener('mousemove', (e) => {
+          const ev = e as MouseEvent;
+          const rect = list.getBoundingClientRect();
+          preview.style.left = `${ev.clientX - rect.left + 20}px`;
+          preview.style.top = `${ev.clientY - rect.top - 80}px`;
+        });
+      });
+    } else {
+      let activeRow: HTMLElement | null = null;
+      const updateActiveRow = () => {
+        const viewportCenter = window.innerHeight / 2;
+        let closest: HTMLElement | null = null;
+        let closestDist = Infinity;
+        rows.forEach((row) => {
+          const rect = row.getBoundingClientRect();
+          const rowCenter = rect.top + rect.height / 2;
+          const dist = Math.abs(rowCenter - viewportCenter);
+          if (dist < closestDist) { closestDist = dist; closest = row as HTMLElement; }
+        });
+        if (closest && closest !== activeRow) {
+          if (activeRow) activeRow.classList.remove('events-list__row--active');
+          closest.classList.add('events-list__row--active');
+          activeRow = closest;
+        }
+      };
+      window.addEventListener('scroll', updateActiveRow, { passive: true });
+      updateActiveRow();
+    }
+  }
+</script>
+
 <style>
+  .events-list {
+    position: relative;
+  }
+
   .events-list__items {
     list-style: none;
     padding: 0;
@@ -61,21 +126,48 @@ const data = exhibitionsJson[0];
     border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 
-  .events-list__row:hover {
+  .events-list__row--active {
     background: var(--color-text);
     color: var(--color-surface);
     padding-left: var(--space-4);
     padding-right: var(--space-4);
   }
 
-  .events-list__row:hover .events-list__row-meta,
-  .events-list__row:hover .events-list__row-info {
+  .events-list__row--active .events-list__row-meta,
+  .events-list__row--active .events-list__row-info {
     color: var(--color-surface);
   }
 
-  .events-list__row:hover .events-list__row-time,
-  .events-list__row:hover .events-list__row-places {
+  .events-list__row--active .events-list__row-time,
+  .events-list__row--active .events-list__row-places {
     opacity: 0.7;
+  }
+
+  /* Floating preview — desktop only */
+  .events-list__preview {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    width: 280px;
+  }
+
+  .events-list__preview--visible {
+    opacity: 1;
+  }
+
+  .events-list__preview-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--btn-radius);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Row thumbnail — mobile only */
+  .events-list__row-thumb {
+    display: none;
   }
 
   .events-list__row-title {
@@ -124,8 +216,36 @@ const data = exhibitionsJson[0];
 
   @media (max-width: 767px) {
     .events-list__row {
-      grid-template-columns: 1fr;
+      position: relative;
+      grid-template-columns: 60% 1fr;
       gap: var(--space-2);
+      overflow: visible;
+    }
+
+    .events-list__row-thumb {
+      display: block;
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 45%;
+      height: 120%;
+      object-fit: cover;
+      border-radius: 4px 0 0 4px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .events-list__row--active .events-list__row-thumb {
+      opacity: 1;
+    }
+
+    .events-list__row-title,
+    .events-list__row-meta,
+    .events-list__row-info {
+      grid-column: 1;
+      position: relative;
+      z-index: 1;
     }
 
     .events-list__row-info {

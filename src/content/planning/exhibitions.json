@@ -146,7 +146,8 @@
         "time": "18:00–19:00",
         "type": { "de": "Führung", "en": "Guided Tour" },
         "places": 17,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/architecture-tour.jpg"
       },
       {
         "id": "temps-forts-moser",
@@ -156,7 +157,8 @@
         "time": "11:00–12:00",
         "type": { "de": "Führung (FR)", "en": "Guided Tour (French)" },
         "places": 28,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/guided-tour.jpg"
       },
       {
         "id": "der-entblosste-blick",
@@ -166,7 +168,8 @@
         "time": "11:00–15:00",
         "type": { "de": "Workshop", "en": "Workshop" },
         "places": 8,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/workshop.jpg"
       },
       {
         "id": "sammlungsfuehrung",
@@ -176,7 +179,8 @@
         "time": "15:00–16:00",
         "type": { "de": "Führung", "en": "Guided Tour" },
         "places": 19,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/collection-tour.jpg"
       },
       {
         "id": "atelier-am-sonntag",
@@ -186,7 +190,8 @@
         "time": "10:30–12:00",
         "type": { "de": "Workshop (ab 5 J.)", "en": "Workshop (Ages 5+)" },
         "places": 5,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/kids-workshop.jpg"
       },
       {
         "id": "kinderworkshop-filz",
@@ -196,7 +201,8 @@
         "time": "14:00–16:00",
         "type": { "de": "Workshop (ab 6 J.)", "en": "Workshop (Ages 6+)" },
         "places": 7,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/kids-workshop.jpg"
       },
       {
         "id": "chagall-tour",
@@ -206,7 +212,8 @@
         "time": "14:00–15:30",
         "type": { "de": "Führung", "en": "Guided Tour" },
         "places": 6,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/chagall.jpg"
       },
       {
         "id": "marisol-preview",
@@ -216,7 +223,8 @@
         "time": "17:00–21:00",
         "type": { "de": "Mitglieder-Preview", "en": "Members Preview" },
         "places": null,
-        "tags": ["members-only"]
+        "tags": ["members-only"],
+        "image": "/images/events/marisol.jpg"
       },
       {
         "id": "impressionismus-tour",
@@ -226,7 +234,8 @@
         "time": "18:00–19:45",
         "type": { "de": "Führung", "en": "Guided Tour" },
         "places": 22,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/impressionism.jpg"
       },
       {
         "id": "marisol-intro",
@@ -236,7 +245,8 @@
         "time": "15:00–16:00",
         "type": { "de": "Führung", "en": "Guided Tour" },
         "places": 20,
-        "tags": []
+        "tags": [],
+        "image": "/images/events/marisol.jpg"
       },
       {
         "id": "recollect-laib",

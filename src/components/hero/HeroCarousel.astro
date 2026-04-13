@@ -37,6 +37,11 @@ const playLabel = getString('carousel-play');
 
 <section class="hero-pinned" aria-roledescription="carousel" aria-label="Featured exhibitions">
   <div class="hero-carousel">
+    {/* Chipperfield facade — visible during welcome state */}
+    <div class="hero-carousel__facade" id="hero-facade">
+      <img src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/chipperfield-facade.jpg`} alt="" class="hero-carousel__facade-img" />
+    </div>
+
     {/* Grid overlay — background layer */}
     <GridOverlay client:only="react" />
 
@@ -85,6 +90,20 @@ const playLabel = getString('carousel-play');
     min-height: 500px;
     overflow: hidden;
     background: var(--color-surface);
+  }
+
+  .hero-carousel__facade {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transition: opacity 1.2s ease;
+  }
+
+  .hero-carousel__facade-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .hero-carousel__slides {
@@ -177,6 +196,7 @@ const playLabel = getString('carousel-play');
     const mobileTitles = Array.from(tabs).map(tab =>
       tab.querySelector('.carousel-tabs__title')?.textContent || ''
     );
+    const facade = document.getElementById('hero-facade');
 
     if (slideCount <= 1) return;
 
@@ -214,9 +234,15 @@ const playLabel = getString('carousel-play');
       tab.querySelector('.carousel-tabs__title') as HTMLElement
     );
 
-    // Phase 0: Empty welcome state
+    // Phase 0: Welcome state with Chipperfield facade
     tl.call(() => clearToWelcome());
-    tl.to({}, { duration: SLIDE_DURATION }); // hold for same duration
+    tl.to({}, { duration: SLIDE_DURATION });
+
+    // Phase 0b: Fade out facade, show grid only
+    tl.call(() => {
+      if (facade) gsap.to(facade, { opacity: 0, duration: 1.2, ease: 'power2.inOut' });
+    });
+    tl.to({}, { duration: SLIDE_DURATION });
 
     // Phases 1–N: Actual slides
     for (let i = 0; i < slideCount; i++) {
@@ -308,6 +334,9 @@ const playLabel = getString('carousel-play');
         });
       }
       if (liveRegion) liveRegion.textContent = 'Welcome to the Kunsthaus';
+
+      // Fade in facade
+      if (facade) gsap.to(facade, { opacity: 1, duration: 1.2, ease: 'power2.inOut' });
     }
 
     function activateSlide(index: number) {
@@ -427,11 +456,13 @@ const playLabel = getString('carousel-play');
       }
     }
 
-    // Tab click: jump to slide (offset by welcome phase duration)
+    // Tab click: jump to slide (offset by welcome + grid phases)
+    const PHASES_BEFORE_SLIDES = 2; // welcome + grid-only
     tabs.forEach((tab, i) => {
       tab.addEventListener('click', () => {
-        const seekTime = SLIDE_DURATION + (i * SLIDE_DURATION);
+        const seekTime = (PHASES_BEFORE_SLIDES * SLIDE_DURATION) + (i * SLIDE_DURATION);
         tl.seek(seekTime);
+        if (facade) gsap.set(facade, { opacity: 0 });
         activateSlide(i);
         if (isPaused) tl.pause();
       });
@@ -440,8 +471,9 @@ const playLabel = getString('carousel-play');
     // Mobile tab click: jump to slide
     mobileTabs.forEach((tab, i) => {
       tab.addEventListener('click', () => {
-        const seekTime = SLIDE_DURATION + (i * SLIDE_DURATION);
+        const seekTime = (PHASES_BEFORE_SLIDES * SLIDE_DURATION) + (i * SLIDE_DURATION);
         tl.seek(seekTime);
+        if (facade) gsap.set(facade, { opacity: 0 });
         activateSlide(i);
         if (isPaused) tl.pause();
       });
