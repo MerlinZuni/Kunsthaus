@@ -28,7 +28,7 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
     {/* Tagline — visible beneath small image, covered as it expands */}
     <p class="cinematic-reveal__tagline" set:html={data.tagline?.[lang] || (contentType === 'offerings'
       ? 'Where art meets appetite, culture meets comfort,<br/>and every visit tells a story.'
-      : 'Every visit is a chance to see something new,<br/>learn something unexpected, and make it yours.')} />
+      : 'Every visit is a chance to see something new<br/>and to learn something unexpected.')} />
 
     {/* Image frame — GSAP animates width from small to 100vw */}
     <div class="cinematic-reveal__frame">

@@ -90,6 +90,12 @@ const languages = [
             </a>
           </li>
           <li class="hamburger-overlay__secondary-item">
+            <a href="/login" class="hamburger-overlay__secondary-link">
+              <span>{lang === 'de' ? 'Anmelden' : 'Log in'}</span>
+              <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
+            </a>
+          </li>
+          <li class="hamburger-overlay__secondary-item">
             <a href="/shop" class="hamburger-overlay__secondary-link">
               <span>{lang === 'de' ? 'Shops & Gastronomie' : 'Shops & Gastronomy'}</span>
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
@@ -254,7 +260,7 @@ const languages = [
     padding: calc(var(--space-6) - 4px) 0;
     padding-left: var(--space-4);
     padding-right: var(--space-2);
-    font-size: var(--type-lg);
+    font-size: var(--type-md);
     font-weight: var(--weight-light);
     color: var(--color-text);
     text-decoration: none;

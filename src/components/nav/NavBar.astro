@@ -225,13 +225,11 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     transition: filter 0.25s ease;
   }
 
-  /* When faded: persistent logo adapts */
+  /* When faded: persistent logo stays dark in planning mode even over
+     dark sections (e.g. the footer). Onsite mode handles its own white
+     logo via the html[data-mode="onsite"] rule below. */
   .navbar--faded .navbar__logo-img {
     filter: invert(1);
-  }
-
-  .navbar--faded .navbar__logo-img.on-dark {
-    filter: none;
   }
 
   /* Onsite/dark mode: dark textured nav like footer */

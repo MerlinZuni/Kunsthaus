@@ -1,0 +1,218 @@
+---
+// FooterPartners.astro -- Partner logos row in the footer
+// Renders a horizontal grid of partner logos with optional captions
+
+interface Props {
+  partners: Array<{
+    id: string;
+    logo: string;
+    url: string;
+    caption: { de: string; en: string } | null;
+  }>;
+  lang: 'en' | 'de';
+}
+
+const { partners, lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<div class="footer-partners">
+  <ul class="footer-partners__list">
+    {partners.map((partner) => (
+      <li class={`footer-partners__item footer-partners__item--${partner.id}`}>
+        <a href={partner.url} target="_blank" rel="noopener" class="footer-partners__link">
+          <img
+            src={`${base}${partner.logo}`}
+            alt={partner.caption?.[lang] || partner.id}
+            class="footer-partners__logo"
+            loading="lazy"
+          />
+          {partner.caption?.[lang] && (
+            <span class="footer-partners__caption">{partner.caption[lang]}</span>
+          )}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .footer-partners {
+    padding: var(--space-8) var(--space-8);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-partners__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-10);
+    flex-wrap: wrap;
+  }
+
+  .footer-partners__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Desktop: align to the FooterColumns 4-column grid
+     (repeat(4, 1fr), gap: var(--space-12), padding: 0 var(--space-8))
+     UBS → col 1 (Kunsthaus Zurich address column)
+     Swiss Re → col 2 (Opening hours column)
+     Stadt Zürich → col 4 (Newsletter / rightmost column) */
+  @media (min-width: 1024px) {
+    .footer-partners__list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-12);
+      align-items: center;
+      justify-content: initial;
+      flex-wrap: initial;
+    }
+
+    .footer-partners__item--ubs {
+      grid-column: 1;
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--ubs .footer-partners__link {
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--ubs .footer-partners__caption {
+      text-align: left;
+    }
+
+    .footer-partners__item--swiss-re {
+      grid-column: 2;
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--swiss-re .footer-partners__link {
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--swiss-re .footer-partners__caption {
+      text-align: left;
+    }
+
+    .footer-partners__item--stadt-zurich {
+      grid-column: 4;
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--stadt-zurich .footer-partners__link {
+      align-items: flex-start;
+    }
+  }
+
+  /* Tablet: mirror the FooterColumns 2-column grid (repeat(2, 1fr), gap: space-8).
+     Row 1: UBS (col 1) + Stadt Zürich (col 2), both top-aligned
+     Row 2: Swiss Re directly below UBS in col 1 */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .footer-partners__list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6) var(--space-8);
+      align-items: start;
+      justify-content: initial;
+      flex-wrap: initial;
+    }
+
+    .footer-partners__item--ubs {
+      grid-column: 1;
+      grid-row: 1;
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--ubs .footer-partners__link {
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--ubs .footer-partners__caption {
+      text-align: left;
+    }
+
+    .footer-partners__item--swiss-re {
+      grid-column: 1;
+      grid-row: 2;
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--swiss-re .footer-partners__link {
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--swiss-re .footer-partners__caption {
+      text-align: left;
+    }
+
+    .footer-partners__item--stadt-zurich {
+      grid-column: 2;
+      grid-row: 1;
+      align-items: flex-start;
+    }
+
+    .footer-partners__item--stadt-zurich .footer-partners__link {
+      align-items: flex-start;
+    }
+  }
+
+  .footer-partners__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: #ffffff;
+    opacity: 0.85;
+    transition: opacity 0.25s ease;
+  }
+
+  .footer-partners__link:hover {
+    opacity: 1;
+  }
+
+  .footer-partners__logo {
+    display: block;
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Force white rendering for logos that aren't shipped as white-version
+     assets (Swiss Re and Stadt Zürich). UBS ships as a real white PNG. */
+  .footer-partners__item--swiss-re .footer-partners__logo,
+  .footer-partners__item--stadt-zurich .footer-partners__logo {
+    filter: brightness(0) invert(1);
+  }
+
+  .footer-partners__caption {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #ffffff;
+    opacity: 0.55;
+    text-align: center;
+    max-width: 180px;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 767px) {
+    .footer-partners {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .footer-partners__list {
+      gap: var(--space-6);
+    }
+
+    .footer-partners__logo {
+      height: 28px;
+    }
+  }
+</style>

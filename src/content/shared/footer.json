@@ -55,8 +55,30 @@
       "href": "/newsletter"
     },
     "social": [
-      { "id": "facebook", "platform": "Facebook", "url": "https://facebook.com/kunsthauszurich", "icon": "facebook" },
-      { "id": "instagram", "platform": "Instagram", "url": "https://instagram.com/kunsthauszurich", "icon": "instagram" }
+      { "id": "facebook", "platform": "Facebook", "url": "https://www.facebook.com/kunsthauszuerich/" },
+      { "id": "instagram", "platform": "Instagram", "url": "https://www.instagram.com/kunsthauszuerich/" },
+      { "id": "linkedin", "platform": "LinkedIn", "url": "https://www.linkedin.com/company/kunsthaus-z%C3%BCrich/posts/?feedView=all" },
+      { "id": "youtube", "platform": "YouTube", "url": "https://www.youtube.com/user/KunsthausZurich" }
+    ],
+    "partners": [
+      {
+        "id": "ubs",
+        "logo": "/images/partners/UBS_rgb_neg.png",
+        "url": "https://www.ubs.com/",
+        "caption": { "de": "Partner Kunsthaus Z\u00fcrich", "en": "Partner Kunsthaus Z\u00fcrich" }
+      },
+      {
+        "id": "swiss-re",
+        "logo": "/images/partners/Swiss-Re-logo.svg",
+        "url": "https://www.swissre.com/",
+        "caption": { "de": "Partner f\u00fcr zeitgen\u00f6ssische Kunst", "en": "Partner for contemporary art" }
+      },
+      {
+        "id": "stadt-zurich",
+        "logo": "/images/partners/logo_Stadt-Zurich_rgb_blau_digital.svg",
+        "url": "https://www.stadt-zuerich.ch/kultur",
+        "caption": null
+      }
     ],
     "legal": [
       { "id": "impressum", "label": { "de": "Impressum", "en": "Impressum" }, "href": "/legal/impressum" },
