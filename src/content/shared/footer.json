@@ -12,7 +12,7 @@
     "schedule": [
       { "day": { "de": "Montag", "en": "Monday" }, "hours": { "de": "Geschlossen", "en": "Closed" }, "closed": true },
       { "day": { "de": "Dienstag", "en": "Tuesday" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
-      { "day": { "de": "Mittwoch", "en": "Wednesday" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
+      { "day": { "de": "Mittwoch", "en": "Wednesday" }, "note": { "de": "Eintritt frei", "en": "Free entry" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
       { "day": { "de": "Donnerstag", "en": "Thursday" }, "hours": { "de": "10:00–20:00", "en": "10am–8pm" }, "closed": false },
       { "day": { "de": "Freitag", "en": "Friday" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },
       { "day": { "de": "Samstag", "en": "Saturday" }, "hours": { "de": "10:00–18:00", "en": "10am–6pm" }, "closed": false },

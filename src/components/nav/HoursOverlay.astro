@@ -5,6 +5,7 @@
 interface Props {
   schedule: Array<{
     day: { de: string; en: string };
+    note?: { de: string; en: string };
     hours: { de: string; en: string };
     closed: boolean;
   }>;
@@ -75,7 +76,12 @@ const scheduleJson = JSON.stringify(schedule);
                 class:list={['hours-overlay__row', { 'hours-overlay__row--closed': entry.closed }]}
                 data-hours-item={i}
               >
-                <span class="hours-overlay__day">{entry.day[lang]}</span>
+                <span class="hours-overlay__day">
+                  {entry.day[lang]}
+                  {entry.note?.[lang] && (
+                    <span class="hours-overlay__occasion">{entry.note[lang]}</span>
+                  )}
+                </span>
                 <span class="hours-overlay__hours">{entry.hours[lang]}</span>
               </li>
             ))}

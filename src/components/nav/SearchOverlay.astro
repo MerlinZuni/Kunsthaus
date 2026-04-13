@@ -20,14 +20,22 @@ const suggestions = [
 
 <div class="search-overlay" id="search-overlay" aria-hidden="true">
   <div class="search-overlay__inner">
-    {/* Header: close left (where search was), logo center, hamburger right (to swap) */}
+    {/* Header: close (where search was) + clock left, logo center, hamburger right */}
     <div class="search-overlay__header">
-      <button class="search-overlay__close touch-target" aria-label="Close search">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
+      <div class="search-overlay__left">
+        <button class="search-overlay__close touch-target" aria-label="Close search">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <button class="search-overlay__hours-btn touch-target" aria-label="Opening hours" data-action="open-hours">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </button>
+      </div>
       <a href="/" class="search-overlay__logo">
         <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="search-overlay__logo-img" />
       </a>
@@ -111,12 +119,22 @@ const suggestions = [
     padding: var(--space-1) var(--space-2);
   }
 
-  .search-overlay__hamburger {
+  .search-overlay__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .search-overlay__hamburger,
+  .search-overlay__hours-btn {
     background: none;
     border: none;
     cursor: pointer;
     color: var(--color-text);
     padding: var(--space-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .search-overlay__logo {
@@ -525,6 +543,12 @@ const suggestions = [
     closeBtn?.addEventListener('click', () => wrappedClose(false));
     hamburgerBtn?.addEventListener('click', () => {
       (window as any).__hamburgerOverlay?.open(true);
+      wrappedClose(true);
+    });
+
+    // Hours button — swap to hours overlay
+    overlay?.querySelector('[data-action="open-hours"]')?.addEventListener('click', () => {
+      (window as any).__hoursOverlay?.open(true);
       wrappedClose(true);
     });
 

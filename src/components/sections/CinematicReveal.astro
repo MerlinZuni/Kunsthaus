@@ -53,7 +53,7 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
           <h3 class="cinematic-reveal__title">{data.title[lang]}</h3>
         )}
         {data.description && (
-          <p class="cinematic-reveal__description">{data.description[lang]}</p>
+          <p class="cinematic-reveal__description" set:html={data.description[lang]} />
         )}
         {data.cta && (
           <a href={data.cta.href} class="cinematic-reveal__cta btn hover-wipe-inverse touch-pulse touch-target">

@@ -229,13 +229,19 @@ const toggleLabels = {
       left: 0;
       right: 0;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       padding: var(--space-3) var(--space-4);
       background: transparent;
       border-top: none;
       z-index: 50;
       transition: opacity 0.3s ease;
+    }
+
+    /* Full-width button, centered by its flex parent */
+    .sticky-cta--mobile .sticky-cta__tickets {
+      width: 100%;
+      justify-content: center;
     }
   }
 

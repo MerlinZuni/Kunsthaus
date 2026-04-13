@@ -19,12 +19,20 @@ const languages = [
   <div class="hamburger-overlay__inner">
     {/* Top bar: mirrors nav bar exactly — same padding, same icon positions */}
     <div class="hamburger-overlay__header">
-      <button class="hamburger-overlay__search-btn touch-target" aria-label={searchLabel}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
+      <div class="hamburger-overlay__left">
+        <button class="hamburger-overlay__search-btn touch-target" aria-label={searchLabel}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+        <button class="hamburger-overlay__hours-btn touch-target" aria-label="Opening hours" data-action="open-hours">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </button>
+      </div>
       <a href="/" class="hamburger-overlay__logo">
         <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="hamburger-overlay__logo-img" />
       </a>
@@ -55,7 +63,7 @@ const languages = [
           role="radio"
           aria-checked="false"
         >
-          {lang === 'de' ? 'Ich bin im Museum' : "I'm at the Museum"}
+          {lang === 'de' ? 'Im Kunsthaus' : 'At Kunsthaus'}
         </button>
       </div>
 
@@ -152,12 +160,22 @@ const languages = [
     flex-shrink: 0;
   }
 
-  .hamburger-overlay__search-btn {
+  .hamburger-overlay__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .hamburger-overlay__search-btn,
+  .hamburger-overlay__hours-btn {
     background: none;
     border: none;
     cursor: pointer;
     color: var(--color-text);
     padding: var(--space-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .hamburger-overlay__logo {
@@ -546,6 +564,12 @@ const languages = [
       // Immediately open the other overlay behind this one
       (window as any).__searchOverlay?.open(true);
       // Then fade out this content
+      close(true);
+    });
+
+    // Hours button — swap to hours overlay
+    overlay?.querySelector('[data-action="open-hours"]')?.addEventListener('click', () => {
+      (window as any).__hoursOverlay?.open(true);
       close(true);
     });
 

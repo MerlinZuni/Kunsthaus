@@ -1,4 +1,12 @@
 @layer base {
+  /* Prevent horizontal scroll from decorative overflow (e.g. mobile list
+     thumbnails positioned with right: -80px). `clip` preserves position:
+     sticky behavior, unlike `overflow-x: hidden`. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   body {
     font-family: var(--font-primary);
     font-size: var(--type-base);
