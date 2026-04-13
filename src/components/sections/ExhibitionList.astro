@@ -213,12 +213,14 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
     border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
   }
 
-  /* Hover: invert colors */
+  /* Hover: invert colors — extend background without shifting text */
   .exhibition-list__row--active {
     background: var(--color-text);
     color: var(--color-surface);
-    padding-left: var(--space-4);
-    padding-right: var(--space-4);
+    margin-left: calc(-1 * var(--space-8));
+    margin-right: calc(-1 * var(--space-8));
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
   }
 
   .exhibition-list__row--active .exhibition-list__row-meta,
@@ -288,7 +290,7 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
     .exhibition-list__row-thumb {
       display: block;
       position: absolute;
-      right: -40%;
+      right: calc(-40% + 10px);
       top: 50%;
       transform: translateY(-50%);
       width: 55%;

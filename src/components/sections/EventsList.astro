@@ -129,8 +129,10 @@ const data = exhibitionsJson[0];
   .events-list__row--active {
     background: var(--color-text);
     color: var(--color-surface);
-    padding-left: var(--space-4);
-    padding-right: var(--space-4);
+    margin-left: calc(-1 * var(--space-8));
+    margin-right: calc(-1 * var(--space-8));
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
   }
 
   .events-list__row--active .events-list__row-meta,
@@ -225,7 +227,7 @@ const data = exhibitionsJson[0];
     .events-list__row-thumb {
       display: block;
       position: absolute;
-      right: -40%;
+      right: calc(-40% + 10px);
       top: 50%;
       transform: translateY(-50%);
       width: 55%;
