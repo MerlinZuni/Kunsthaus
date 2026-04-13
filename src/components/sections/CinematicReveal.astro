@@ -107,11 +107,12 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
       if (card) gsap.set(card, { opacity: 0, y: 40 });
 
       // Scrub timeline driven by scroll position through the tall container
+      const isMobileView = window.innerWidth < 768;
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: reveal,
           scrub: 0.3,
-          start: 'top 60%',
+          start: isMobileView ? 'top 30%' : 'top 60%',
           end: 'bottom bottom',
           _cinematic: true,
         } as ScrollTrigger.Vars & { _cinematic: boolean },
@@ -273,17 +274,17 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
 
   @media (max-width: 767px) {
     .cinematic-reveal {
-      height: 200vh;
+      height: 250vh;
     }
 
     .cinematic-reveal__viewport {
       align-items: flex-start;
-      padding-top: 15vh;
+      padding-top: 8vh;
     }
 
     .cinematic-reveal__tagline {
       bottom: auto;
-      top: calc(15vh + 35vh + var(--space-6));
+      top: calc(8vh + 25vh + var(--space-6));
     }
 
     .cinematic-reveal__frame {
@@ -291,7 +292,7 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
     }
 
     .cinematic-reveal__image-wrap {
-      height: 35vh;
+      height: 25vh;
     }
 
     .cinematic-reveal__card {
