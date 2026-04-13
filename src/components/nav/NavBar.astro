@@ -266,6 +266,14 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
   .navbar__search-migrated {
     display: none;
   }
+
+  /* Mobile: shrink logo so icons don't crowd the centered mark */
+  @media (max-width: 767px) {
+    .navbar__logo-img,
+    .navbar__logo-inner-img {
+      width: 160px;
+    }
+  }
 </style>
 
 <script>
