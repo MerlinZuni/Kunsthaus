@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 Phase: 03 (dual-mode-routing) — EXECUTING
 Plan: 03-01 complete; 03-02 next
 Status: Ready to execute
-Last activity: 2026-04-14 -- Phase 03 planning complete
+Last activity: 2026-04-14 - Completed quick task 260414-npq: improve the existing hero design for the on-site index
 
 Progress: [██░░░░░░░░] 25%
 
@@ -93,6 +93,12 @@ None yet.
 
 - Timeline is 3-4 days total -- must be ruthless about scope
 - Three Figma files need to be extracted/unified via Figma MCP (not yet started)
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260414-npq | improve the existing hero design for the on-site index | 2026-04-14 | 0f5a83b | [260414-npq-improve-the-existing-hero-design-for-the](./quick/260414-npq-improve-the-existing-hero-design-for-the/) |
 
 ## Session Continuity
 
