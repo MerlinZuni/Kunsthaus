@@ -1,0 +1,122 @@
+---
+// HorizontalSlider.astro — Phase 03-03 reusable center-snap peek slider.
+// Used twice on the KJM detail page: once for video testimonials, once for
+// the shop items. IntersectionObserver maps each card's intersection ratio
+// to CSS custom properties (--card-scale, --card-opacity) so peek cards
+// render smaller and dimmer than the centered card. Short-circuits under
+// prefers-reduced-motion. Dual-init for Astro View Transitions.
+
+interface Props {
+  heading?: { de: string; en: string };
+  variant?: 'videos' | 'shop' | 'default';
+  lang: 'en' | 'de';
+}
+
+const { heading, variant = 'default', lang } = Astro.props;
+---
+
+<section class="h-slider" data-h-slider data-variant={variant}>
+  {heading && <h3 class="h-slider__heading">{heading[lang]}</h3>}
+  <div class="h-slider__track" data-h-slider-track>
+    <slot />
+  </div>
+</section>
+
+<script>
+  function initHorizontalSliders() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const tracks = document.querySelectorAll<HTMLElement>('[data-h-slider-track]');
+    tracks.forEach((track) => {
+      if (track.dataset.initialized === 'true') return;
+      track.dataset.initialized = 'true';
+
+      const cards = Array.from(track.children) as HTMLElement[];
+
+      if (reduceMotion) {
+        cards.forEach((c) => {
+          c.style.setProperty('--card-scale', '1');
+          c.style.setProperty('--card-opacity', '1');
+        });
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const ratio = entry.intersectionRatio;
+            const scale = (0.85 + 0.15 * ratio).toFixed(3);
+            const opacity = (0.5 + 0.5 * ratio).toFixed(3);
+            (entry.target as HTMLElement).style.setProperty('--card-scale', scale);
+            (entry.target as HTMLElement).style.setProperty('--card-opacity', opacity);
+          });
+        },
+        {
+          root: track,
+          threshold: [0, 0.25, 0.5, 0.75, 1],
+        }
+      );
+
+      cards.forEach((c) => observer.observe(c));
+    });
+  }
+
+  initHorizontalSliders();
+  document.addEventListener('astro:page-load', initHorizontalSliders);
+</script>
+
+<style>
+  .h-slider {
+    width: 100%;
+  }
+
+  .h-slider__heading {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 var(--space-6);
+    color: var(--color-text);
+    opacity: 0.85;
+  }
+
+  .h-slider__track {
+    display: flex;
+    gap: var(--space-6);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding-inline: max(var(--space-8), calc((100% - 55%) / 2));
+    padding-block: var(--space-4);
+    scrollbar-width: none;
+  }
+  .h-slider__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .h-slider__track > :global(*) {
+    flex: 0 0 55%;
+    scroll-snap-align: center;
+    transform: scale(var(--card-scale, 1));
+    opacity: var(--card-opacity, 1);
+    transition: transform 0.2s linear, opacity 0.2s linear;
+    transform-origin: center center;
+  }
+
+  @media (max-width: 767px) {
+    .h-slider__track {
+      padding-inline: max(var(--space-6), calc((100% - 80%) / 2));
+    }
+    .h-slider__track > :global(*) {
+      flex: 0 0 80%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .h-slider__track > :global(*) {
+      transform: none;
+      opacity: 1;
+      transition: none;
+    }
+  }
+</style>
