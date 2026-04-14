@@ -43,7 +43,7 @@ const onsiteHref = `${base}/onsite`;
           </svg>
         </button>
       </div>
-      <a href="/" class="hamburger-overlay__logo">
+      <a href={`${base}/`} class="hamburger-overlay__logo">
         <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="hamburger-overlay__logo-img" />
       </a>
       <button class="hamburger-overlay__close touch-target" aria-label="Close menu">
@@ -97,19 +97,19 @@ const onsiteHref = `${base}/onsite`;
       <nav class="hamburger-overlay__secondary" aria-label="Secondary navigation">
         <ul>
           <li class="hamburger-overlay__secondary-item">
-            <a href="/membership" class="hamburger-overlay__secondary-link">
+            <a href={`${base}/membership`} class="hamburger-overlay__secondary-link">
               <span>{lang === 'de' ? 'Mitglied werden' : 'Become a member'}</span>
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
             </a>
           </li>
           <li class="hamburger-overlay__secondary-item">
-            <a href="/login" class="hamburger-overlay__secondary-link">
+            <a href={`${base}/login`} class="hamburger-overlay__secondary-link">
               <span>{lang === 'de' ? 'Anmelden' : 'Log in'}</span>
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
             </a>
           </li>
           <li class="hamburger-overlay__secondary-item">
-            <a href="/shop" class="hamburger-overlay__secondary-link">
+            <a href={`${base}/shop`} class="hamburger-overlay__secondary-link">
               <span>{lang === 'de' ? 'Shops & Gastronomie' : 'Shops & Gastronomy'}</span>
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
             </a>
@@ -121,7 +121,7 @@ const onsiteHref = `${base}/onsite`;
             </a>
           </li>
           <li class="hamburger-overlay__secondary-item">
-            <a href="/press" class="hamburger-overlay__secondary-link">
+            <a href={`${base}/press`} class="hamburger-overlay__secondary-link">
               <span>{lang === 'de' ? 'Presse' : 'Press'}</span>
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
             </a>
