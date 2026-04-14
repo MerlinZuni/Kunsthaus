@@ -1,0 +1,104 @@
+---
+// InfoBox.astro — Outlined card containing Wifi info + TodaysEventsAccordion.
+// Dark-mode aware via semantic tokens. No script.
+
+import TodaysEventsAccordion from '../ui/TodaysEventsAccordion.astro';
+
+interface Event {
+  id: string;
+  title: { de: string; en: string };
+  date: string;
+  time: string;
+  type: { de: string; en: string };
+}
+
+interface Props {
+  wifiSsid: string;
+  wifiPassword: string;
+  wifiNote?: { de: string; en: string };
+  events: Event[];
+  lang: 'en' | 'de';
+}
+
+const { wifiSsid, wifiPassword, wifiNote, events, lang } = Astro.props;
+---
+
+<section class="info-box">
+  <div class="info-box__wifi">
+    <h3 class="info-box__heading">Wi-Fi</h3>
+    <dl class="info-box__kv">
+      <dt>SSID</dt>
+      <dd><code>{wifiSsid}</code></dd>
+      <dt>{lang === 'de' ? 'Passwort' : 'Password'}</dt>
+      <dd><code>{wifiPassword}</code></dd>
+    </dl>
+    {wifiNote && <p class="info-box__note">{wifiNote[lang]}</p>}
+  </div>
+  <div class="info-box__events">
+    <h3 class="info-box__heading">
+      {lang === 'de' ? 'Heute im Museum' : 'Today at the Museum'}
+    </h3>
+    <TodaysEventsAccordion events={events} lang={lang} />
+  </div>
+</section>
+
+<style>
+  .info-box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+    border-radius: var(--btn-radius);
+    padding: var(--space-8);
+    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--color-text);
+    max-width: 560px;
+  }
+
+  .info-box__heading {
+    font-size: var(--type-sm);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text);
+    opacity: 0.7;
+    margin: 0 0 var(--space-3) 0;
+  }
+
+  .info-box__kv {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2) var(--space-4);
+    margin: 0;
+  }
+
+  .info-box__kv dt {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.7;
+  }
+
+  .info-box__kv dd {
+    margin: 0;
+    font-size: var(--type-sm);
+    color: var(--color-text);
+  }
+
+  .info-box__kv code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .info-box__note {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.7;
+    margin: var(--space-3) 0 0 0;
+  }
+</style>

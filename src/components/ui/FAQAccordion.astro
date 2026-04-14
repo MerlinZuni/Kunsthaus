@@ -1,0 +1,164 @@
+---
+// FAQAccordion.astro — Multi-open Q&A accordion.
+// Fork of StatusAccordion pattern: N trigger/panel pairs.
+// Opening one panel does NOT collapse siblings.
+// Dual init (DOMContentLoaded + astro:page-load), guarded by data-initialized.
+
+interface FaqItem {
+  id: string;
+  question: { de: string; en: string };
+  answer: { de: string; en: string };
+}
+
+interface Props {
+  items: FaqItem[];
+  lang?: 'en' | 'de';
+}
+
+const { items, lang = 'en' } = Astro.props;
+---
+
+<div class="faq-accordion" data-faq-accordion>
+  {items.map((item) => (
+    <div class="faq-accordion__item" data-faq-item>
+      <button
+        class="faq-accordion__trigger"
+        aria-expanded="false"
+        aria-controls={`faq-panel-${item.id}`}
+        id={`faq-trigger-${item.id}`}
+        type="button"
+      >
+        <span class="faq-accordion__question">{item.question[lang]}</span>
+        <svg class="faq-accordion__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div
+        class="faq-accordion__panel"
+        id={`faq-panel-${item.id}`}
+        role="region"
+        aria-labelledby={`faq-trigger-${item.id}`}
+        aria-hidden="true"
+      >
+        <p class="faq-accordion__answer" set:html={item.answer[lang]}></p>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text);
+    width: 100%;
+  }
+
+  .faq-accordion__item {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+  }
+
+  .faq-accordion__item:last-child {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+  }
+
+  .faq-accordion__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(--space-5) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    text-align: left;
+    line-height: 1.3;
+  }
+
+  .faq-accordion__question {
+    flex: 1;
+  }
+
+  .faq-accordion__arrow {
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .faq-accordion__panel {
+    height: 0;
+    overflow: hidden;
+  }
+
+  .faq-accordion__answer {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.8;
+    line-height: var(--leading-normal);
+    margin: 0;
+    padding-bottom: var(--space-5);
+    max-width: 70ch;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initFaqAccordions() {
+    const containers = document.querySelectorAll<HTMLElement>('[data-faq-accordion]');
+    containers.forEach((container) => {
+      if (container.dataset.initialized === 'true') return;
+      container.dataset.initialized = 'true';
+
+      const reduceMotion =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.classList.contains('reduce-motion');
+
+      const items = container.querySelectorAll<HTMLElement>('[data-faq-item]');
+      items.forEach((item) => {
+        const trigger = item.querySelector('.faq-accordion__trigger') as HTMLButtonElement | null;
+        const panel = item.querySelector('.faq-accordion__panel') as HTMLElement | null;
+        const arrow = item.querySelector('.faq-accordion__arrow') as HTMLElement | null;
+        if (!trigger || !panel || !arrow) return;
+
+        let expanded = false;
+        trigger.addEventListener('click', () => {
+          expanded = !expanded;
+          trigger.setAttribute('aria-expanded', String(expanded));
+          panel.setAttribute('aria-hidden', String(!expanded));
+
+          if (reduceMotion) {
+            if (expanded) {
+              panel.style.height = 'auto';
+              arrow.style.transform = 'rotate(180deg)';
+            } else {
+              panel.style.height = '0px';
+              arrow.style.transform = 'rotate(0deg)';
+            }
+            return;
+          }
+
+          if (expanded) {
+            panel.style.height = 'auto';
+            const natural = panel.scrollHeight;
+            panel.style.height = '0px';
+            const tl = gsap.timeline();
+            tl.to(arrow, { rotation: 180, duration: 0.25, ease: 'power2.out' });
+            tl.to(panel, { height: natural, duration: 0.35, ease: 'power2.out' }, 0);
+          } else {
+            const tl = gsap.timeline();
+            tl.to(panel, { height: 0, duration: 0.3, ease: 'power2.inOut' });
+            tl.to(arrow, { rotation: 0, duration: 0.25, ease: 'power2.inOut' }, 0);
+          }
+          // Multi-open: intentionally do NOT touch sibling items.
+        });
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initFaqAccordions);
+  document.addEventListener('astro:page-load', initFaqAccordions);
+</script>

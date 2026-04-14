@@ -1,0 +1,81 @@
+---
+// MuseumNavigatorTeaser.astro — Minimal dark teaser block.
+// Title + decorative rule + body paragraph + external link. No icon, no map, no script.
+
+interface Props {
+  title: { de: string; en: string };
+  body: { de: string; en: string };
+  linkLabel: { de: string; en: string };
+  linkHref: string;
+  lang: 'en' | 'de';
+}
+
+const { title, body, linkLabel, linkHref, lang } = Astro.props;
+---
+
+<section class="navigator-teaser">
+  <h2 class="navigator-teaser__title">{title[lang]}</h2>
+  <hr class="navigator-teaser__rule" aria-hidden="true" />
+  <p class="navigator-teaser__body">{body[lang]}</p>
+  <a
+    class="navigator-teaser__link"
+    href={linkHref}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {linkLabel[lang]}
+  </a>
+</section>
+
+<style>
+  .navigator-teaser {
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+    color: var(--color-text);
+    padding: var(--space-12) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .navigator-teaser__title {
+    font-size: var(--type-2xl);
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .navigator-teaser__rule {
+    border: 0;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-text) 25%, transparent);
+    width: 40px;
+    margin: var(--space-2) 0;
+  }
+
+  .navigator-teaser__body {
+    font-size: var(--type-md);
+    color: var(--color-text);
+    opacity: 0.85;
+    line-height: var(--leading-normal);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  .navigator-teaser__link {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  .navigator-teaser__link:hover {
+    opacity: 0.75;
+  }
+</style>
