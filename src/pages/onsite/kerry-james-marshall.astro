@@ -7,10 +7,23 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import KjmHero from '../../components/hero/KjmHero.astro';
 import CinematicReveal from '../../components/sections/CinematicReveal.astro';
+import SectionWrapper from '../../components/sections/SectionWrapper.astro';
+import ArtworkSlider from '../../components/sections/ArtworkSlider.astro';
+import ArtistQuote from '../../components/sections/ArtistQuote.astro';
+import HorizontalSlider from '../../components/sections/HorizontalSlider.astro';
+import Footer from '../../components/footer/Footer.astro';
+import StickyCTA from '../../components/ui/StickyCTA.astro';
 import kjmJson from '../../content/onsite/kerry-james-marshall.json';
+import uiStringsJson from '../../content/shared/ui-strings.json';
 
 const lang = 'en' as const;
 const kjm = (kjmJson as any)['kerry-james-marshall'];
+
+const uiStrings = uiStringsJson;
+const getString = (key: string) => {
+  const entry = uiStrings.find((s: any) => s.key === key);
+  return entry?.value?.[lang] || key;
+};
 
 // CinematicReveal adapter — same 03-02 trap: component reads data.title,
 // not data.cardTitle. Build the adapter at the page level.
@@ -48,5 +61,199 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     />
   </section>
 
-  <!-- Task 6 adds: intro SectionWrapper, ArtworkSlider, ArtistQuote, 2x HorizontalSlider, Footer, StickyCTA -->
+  <SectionWrapper
+    index={1}
+    bgStep={1}
+    sectionName={kjm.intro.heading[lang]}
+    sectionId="kjm-intro"
+  >
+    <p class="kjm-intro__body">{kjm.intro.body[lang]}</p>
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={2}
+    bgStep={2}
+    sectionName="Works"
+    sectionId="kjm-artworks"
+  >
+    <ArtworkSlider artworks={kjm.artworks} lang={lang} />
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={3}
+    bgStep={3}
+    sectionName="In the artist's words"
+    sectionId="kjm-quote"
+  >
+    <ArtistQuote
+      quote={kjm.artistQuote.quote}
+      attribution={kjm.artistQuote.attribution}
+      lang={lang}
+    />
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={4}
+    bgStep={4}
+    sectionName="Voices"
+    sectionId="kjm-videos"
+  >
+    <HorizontalSlider
+      heading={{ de: 'Stimmen zur Ausstellung', en: 'Voices on the exhibition' }}
+      variant="videos"
+      lang={lang}
+    >
+      {kjm.videos.map((v: any) => (
+        <article class="video-card" data-role={v.role}>
+          <div class="video-card__media">
+            <img src={`${base}${v.thumbnail}`} alt={v.quote[lang]} loading="lazy" />
+            <span class="video-card__duration">{v.duration}</span>
+          </div>
+          <blockquote class="video-card__quote">{v.quote[lang]}</blockquote>
+          <p class="video-card__role">{v.role}</p>
+        </article>
+      ))}
+    </HorizontalSlider>
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={5}
+    bgStep={1}
+    sectionName="Shop"
+    sectionId="kjm-shop"
+  >
+    <HorizontalSlider
+      heading={{ de: 'Shop', en: 'Shop' }}
+      variant="shop"
+      lang={lang}
+    >
+      {kjm.shop.map((s: any) => (
+        <article class="shop-card">
+          <div class="shop-card__media">
+            <img src={`${base}${s.image}`} alt={s.title[lang]} loading="lazy" />
+          </div>
+          <h4 class="shop-card__title">{s.title[lang]}</h4>
+          <p class="shop-card__price">{s.price}</p>
+          <button type="button" class="shop-card__cta">{s.addToCartLabel[lang]}</button>
+        </article>
+      ))}
+    </HorizontalSlider>
+  </SectionWrapper>
+
+  <Footer
+    lang={lang}
+    modeLabels={{ planning: getString('mode-planning'), onsite: getString('mode-onsite') }}
+    ticketsLabel={getString('tickets')}
+  />
+
+  <StickyCTA
+    modeLabels={{
+      planning: getString('mode-planning'),
+      onsite: getString('mode-onsite'),
+    }}
+    ticketsLabel={getString('tickets')}
+    lang={lang}
+  />
 </BaseLayout>
+
+<style>
+  .kjm-intro__body {
+    font-size: var(--type-lg);
+    line-height: var(--leading-normal);
+    max-width: 60ch;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* Video testimonial cards (inline markup fills the HorizontalSlider slot) */
+  .video-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    color: var(--color-text);
+  }
+  .video-card__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+  .video-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .video-card__duration {
+    position: absolute;
+    bottom: var(--space-3);
+    right: var(--space-3);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--type-xs);
+    letter-spacing: 0.04em;
+  }
+  .video-card__quote {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-light);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .video-card__role {
+    font-size: var(--type-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.65;
+    margin: 0;
+  }
+
+  /* Shop cards */
+  .shop-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    color: var(--color-text);
+  }
+  .shop-card__media {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+  .shop-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .shop-card__title {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-regular);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .shop-card__price {
+    font-size: var(--type-md);
+    opacity: 0.8;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .shop-card__cta {
+    align-self: flex-start;
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--color-text) 60%, transparent);
+    color: var(--color-text);
+    font-size: var(--type-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .shop-card__cta:hover,
+  .shop-card__cta:focus-visible {
+    background: color-mix(in srgb, var(--color-text) 12%, transparent);
+    outline: none;
+  }
+</style>
