@@ -1,0 +1,131 @@
+---
+// OnsiteExhibitionGrid.astro — Responsive 2/3/4-col grid for one building group.
+// Phase 03-02: KJM card is NON-CLICKABLE (plain div). 03-03 will flip to <a>.
+
+interface Item {
+  id: string;
+  title: { de: string; en: string };
+  image: string;
+  location?: { building: string; floor: string };
+  dateLabel?: { de: string; en: string };
+}
+
+interface Props {
+  buildingName: { de: string; en: string };
+  items: Item[];
+  lang: 'en' | 'de';
+}
+
+const { buildingName, items, lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="onsite-grid">
+  <header class="onsite-grid__header">
+    <h2 class="onsite-grid__building">{buildingName[lang]}</h2>
+  </header>
+  <ul class="onsite-grid__list">
+    {items.map((item) => {
+      const floor = item.location?.floor ?? '';
+      const imgSrc = `${base}${item.image}`;
+      return (
+        <li class="onsite-grid__item" data-id={item.id}>
+          <div class="onsite-grid__card">
+            <div class="onsite-grid__media">
+              <img src={imgSrc} alt={item.title[lang]} loading="lazy" />
+            </div>
+            <div class="onsite-grid__meta">
+              <h3 class="onsite-grid__title">{item.title[lang]}</h3>
+              {floor && <p class="onsite-grid__floor">{floor}</p>}
+            </div>
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+</section>
+
+<style>
+  .onsite-grid {
+    color: var(--color-text);
+  }
+
+  .onsite-grid__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .onsite-grid__building {
+    font-size: var(--type-2xl);
+    color: var(--color-text);
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+
+  .onsite-grid__list {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(2, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (min-width: 768px) {
+    .onsite-grid__list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .onsite-grid__list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .onsite-grid__item {
+    margin: 0;
+  }
+
+  .onsite-grid__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .onsite-grid__media {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+
+  .onsite-grid__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .onsite-grid__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .onsite-grid__title {
+    font-size: var(--type-lg);
+    color: var(--color-text);
+    font-weight: var(--weight-regular);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .onsite-grid__floor {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>
