@@ -1,0 +1,49 @@
+---
+// OnsiteHero.astro — Static dark hero for /onsite landing.
+// Per Phase 03-02 spec: no JS, no GSAP, no SplitText.
+// Right-aligned "AT THE MUSEUM" title, grid-line background.
+
+interface Props {
+  title: { de: string; en: string };
+  lang: 'en' | 'de';
+}
+
+const { title, lang } = Astro.props;
+---
+
+<section class="onsite-hero" aria-label={title[lang]}>
+  <h1 class="onsite-hero__title">{title[lang]}</h1>
+</section>
+
+<style>
+  .onsite-hero {
+    min-height: 100svh;
+    display: grid;
+    place-items: end;
+    padding: var(--space-24) var(--space-8) var(--space-16);
+    background-color: var(--color-bg);
+    background-image: repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.08) 0 1px,
+      transparent 1px calc(100% / 12)
+    );
+  }
+
+  .onsite-hero__title {
+    font-size: var(--type-4xl);
+    font-weight: var(--weight-regular);
+    color: var(--color-text);
+    text-align: right;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    max-width: 14ch;
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .onsite-hero {
+      padding: var(--space-16) var(--space-4) var(--space-8);
+    }
+  }
+</style>
