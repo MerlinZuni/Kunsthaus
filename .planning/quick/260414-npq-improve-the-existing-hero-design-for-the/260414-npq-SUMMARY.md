@@ -118,3 +118,16 @@ None. All LOCKED decisions (visual direction, background grid, typography, conta
 - File exists: `src/components/hero/OnsiteHero.astro` — FOUND
 - Commit exists: `0f5a83b` — FOUND
 - Build status: PASS
+
+---
+
+## Follow-up Hotfix (post-review)
+
+During interactive browser review the initial commit revealed two issues introduced by literal CSS carry-over from `HeroCarousel`:
+
+1. **`background: var(--color-bg)` was undefined.** The actual semantic token is `--color-surface` (see `src/styles/tokens/semantic.css`). The hero was effectively transparent and only looked dark because the `<body>` background was dark. Changed to `var(--color-surface)`.
+2. **`mix-blend-mode: screen` on `.onsite-hero__text` created visual noise** on the title letterforms wherever they intersected the bright `GridOverlay` lines. HeroCarousel only needs screen-blend in onsite mode because the same React component has to work in both light and dark modes; `OnsiteHero` is single-mode, so the blend mode is unnecessary and harmful. Dropped entirely — text now renders with `var(--color-text)` directly over the dark background.
+
+Additionally: the user reported a "flash-correct-then-wrong" symptom that turned out to be **stale Vite HMR CSS cache** from earlier dev sessions. A hard reload resolved it — no code change needed for that part.
+
+**Follow-up commit:** included in the docs commit that wraps this follow-up section. No deviations from CONTEXT.md; these are corrections to a mis-copy from HeroCarousel, not scope changes.
