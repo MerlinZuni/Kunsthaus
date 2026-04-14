@@ -1,0 +1,63 @@
+---
+// src/pages/onsite/index.astro -- Phase 03-01 stub route
+// Proves routing foundation: navigating here produces <html data-mode="onsite">
+// with the dark palette cascade. Real on-site landing page content lands in 03-02.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StickyCTA from '../../components/ui/StickyCTA.astro';
+import Footer from '../../components/footer/Footer.astro';
+import uiStringsJson from '../../content/shared/ui-strings.json';
+
+const lang = 'en' as const;
+const uiStrings = uiStringsJson;
+const getString = (key: string) => {
+  const entry = uiStrings.find((s: any) => s.key === key);
+  return entry?.value?.[lang] || key;
+};
+---
+
+<BaseLayout title="Kunsthaus Zurich — At the Museum" lang={lang} mode="onsite">
+  <section class="onsite-stub">
+    <h1 class="onsite-stub__title">On-site mode — coming in 03-02</h1>
+    <p class="onsite-stub__body">
+      This is a stub route. The full On-site landing page will be built in Phase 03-02.
+    </p>
+  </section>
+
+  <Footer
+    lang={lang}
+    modeLabels={{ planning: getString('mode-planning'), onsite: getString('mode-onsite') }}
+    ticketsLabel={getString('tickets')}
+  />
+
+  <StickyCTA
+    modeLabels={{
+      planning: getString('mode-planning'),
+      onsite: getString('mode-onsite'),
+    }}
+    ticketsLabel={getString('tickets')}
+    lang={lang}
+  />
+</BaseLayout>
+
+<style>
+  .onsite-stub {
+    min-height: 100vh;
+    padding: var(--space-16) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .onsite-stub__title {
+    font-size: var(--type-3xl);
+    color: var(--color-text);
+    max-width: 20ch;
+  }
+
+  .onsite-stub__body {
+    color: var(--color-text);
+    opacity: 0.7;
+    max-width: 60ch;
+  }
+</style>
