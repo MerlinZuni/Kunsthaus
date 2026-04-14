@@ -1,0 +1,288 @@
+---
+// TodaysEventsAccordion.astro — Fork of StatusAccordion for "today's events".
+// Client-side today filter + 4-state headline (next / now / ended / none).
+// Dual init: DOMContentLoaded + astro:page-load, guarded by data-initialized.
+// Time strings parse on en-dash U+2013 ('–'), not hyphen.
+
+interface Event {
+  id: string;
+  title: { de: string; en: string };
+  date: string;
+  time: string;
+  type: { de: string; en: string };
+}
+
+interface Props {
+  events: Event[];
+  lang?: 'en' | 'de';
+}
+
+const { events, lang = 'en' } = Astro.props;
+---
+
+<div
+  class="todays-events"
+  data-todays-events
+  data-events={JSON.stringify(events)}
+  data-lang={lang}
+>
+  <button class="todays-events__trigger" aria-expanded="false" type="button">
+    <span class="todays-events__dot todays-events__dot--dim"></span>
+    <span class="todays-events__text">…</span>
+    <svg class="todays-events__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </button>
+  <div class="todays-events__panel" aria-hidden="true">
+    <ul class="todays-events__list" data-list></ul>
+  </div>
+</div>
+
+<style>
+  .todays-events {
+    --color-status-live: #34a853; /* status green — not a theming color */
+
+    display: flex;
+    flex-direction: column;
+    border: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+    border-radius: var(--btn-radius);
+    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    width: 100%;
+  }
+
+  .todays-events__trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: var(--btn-padding-y) 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    line-height: 1;
+    width: 100%;
+    text-align: left;
+  }
+
+  .todays-events__text {
+    flex: 1;
+  }
+
+  .todays-events__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .todays-events__dot--live {
+    background: color-mix(in srgb, var(--color-status-live) 80%, transparent);
+  }
+
+  .todays-events__dot--dim {
+    background: color-mix(in srgb, var(--color-text) 30%, transparent);
+  }
+
+  .todays-events__arrow {
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .todays-events__panel {
+    height: 0;
+    overflow: hidden;
+    padding: 0 16px;
+  }
+
+  .todays-events__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .todays-events__row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: var(--type-sm);
+    color: var(--color-text);
+  }
+
+  .todays-events__row-time {
+    font-weight: var(--weight-medium);
+    flex-shrink: 0;
+  }
+
+  .todays-events__row-title {
+    flex: 1;
+    opacity: 0.9;
+  }
+
+  .todays-events__row-type {
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  interface EventItem {
+    id: string;
+    title: { de: string; en: string };
+    date: string;
+    time: string;
+    type: { de: string; en: string };
+  }
+
+  function parseMinutes(hhmm: string): number {
+    const [h, m] = hhmm.split(':').map((s) => parseInt(s, 10));
+    return (h || 0) * 60 + (m || 0);
+  }
+
+  function initTodaysEvents() {
+    const els = document.querySelectorAll<HTMLElement>('[data-todays-events]');
+    els.forEach((el) => {
+      if (el.dataset.initialized === 'true') return;
+      el.dataset.initialized = 'true';
+
+      const trigger = el.querySelector('.todays-events__trigger') as HTMLButtonElement | null;
+      const dot = el.querySelector('.todays-events__dot') as HTMLElement | null;
+      const text = el.querySelector('.todays-events__text') as HTMLElement | null;
+      const panel = el.querySelector('.todays-events__panel') as HTMLElement | null;
+      const arrow = el.querySelector('.todays-events__arrow') as HTMLElement | null;
+      const list = el.querySelector('.todays-events__list') as HTMLElement | null;
+      if (!trigger || !dot || !text || !panel || !arrow || !list) return;
+
+      const lang = (el.getAttribute('data-lang') || 'en') as 'en' | 'de';
+      const allEvents: EventItem[] = JSON.parse(el.getAttribute('data-events') || '[]');
+
+      const now = new Date();
+      const todayISO = now.toISOString().split('T')[0];
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+
+      // Filter today + sort by start time (en-dash split)
+      const todays = allEvents
+        .filter((e) => e.date === todayISO)
+        .map((e) => {
+          const [startStr, endStr] = e.time.split('–');
+          return {
+            ...e,
+            startMin: parseMinutes(startStr || '00:00'),
+            endMin: parseMinutes(endStr || '00:00'),
+            startStr: (startStr || '').trim(),
+          };
+        })
+        .sort((a, b) => a.startMin - b.startMin);
+
+      // Determine state
+      let headline: string;
+      let dotClass: 'live' | 'dim';
+
+      if (todays.length === 0) {
+        headline = lang === 'de' ? 'Heute keine Veranstaltungen' : 'No events today';
+        dotClass = 'dim';
+      } else {
+        const current = todays.find((e) => e.startMin <= nowMin && nowMin < e.endMin);
+        if (current) {
+          headline =
+            lang === 'de'
+              ? `Jetzt: ${current.title.de}`
+              : `Now: ${current.title.en}`;
+          dotClass = 'live';
+        } else {
+          const next = todays.find((e) => e.startMin > nowMin);
+          if (next) {
+            headline =
+              lang === 'de'
+                ? `Als nächstes um ${next.startStr} — ${next.title.de}`
+                : `Next at ${next.startStr} — ${next.title.en}`;
+            dotClass = 'live';
+          } else {
+            headline =
+              lang === 'de'
+                ? 'Das heutige Programm ist zu Ende'
+                : "Today's program has ended";
+            dotClass = 'dim';
+          }
+        }
+      }
+
+      text.textContent = headline;
+      dot.classList.remove('todays-events__dot--dim', 'todays-events__dot--live');
+      dot.classList.add(`todays-events__dot--${dotClass}`);
+
+      // Populate list
+      list.innerHTML = '';
+      todays.forEach((e) => {
+        const li = document.createElement('li');
+        li.className = 'todays-events__row';
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'todays-events__row-time';
+        timeSpan.textContent = e.time;
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'todays-events__row-title';
+        titleSpan.textContent = e.title[lang];
+        const typeSpan = document.createElement('span');
+        typeSpan.className = 'todays-events__row-type';
+        typeSpan.textContent = e.type[lang];
+        li.append(timeSpan, titleSpan, typeSpan);
+        list.appendChild(li);
+      });
+
+      // Reduced motion check
+      const reduceMotion =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.classList.contains('reduce-motion');
+
+      let expanded = false;
+      trigger.addEventListener('click', () => {
+        expanded = !expanded;
+        trigger.setAttribute('aria-expanded', String(expanded));
+        panel.setAttribute('aria-hidden', String(!expanded));
+
+        if (reduceMotion) {
+          if (expanded) {
+            panel.style.height = 'auto';
+            panel.style.paddingBottom = '24px';
+            arrow.style.transform = 'rotate(180deg)';
+          } else {
+            panel.style.height = '0px';
+            panel.style.paddingBottom = '0px';
+            arrow.style.transform = 'rotate(0deg)';
+          }
+          return;
+        }
+
+        if (expanded) {
+          panel.style.height = 'auto';
+          const natural = panel.scrollHeight;
+          panel.style.height = '0px';
+          const tl = gsap.timeline();
+          tl.to(arrow, { rotation: 180, duration: 0.25, ease: 'power2.out' });
+          tl.to(
+            panel,
+            { height: natural + 8, paddingBottom: 24, duration: 0.4, ease: 'power2.out' },
+            0
+          );
+        } else {
+          const tl = gsap.timeline();
+          tl.to(panel, { height: 0, paddingBottom: 0, duration: 0.3, ease: 'power2.inOut' });
+          tl.to(arrow, { rotation: 0, duration: 0.25, ease: 'power2.inOut' }, 0);
+        }
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initTodaysEvents);
+  document.addEventListener('astro:page-load', initTodaysEvents);
+</script>
