@@ -28,17 +28,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     {items.map((item) => {
       const floor = item.location?.floor ?? '';
       const imgSrc = `${base}${item.image}`;
+      const isClickable = item.id === 'kerry-james-marshall';
+      const href = isClickable ? `${base}/onsite/${item.id}` : undefined;
       return (
         <li class="onsite-grid__item" data-id={item.id}>
-          <div class="onsite-grid__card">
-            <div class="onsite-grid__media">
-              <img src={imgSrc} alt={item.title[lang]} loading="lazy" />
+          {isClickable ? (
+            <a class="onsite-grid__card onsite-grid__card--link" href={href}>
+              <div class="onsite-grid__media">
+                <img src={imgSrc} alt={item.title[lang]} loading="lazy" />
+              </div>
+              <div class="onsite-grid__meta">
+                <h3 class="onsite-grid__title">{item.title[lang]}</h3>
+                {floor && <p class="onsite-grid__floor">{floor}</p>}
+              </div>
+            </a>
+          ) : (
+            <div class="onsite-grid__card">
+              <div class="onsite-grid__media">
+                <img src={imgSrc} alt={item.title[lang]} loading="lazy" />
+              </div>
+              <div class="onsite-grid__meta">
+                <h3 class="onsite-grid__title">{item.title[lang]}</h3>
+                {floor && <p class="onsite-grid__floor">{floor}</p>}
+              </div>
             </div>
-            <div class="onsite-grid__meta">
-              <h3 class="onsite-grid__title">{item.title[lang]}</h3>
-              {floor && <p class="onsite-grid__floor">{floor}</p>}
-            </div>
-          </div>
+          )}
         </li>
       );
     })}
@@ -124,5 +138,20 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--color-text);
     opacity: 0.7;
     margin: 0;
+  }
+
+  /* Phase 03-03: KJM card is a clickable <a>. Inherit text color,
+     drop default underline, add a hover + focus-visible affordance. */
+  .onsite-grid__card--link {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+  .onsite-grid__card--link:hover {
+    opacity: 0.85;
+  }
+  .onsite-grid__card--link:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
   }
 </style>
