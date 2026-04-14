@@ -67,7 +67,7 @@ const { items, lang = 'en' } = Astro.props;
     align-items: center;
     gap: var(--space-4);
     width: 100%;
-    padding: var(--space-5) 0;
+    padding: var(--space-6) 0;
     background: none;
     border: none;
     cursor: pointer;
@@ -94,12 +94,13 @@ const { items, lang = 'en' } = Astro.props;
   }
 
   .faq-accordion__answer {
-    font-size: var(--type-sm);
+    font-size: var(--type-md);
     color: var(--color-text);
     opacity: 0.8;
     line-height: var(--leading-normal);
     margin: 0;
-    padding-bottom: var(--space-5);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-6);
     max-width: 70ch;
   }
 </style>
