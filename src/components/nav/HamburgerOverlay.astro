@@ -15,7 +15,14 @@ const languages = [
 ];
 
 // Phase 03-01: mode state = URL. Server-render the active segment from pathname.
-const isOnsite = Astro.url.pathname.startsWith('/onsite');
+// Strip the configured base (/Kunsthaus) so the check works on GitHub Pages.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pathWithoutBase = Astro.url.pathname.startsWith(base)
+  ? Astro.url.pathname.slice(base.length)
+  : Astro.url.pathname;
+const isOnsite = pathWithoutBase.startsWith('/onsite');
+const planningHref = `${base}/`;
+const onsiteHref = `${base}/onsite`;
 ---
 
 <div class="hamburger-overlay" id="hamburger-overlay" aria-hidden="true" role="dialog" aria-label="Navigation menu">
@@ -55,7 +62,7 @@ const isOnsite = Astro.url.pathname.startsWith('/onsite');
         <span class="hamburger-overlay__mode-pill"></span>
         <a
           class:list={['hamburger-overlay__mode-btn', { 'is-active': !isOnsite }]}
-          href="/"
+          href={planningHref}
           data-mode-segment="planning"
           role="radio"
           aria-checked={!isOnsite}
@@ -64,7 +71,7 @@ const isOnsite = Astro.url.pathname.startsWith('/onsite');
         </a>
         <a
           class:list={['hamburger-overlay__mode-btn', { 'is-active': isOnsite }]}
-          href="/onsite"
+          href={onsiteHref}
           data-mode-segment="onsite"
           role="radio"
           aria-checked={isOnsite}

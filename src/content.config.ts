@@ -129,7 +129,9 @@ const footerCollection = defineCollection({
       id: z.string(),
       platform: z.string(),
       url: z.string(),
-      icon: z.string(),
+      // icon dropped from data file (text-only social links per Phase 02 footer redesign);
+      // schema kept tolerant so the collection validates.
+      icon: z.string().optional(),
     })),
     legal: z.array(z.object({
       id: z.string(),

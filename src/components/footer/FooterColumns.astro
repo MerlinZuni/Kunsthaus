@@ -37,7 +37,14 @@ const mediaHeading = 'MEDIA';
 const newsletterHeading = 'NEWSLETTER';
 
 // Phase 03-01: mode state = URL. Active segment derived from pathname.
-const isOnsite = Astro.url.pathname.startsWith('/onsite');
+// Strip the configured base (/Kunsthaus) so the check works on GitHub Pages.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pathWithoutBase = Astro.url.pathname.startsWith(base)
+  ? Astro.url.pathname.slice(base.length)
+  : Astro.url.pathname;
+const isOnsite = pathWithoutBase.startsWith('/onsite');
+const planningHref = `${base}/`;
+const onsiteHref = `${base}/onsite`;
 ---
 
 <div class="footer-columns">
@@ -109,7 +116,7 @@ const isOnsite = Astro.url.pathname.startsWith('/onsite');
       <span class="footer-col__mode-pill"></span>
       <a
         class:list={['footer-col__mode-segment', { 'footer-col__mode-segment--active': !isOnsite }]}
-        href="/"
+        href={planningHref}
         data-mode-segment="planning"
         role="radio"
         aria-checked={!isOnsite}
@@ -118,7 +125,7 @@ const isOnsite = Astro.url.pathname.startsWith('/onsite');
       </a>
       <a
         class:list={['footer-col__mode-segment', { 'footer-col__mode-segment--active': isOnsite }]}
-        href="/onsite"
+        href={onsiteHref}
         data-mode-segment="onsite"
         role="radio"
         aria-checked={isOnsite}
