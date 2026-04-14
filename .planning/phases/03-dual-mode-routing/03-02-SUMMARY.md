@@ -171,3 +171,34 @@ Only pre-existing warnings (unrelated texture path resolution) — no new errors
 - `grep -rn 'kunsthaus-mode' src/` = 0 matches (no 03-01 regression).
 - `npm run build` succeeds.
 - All 7 task commits reachable from HEAD: `eb91f5b`, `0d429d4`, `fd0e263`, `f575fd5`, `776eeb9`, `a3131d7`, `373d150`.
+
+---
+
+## Post-03-02 Enhancements (supersedes parts of this phase)
+
+Several aspects of the 03-02 deliverable were revised during a visual validation and design review session on 2026-04-14. These changes were captured as retrospective quick tasks and live alongside this summary for reference:
+
+- **`260414-npq`** — OnsiteHero redesigned to mirror the planning hero's visual language (GridOverlay background, monumental three-line right-aligned title). Hero refinement followed in the same quick task (`--color-surface` token fix, dropped stray blend mode).
+- **`260414-ota`** — Navbar View Transitions dual-init fix + `scrollbar-gutter: stable` for the overlay-open alignment shift. Both bugs were latent, not introduced by 03-02, but surfaced during review.
+- **`260414-oxm`** — Base-path-aware hrefs for the five HamburgerOverlay anchors that were flagged in `03-VERIFICATION.md` as a deploy blocker.
+- **`260414-ru8`** — **Visitor Essentials section redesign.** This is the largest change: the 03-02 InfoBox + MuseumNavigatorTeaser pair was replaced by a 9-card responsive grid inside a renamed "Visitor Essentials" section (was "Museum Navigator"). The grid covers Wi-Fi, Getting Around, Today at the Museum, 3 venues (café/restaurant/bar), 2 shops (art/design) with live open/closed status, and an Accessibility placeholder. See the quick task summary for full detail.
+
+**Components retired by 260414-ru8:**
+
+- `src/components/sections/InfoBox.astro` — deleted
+- `src/components/sections/MuseumNavigatorTeaser.astro` — deleted
+
+**Component added by 260414-ru8:**
+
+- `src/components/sections/EssentialsCard.astro` — new reusable card used by all nine tiles in the Visitor Essentials grid
+
+**Also from the visual review** (standalone fix commits, not their own quick task):
+
+- `8c4b0c9` — `fix(hamburger-overlay): match navbar icon size (18x18, was 24x24)`
+- `bb88295` — `fix(faq-accordion): replace ghost --space-5 token and bump answer to button text size`
+- `f4d3f67` — `fix(navbar): restore white logo in onsite + faded state`
+- `7dd0727` — `fix(status-accordion): dual-init + data-initialized guard`
+- `9b727cc` — `fix(todays-events): scope row CSS globally, bump gap, add live-row highlight`
+- `4033a8a` — `fix(hamburger-overlay): suppress anchor underline on mode toggle buttons`
+
+The 03-02 phase goal (a shippable /onsite landing page) is still met by these changes — they refine the implementation without changing scope.

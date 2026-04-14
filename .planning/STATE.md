@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 Phase: 03 (dual-mode-routing) — EXECUTING
 Plan: 03-01 complete; 03-02 next
 Status: Ready to execute
-Last activity: 2026-04-14 - Completed quick task 260414-oxm: base-path prefix for HamburgerOverlay secondary and logo anchors
+Last activity: 2026-04-14 - Completed quick task 260414-ru8: visitor essentials section redesign with card grid and venue cards
 
 Progress: [██░░░░░░░░] 25%
 
@@ -101,6 +101,7 @@ None yet.
 | 260414-npq | improve the existing hero design for the on-site index | 2026-04-14 | 0f5a83b | [260414-npq-improve-the-existing-hero-design-for-the](./quick/260414-npq-improve-the-existing-hero-design-for-the/) |
 | 260414-ota | fix navbar view transitions and scrollbar gutter | 2026-04-14 | 14bd771 | [260414-ota-fix-navbar-view-transitions-and-scrollba](./quick/260414-ota-fix-navbar-view-transitions-and-scrollba/) |
 | 260414-oxm | base-path prefix for HamburgerOverlay secondary and logo anchors | 2026-04-14 | 4b289e4 | [260414-oxm-base-path-prefix-for-hamburgeroverlay-se](./quick/260414-oxm-base-path-prefix-for-hamburgeroverlay-se/) |
+| 260414-ru8 | visitor essentials section redesign with card grid and venue cards | 2026-04-14 | d74b790 | [260414-ru8-visitor-essentials-section-redesign-with](./quick/260414-ru8-visitor-essentials-section-redesign-with/) |
 
 ## Session Continuity
 
