@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-04-14T19:05:53.853Z",
+  "phase": "03",
+  "phase_name": "dual-mode-routing",
+  "phase_dir": ".planning/phases/03-dual-mode-routing",
+  "plan": 3,
+  "task": 8,
+  "total_tasks": 8,
+  "status": "paused",
+  "completed_tasks": [
+    {"id": 1, "name": "Rewrite onsiteExhibition schema + KJM JSON content", "status": "done", "commit": "0b908e8"},
+    {"id": 2, "name": "KJM detail route skeleton with hero video + cinematic reveal", "status": "done", "commit": "dbf2faf"},
+    {"id": 3, "name": "ArtworkSlider with 10-slide scroll-snap track + silent headphones stub", "status": "done", "commit": "a36037b"},
+    {"id": 4, "name": "ArtistQuote typographic pull-quote component", "status": "done", "commit": "7aac754"},
+    {"id": 5, "name": "HorizontalSlider center-snap peek carousel", "status": "done", "commit": "4157c28"},
+    {"id": 6, "name": "Compose KJM detail page sections (intro, slider, quote, videos, shop)", "status": "done", "commit": "78be094"},
+    {"id": 7, "name": "Make KJM card on /onsite click-through to detail page", "status": "done", "commit": "eef0335"},
+    {"id": 8, "name": "Verify build + grep gates; write SUMMARY + VERIFICATION", "status": "done", "commit": "d20a78e"}
+  ],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [
+    {"action": "Browser smoke-test View Transitions smoothness entering /onsite/kerry-james-marshall and returning", "context": "ANIM-04 visual quality — automated checks confirm code paths but transition timing is a perceptual judgment", "blocking": false},
+    {"action": "Verify no-flash hard refresh on /onsite/kerry-james-marshall (dark palette applied before first paint)", "context": "data-mode attribute is set on <html> in BaseLayout — confirm no FOUC", "blocking": false},
+    {"action": "Test iOS Safari video autoplay on KjmHero", "context": "autoplay muted loop playsinline preload=metadata all present in markup; iOS behavior can still surprise", "blocking": false},
+    {"action": "Test mobile horizontal scroll gesture inside ArtworkSlider while page is vertically pinned/stacking", "context": "scroll-snap + SectionWrapper stacking interaction is the main risk for touch", "blocking": false},
+    {"action": "Review HorizontalSlider peek-scale timing and CinematicReveal left-position alignment on the detail page", "context": "IntersectionObserver thresholds and imagePosition='left' prop are new — visual review only", "blocking": false},
+    {"action": "Decide whether to promote 03-04 (paywall + simulated login + audio guide overlay + profile overlay) into a real plan or defer", "context": "ROADMAP SCs 5-8 still open; headphones button on artwork cards is a silent stub waiting for that wiring", "blocking": false}
+  ],
+  "decisions": [
+    {"decision": "Hero <video> is plain HTML5 with autoplay muted loop playsinline preload=metadata poster; no transition:persist, no GSAP ScrollTrigger", "rationale": "Static background video only — View Transitions + GSAP on the element caused unreliable autoplay in research", "phase": "03"},
+    {"decision": "Headphones button on artwork cards is a silent stub — rendered/styled, click does nothing, no dispatchEvent", "rationale": "03-04 will wire it to paywall + audio guide; pre-emitting an event would create a dead contract", "phase": "03"},
+    {"decision": "Intro copy lives in its own SectionWrapper between CinematicReveal and ArtworkSlider", "rationale": "Preserves /onsite stacking cadence instead of merging intro into the slider header", "phase": "03"},
+    {"decision": "onsiteExhibition content file uses id-keyed object map wrapper ({ 'kerry-james-marshall': {...} })", "rationale": "Matches the 03-02 home.json deviation for single-file collections", "phase": "03"},
+    {"decision": "Hero assets live at public/video/kjm-hero.{mp4,png} (singular /video/)", "rationale": "Research file incorrectly listed /videos/ — corrected during planning", "phase": "03"},
+    {"decision": "OnsiteExhibitionGrid renders <a> only when item.id === 'kerry-james-marshall'", "rationale": "Only one real detail page exists; other cards should not imply a live link", "phase": "03"}
+  ],
+  "uncommitted_files": [],
+  "next_action": "Run the browser smoke-test for /onsite/kerry-james-marshall in desktop + iOS Safari against the items listed in 03-VERIFICATION.md human-verification section, then decide 03-04 vs. Phase 04.",
+  "context_notes": "Phase 03-dual-mode-routing is code-complete: all three plans (03-01 router + dark onsite cascade + URL-as-state toggle, 03-02 /onsite landing with exhibition grid, 03-03 KJM detail page) are shipped and committed on master. Verifier returned 7/7 automated checks PASS and flagged 6 browser-only items as human_needed. ROADMAP SCs 5-8 (paywall, simulated login, audio guide overlay, profile overlay) remain deferred — no 03-04 plan file exists yet. No blockers, no regressions, working tree clean except for untracked .claude/."
+}
