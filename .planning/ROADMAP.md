@@ -53,22 +53,27 @@ Plans:
 - [x] 02-03-PLAN.md -- Immersive storytelling sections (Cinematic Reveal, Pinned Narrative), sticky CTA, mode toggle, section progress
 - [x] 02-04-PLAN.md -- Footer with marquee and columns, final homepage composition wiring all components into index.astro
 
-### Phase 3: Dual-Mode + Animation
-**Goal**: The competition differentiator -- mode switching transforms the page between Planning and On-site experiences, layered with scroll-driven animations, text motion, hover effects, and stacking/layering scroll effects
+### Phase 3: Dual-Mode Routing
+**Goal**: Transform the dual-mode concept from a CSS palette flip into genuine routing. The mode toggle navigates between `/` (Planning) and `/onsite` (On-site) via Astro View Transitions. From the on-site landing, the user can drill into a single exhibition detail page (`/onsite/kerry-james-marshall`) with an audio guide, a paywall, and a simulated logged-in state.
 **Depends on**: Phase 2
-**Requirements**: NAV-02, NAV-03, NAV-04, NAV-05, ANIM-01, ANIM-02, ANIM-03, ANIM-04, ANIM-05, ANIM-06
+**Requirements**: NAV-02, NAV-03, ANIM-04 (as View Transitions), ANIM-06 (as SectionWrapper stacking — already shipped)
+**Deferred requirements**: NAV-04 (QR deep-link → URL itself replaces this), NAV-05 (geolocation), ANIM-01/02/03/05 (scroll/text/hover/easter-egg animations — not essential for pitch)
 **Success Criteria** (what must be TRUE):
-  1. A visible toggle in the navigation switches between Planning and On-site modes, and the page content/layout transforms smoothly in response
-  2. Appending a QR code URL parameter (e.g., `?mode=onsite&exhibit=xyz`) opens the page directly in On-site mode for that exhibit
-  3. Scroll-driven animations (parallax, reveals, stacking/layering pin effect) play as the user scrolls down the page
-  4. Text animations with line splitting and staggered blur reveals appear on key headings
-  5. Hover interactions (image tracking, underline effects) and at least one hidden discovery micro-interaction reward exploration
-**Plans**: TBD
+  1. Clicking the mode toggle on `/` navigates to `/onsite` with an animated View Transitions palette flip (not a hard reload)
+  2. URL is the single source of truth for mode — `localStorage` mode persistence is removed
+  3. `/onsite` produces a full on-site landing with hero, cinematic reveal, building-grouped exhibition thumbnails, museum navigator, info box with live today's events, and FAQ
+  4. `/onsite/kerry-james-marshall` produces an exhibition detail page with hero video, cinematic reveal, artwork slider, artist quote, video testimonials, and shop
+  5. Tapping an artwork's headphones button triggers a paywall (if logged out) with Buy Tickets + Become a Member CTAs
+  6. Clicking Buy Tickets (or Log in via hamburger) simulates login: profile icon fades into the navbar, hamburger "Log in" becomes "My Account"
+  7. Audio guide overlay opens with a Playlist view; tapping a track slides up a Detail Player bottom-sheet with full transport controls
+  8. Profile overlay shows a QR ticket, secondary nav items, and log out
+**Plans**: 4 sub-plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
-- [ ] 03-03: TBD
+- [ ] 03-01-PLAN.md -- Routing Foundation: Astro View Transitions, URL-as-state mode toggle refactor across 4 writers, /onsite stub route
+- [ ] 03-02-PLAN.md -- On-site Landing Page: OnsiteHero, cinematic reveal, OnsiteExhibitionGrid, MuseumNavigatorTeaser, InfoBox with TodaysEventsAccordion, FAQAccordion
+- [ ] 03-03-PLAN.md -- KJM Exhibition Detail Page: /onsite/kerry-james-marshall, hero video, cinematic reveal, ArtworkSlider, ArtistQuote, HorizontalSlider (videos + shop)
+- [ ] 03-04-PLAN.md -- Audio Guide + Login System: AudioGuideOverlay (Playlist + DetailPlayer bottom-sheet), PaywallOverlay, simulateLogin, NavProfileButton, ProfileOverlay
 
 ### Phase 4: Deploy + Present
 **Goal**: A live prototype accessible via URL and high-quality screenshots capturing the design highlights for the competition presentation deck
@@ -89,9 +94,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 3/3 | Complete | - |
-| 2. Static Homepage | 0/4 | Not started | - |
-| 3. Dual-Mode + Animation | 0/3 | Not started | - |
+| 1. Foundation | 3/3 | Complete (human_needed) | 2026-04-06 |
+| 2. Static Homepage | 4/4 | Verified (human_needed) | 2026-04-13 |
+| 3. Dual-Mode Routing | 0/4 | Planned (03-01 plan written) | - |
 | 4. Deploy + Present | 0/1 | Not started | - |
 
 ## Backlog
