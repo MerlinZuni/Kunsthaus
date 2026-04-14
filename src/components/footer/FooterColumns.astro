@@ -35,6 +35,9 @@ const { footerData, lang, modeLabels = { planning: 'Plan a visit', onsite: "I'm 
 const quickLinksHeading = lang === 'de' ? 'SCHNELLZUGRIFF' : 'QUICK LINKS';
 const mediaHeading = 'MEDIA';
 const newsletterHeading = 'NEWSLETTER';
+
+// Phase 03-01: mode state = URL. Active segment derived from pathname.
+const isOnsite = Astro.url.pathname.startsWith('/onsite');
 ---
 
 <div class="footer-columns">
@@ -104,22 +107,24 @@ const newsletterHeading = 'NEWSLETTER';
 
     <div class="footer-col__mode-toggle" role="radiogroup" aria-label="Site mode">
       <span class="footer-col__mode-pill"></span>
-      <button
-        class="footer-col__mode-segment footer-col__mode-segment--active"
+      <a
+        class:list={['footer-col__mode-segment', { 'footer-col__mode-segment--active': !isOnsite }]}
+        href="/"
         data-mode-segment="planning"
         role="radio"
-        aria-checked="true"
+        aria-checked={!isOnsite}
       >
         {lang === 'de' ? 'Besuch planen' : 'Plan a Visit'}
-      </button>
-      <button
-        class="footer-col__mode-segment"
+      </a>
+      <a
+        class:list={['footer-col__mode-segment', { 'footer-col__mode-segment--active': isOnsite }]}
+        href="/onsite"
         data-mode-segment="onsite"
         role="radio"
-        aria-checked="false"
+        aria-checked={isOnsite}
       >
         {lang === 'de' ? 'Ich bin da' : "I'm Here"}
-      </button>
+      </a>
     </div>
   </div>
 </div>
@@ -280,6 +285,10 @@ const newsletterHeading = 'NEWSLETTER';
     text-align: center;
     white-space: nowrap;
     transition: color 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .footer-col__mode-segment--active {
@@ -302,3 +311,31 @@ const newsletterHeading = 'NEWSLETTER';
     }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // Phase 03-01: position the footer mode pill under the server-rendered
+  // active segment. Runs on first paint and after every View Transitions nav.
+  function initFooterModePill() {
+    document.querySelectorAll('.footer-col__mode-toggle').forEach((toggleEl) => {
+      const toggle = toggleEl as HTMLElement;
+      const pill = toggle.querySelector('.footer-col__mode-pill') as HTMLElement | null;
+      const active = toggle.querySelector('.footer-col__mode-segment--active') as HTMLElement | null;
+      if (!pill || !active) return;
+      const toggleRect = toggle.getBoundingClientRect();
+      const activeRect = active.getBoundingClientRect();
+      gsap.set(pill, {
+        x: activeRect.left - toggleRect.left - 3,
+        width: activeRect.width,
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(initFooterModePill));
+  } else {
+    requestAnimationFrame(initFooterModePill);
+  }
+  document.addEventListener('astro:page-load', () => requestAnimationFrame(initFooterModePill));
+</script>
