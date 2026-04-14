@@ -10,6 +10,8 @@ import '../styles/base.css';
 import '../styles/components/interactions.css';
 import '../styles/components/sections.css';
 
+import { ClientRouter } from 'astro:transitions';
+
 import SkipNav from '../components/SkipNav.astro';
 import Head from '../components/Head.astro';
 import GridOverlay from '../components/GridOverlay.tsx';
@@ -26,9 +28,13 @@ import footerJson from '../content/shared/footer.json';
 interface Props {
   title: string;
   lang?: 'en' | 'de';
+  /** Which dual-mode theme this page renders in. Drives `html[data-mode]`
+   *  which cascades through semantic tokens. Phase 03 URL-as-state pattern:
+   *  each page sets this explicitly, JS does NOT mutate data-mode anywhere. */
+  mode?: 'planning' | 'onsite';
 }
 
-const { title, lang = 'en' } = Astro.props;
+const { title, lang = 'en', mode = 'planning' } = Astro.props;
 const isDev = import.meta.env.DEV;
 
 // Navigation data from JSON
@@ -43,9 +49,10 @@ const menuLabel = getString('menu-label');
 const footerData = footerJson[0];
 ---
 
-<html lang={lang} data-mode="planning">
+<html lang={lang} data-mode={mode}>
   <head>
     <Head title={title} />
+    <ClientRouter />
     <noscript>
       <style>
         /* Ensure all content is visible without JS */
