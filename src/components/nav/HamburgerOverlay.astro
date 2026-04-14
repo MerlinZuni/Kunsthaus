@@ -13,6 +13,9 @@ const languages = [
   { code: 'de', label: 'Deutsch' },
   { code: 'fr', label: 'Fran\u00e7ais' },
 ];
+
+// Phase 03-01: mode state = URL. Server-render the active segment from pathname.
+const isOnsite = Astro.url.pathname.startsWith('/onsite');
 ---
 
 <div class="hamburger-overlay" id="hamburger-overlay" aria-hidden="true" role="dialog" aria-label="Navigation menu">
@@ -46,25 +49,28 @@ const languages = [
 
     {/* Navigation links + secondary + language */}
     <div class="hamburger-overlay__body" data-lenis-prevent>
-      {/* Mode toggle — top of the menu, above the nav items */}
+      {/* Mode toggle — top of the menu, above the nav items.
+          Phase 03-01: <a href> navigation, active state from pathname. */}
       <div class="hamburger-overlay__mode" role="radiogroup" aria-label="Site mode" data-mode-toggle>
         <span class="hamburger-overlay__mode-pill"></span>
-        <button
-          class="hamburger-overlay__mode-btn is-active"
+        <a
+          class:list={['hamburger-overlay__mode-btn', { 'is-active': !isOnsite }]}
+          href="/"
           data-mode-segment="planning"
           role="radio"
-          aria-checked="true"
+          aria-checked={!isOnsite}
         >
           {lang === 'de' ? 'Besuch planen' : 'Plan a Visit'}
-        </button>
-        <button
-          class="hamburger-overlay__mode-btn"
+        </a>
+        <a
+          class:list={['hamburger-overlay__mode-btn', { 'is-active': isOnsite }]}
+          href="/onsite"
           data-mode-segment="onsite"
           role="radio"
-          aria-checked="false"
+          aria-checked={isOnsite}
         >
           {lang === 'de' ? 'Im Kunsthaus' : 'At Kunsthaus'}
-        </button>
+        </a>
       </div>
 
       <nav class="hamburger-overlay__nav" aria-label="Main navigation">
@@ -599,16 +605,9 @@ const languages = [
       });
     }
 
-    // Set initial mode pill position
+    // Phase 03-01: active state is server-rendered from Astro.url.pathname.
+    // Just position the pill under the already-active segment on mount.
     if (modeToggle && modePill) {
-      // Sync with current data-mode
-      const saved = localStorage.getItem('kunsthaus-mode') || 'planning';
-      modeBtns?.forEach(btn => {
-        const el = btn as HTMLElement;
-        const isActive = el.dataset.modeSegment === saved;
-        el.classList.toggle('is-active', isActive);
-        el.setAttribute('aria-checked', isActive ? 'true' : 'false');
-      });
       requestAnimationFrame(() => {
         const active = modeToggle.querySelector('.is-active') as HTMLElement;
         if (active) {
@@ -622,28 +621,12 @@ const languages = [
       });
     }
 
-    // Mode buttons
+    // Mode anchors: close overlay before navigation so View Transitions
+    // don't animate the overlay itself. The <a href> then proceeds natively
+    // and Astro's ClientRouter intercepts it.
     modeBtns?.forEach(btn => {
       btn.addEventListener('click', () => {
-        const mode = (btn as HTMLElement).dataset.modeSegment;
-        if (!mode) return;
-        document.documentElement.setAttribute('data-mode', mode);
-        localStorage.setItem('kunsthaus-mode', mode);
-        modeBtns.forEach(b => {
-          const el = b as HTMLElement;
-          const isActive = el.dataset.modeSegment === mode;
-          el.classList.toggle('is-active', isActive);
-          el.setAttribute('aria-checked', isActive ? 'true' : 'false');
-        });
-        // Sync StickyCTA and footer toggles
-        document.querySelectorAll('[data-mode-segment]').forEach(seg => {
-          const el = seg as HTMLElement;
-          const isActive = el.dataset.modeSegment === mode;
-          el.classList.toggle('sticky-cta__segment--active', isActive);
-          el.classList.toggle('footer-col__mode-segment--active', isActive);
-          el.setAttribute('aria-checked', isActive ? 'true' : 'false');
-        });
-        slideModePill();
+        close(false);
       });
     });
 
@@ -705,5 +688,11 @@ const languages = [
     (window as any).__hamburgerOverlay = { open, close };
   }
 
-  document.addEventListener('DOMContentLoaded', initHamburgerOverlay);
+  // Run once on first paint and again after every Astro View Transitions nav.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHamburgerOverlay);
+  } else {
+    initHamburgerOverlay();
+  }
+  document.addEventListener('astro:page-load', initHamburgerOverlay);
 </script>
