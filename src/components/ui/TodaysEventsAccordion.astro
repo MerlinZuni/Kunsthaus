@@ -109,10 +109,17 @@ const { events, lang = 'en' } = Astro.props;
     gap: var(--space-2);
   }
 
+</style>
+
+<!-- Row rules must be global: the <li>/<span> children are created via
+     document.createElement in the script below, so they never receive
+     Astro's scoping data-astro-cid attribute and would not match scoped
+     selectors. -->
+<style is:global>
   .todays-events__row {
     display: flex;
     justify-content: space-between;
-    gap: var(--space-3);
+    gap: var(--space-6);
     font-size: var(--type-sm);
     color: var(--color-text);
   }
@@ -130,6 +137,23 @@ const { events, lang = 'en' } = Astro.props;
   .todays-events__row-type {
     opacity: 0.6;
     flex-shrink: 0;
+  }
+
+  /* Live-now row highlight — mirrors StatusAccordion's --today zebra stripe */
+  .todays-events__row--live {
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+    border-radius: 4px;
+    margin: 0 -8px;
+    padding: 4px 8px;
+  }
+
+  .todays-events__row--live .todays-events__row-title {
+    font-weight: var(--weight-medium);
+    opacity: 1;
+  }
+
+  html[data-mode="onsite"] .todays-events__row--live {
+    background: color-mix(in srgb, var(--color-surface) 15%, transparent);
   }
 </style>
 
@@ -187,6 +211,7 @@ const { events, lang = 'en' } = Astro.props;
       // Determine state
       let headline: string;
       let dotClass: 'live' | 'dim';
+      let currentId: string | null = null;
 
       if (todays.length === 0) {
         headline = lang === 'de' ? 'Heute keine Veranstaltungen' : 'No events today';
@@ -194,6 +219,7 @@ const { events, lang = 'en' } = Astro.props;
       } else {
         const current = todays.find((e) => e.startMin <= nowMin && nowMin < e.endMin);
         if (current) {
+          currentId = current.id;
           headline =
             lang === 'de'
               ? `Jetzt: ${current.title.de}`
@@ -226,6 +252,7 @@ const { events, lang = 'en' } = Astro.props;
       todays.forEach((e) => {
         const li = document.createElement('li');
         li.className = 'todays-events__row';
+        if (e.id === currentId) li.classList.add('todays-events__row--live');
         const timeSpan = document.createElement('span');
         timeSpan.className = 'todays-events__row-time';
         timeSpan.textContent = e.time;
