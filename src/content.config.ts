@@ -152,9 +152,42 @@ const uiStrings = defineCollection({
   }),
 });
 
+// Onsite landing page content -- per Phase 03-02
+const onsiteHome = defineCollection({
+  loader: file("src/content/onsite/home.json"),
+  schema: z.object({
+    id: z.string(),
+    hero: z.object({ title: localizedText }),
+    cinematicReveal: z.object({
+      tagline: localizedText,
+      cardTitle: localizedText,
+      description: localizedText,
+      image: z.string(),
+    }).optional(),
+    buildings: z.array(z.object({ id: z.string(), name: localizedText })),
+    navigatorTeaser: z.object({
+      title: localizedText,
+      body: localizedText,
+      linkLabel: localizedText,
+      linkHref: z.string(),
+    }),
+    infoBox: z.object({
+      wifiSsid: z.string(),
+      wifiPassword: z.string(),
+      wifiNote: localizedText.optional(),
+    }),
+    faq: z.array(z.object({
+      id: z.string(),
+      question: localizedText,
+      answer: localizedText,
+    })),
+  }),
+});
+
 export const collections = {
   planning: planningHomepage,
   onsite: onsiteExhibition,
+  onsiteHome,
   shared,
   footer: footerCollection,
   uiStrings,

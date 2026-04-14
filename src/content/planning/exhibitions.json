@@ -117,6 +117,7 @@
         "title": { "de": "Marisol", "en": "Marisol" },
         "dates": { "start": "2026-04-17", "end": "2026-08-23" },
         "dateLabel": { "de": "17.04 – 23.08.2026", "en": "17 Apr – 23 Aug 2026" },
+        "location": { "building": "Moser Building", "floor": "1st Floor" },
         "image": "/images/exhibitions/marisol.jpg",
         "tags": []
       },
@@ -258,6 +259,61 @@
         "places": 24,
         "tags": [],
         "image": "/images/exhibitions/wolfgang-laib.jpg"
+      },
+      {
+        "id": "architecture-tour-0422",
+        "title": { "de": "Architekturführung", "en": "Architecture Tour" },
+        "date": "2026-04-22",
+        "dateLabel": { "de": "Mi 22.4.", "en": "Wed 22 Apr" },
+        "time": "09:00–10:00",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 18,
+        "tags": [],
+        "image": "/images/events/architecture-tour.jpg"
+      },
+      {
+        "id": "marisol-introduction-0422",
+        "title": { "de": "Marisol – Einführung", "en": "Marisol Introduction" },
+        "date": "2026-04-22",
+        "dateLabel": { "de": "Mi 22.4.", "en": "Wed 22 Apr" },
+        "time": "11:00–12:30",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 22,
+        "tags": [],
+        "image": "/images/events/marisol.jpg"
+      },
+      {
+        "id": "collection-highlights-0422",
+        "title": { "de": "Sammlungs-Highlights", "en": "Collection Highlights" },
+        "date": "2026-04-22",
+        "dateLabel": { "de": "Mi 22.4.", "en": "Wed 22 Apr" },
+        "time": "13:00–14:00",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 20,
+        "tags": [],
+        "image": "/images/events/collection-tour.jpg"
+      },
+      {
+        "id": "kids-workshop-0422",
+        "title": { "de": "Kinderworkshop", "en": "Kids Workshop" },
+        "date": "2026-04-22",
+        "dateLabel": { "de": "Mi 22.4.", "en": "Wed 22 Apr" },
+        "time": "15:30–16:30",
+        "type": { "de": "Workshop (ab 6 J.)", "en": "Workshop (Ages 6+)" },
+        "places": 8,
+        "tags": [],
+        "image": "/images/events/kids-workshop.jpg"
+      },
+      {
+        "id": "kjm-tour-0422",
+        "title": { "de": "Kerry James Marshall Führung", "en": "Kerry James Marshall Tour" },
+        "date": "2026-04-22",
+        "dateLabel": { "de": "Mi 22.4.", "en": "Wed 22 Apr" },
+        "time": "18:00–19:00",
+        "type": { "de": "Führung", "en": "Guided Tour" },
+        "places": 16,
+        "tags": [],
+        "image": "/images/events/guided-tour.jpg"
       }
     ]
   }
