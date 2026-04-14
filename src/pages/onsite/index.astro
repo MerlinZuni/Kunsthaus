@@ -1,7 +1,8 @@
 ---
 // src/pages/onsite/index.astro — Phase 03-02 full on-site landing page.
-// Replaces the 03-01 stub with the full composition:
-// OnsiteHero → CinematicReveal → Chipperfield grid → Moser grid → Navigator teaser → InfoBox → FAQ.
+// Composition: OnsiteHero → CinematicReveal → Chipperfield grid → Moser grid →
+// Navigator teaser + InfoBox (paired in one section so the Wi-Fi + today's events
+// panel has more scroll life) → FAQ.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import StickyCTA from '../../components/ui/StickyCTA.astro';
 import Footer from '../../components/footer/Footer.astro';
@@ -9,12 +10,14 @@ import OnsiteHero from '../../components/hero/OnsiteHero.astro';
 import CinematicReveal from '../../components/sections/CinematicReveal.astro';
 import SectionWrapper from '../../components/sections/SectionWrapper.astro';
 import OnsiteExhibitionGrid from '../../components/sections/OnsiteExhibitionGrid.astro';
-import MuseumNavigatorTeaser from '../../components/sections/MuseumNavigatorTeaser.astro';
-import InfoBox from '../../components/sections/InfoBox.astro';
+import EssentialsCard from '../../components/sections/EssentialsCard.astro';
+import TodaysEventsAccordion from '../../components/ui/TodaysEventsAccordion.astro';
+import StatusAccordion from '../../components/ui/StatusAccordion.astro';
 import FAQAccordion from '../../components/ui/FAQAccordion.astro';
 import uiStringsJson from '../../content/shared/ui-strings.json';
 import onsiteHomeJson from '../../content/onsite/home.json';
 import exhibitionsData from '../../content/planning/exhibitions.json';
+import planningHomepageJson from '../../content/planning/homepage.json';
 
 const lang = 'en' as const;
 const uiStrings = uiStringsJson;
@@ -52,6 +55,23 @@ const cinematicData = onsiteHome.cinematicReveal
       image: onsiteHome.cinematicReveal.image,
     }
   : null;
+
+// Venue lookup: Visitor Essentials venue cards (bar, restaurant, cafe, shops)
+// pull their schedules from the planning homepage's "offerings" section by id.
+// Each entry in visitorEssentials.venueCards is keyed by the same id used in
+// planning/homepage.json → section id='offerings' → item.id.
+const offerings = (planningHomepageJson as any[]).find((s) => s.id === 'offerings');
+const offeringsById = new Map<string, any>(
+  (offerings?.items ?? []).map((it: any) => [it.id, it])
+);
+const venueCardOrder = ['cafe', 'restaurant', 'bar', 'art-shop', 'design-shop'] as const;
+const venueCards = venueCardOrder.map((id) => {
+  const card = (onsiteHome.visitorEssentials.venueCards as any)[id];
+  const planningVenue = offeringsById.get(id);
+  return card && planningVenue ? { id, card, planningVenue } : null;
+}).filter((v): v is NonNullable<typeof v> => v !== null);
+
+const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
 ---
 
 <BaseLayout title="Kunsthaus Zurich — At the Museum" lang={lang} mode="onsite">
@@ -74,7 +94,7 @@ const cinematicData = onsiteHome.cinematicReveal
     sectionId="chipperfield-grid"
   >
     <OnsiteExhibitionGrid
-      buildingName={onsiteHome.buildings[0].name}
+      heading={onsiteHome.specialExhibitionsLabel}
       items={chipperfieldItems}
       lang={lang}
     />
@@ -87,7 +107,7 @@ const cinematicData = onsiteHome.cinematicReveal
     sectionId="moser-grid"
   >
     <OnsiteExhibitionGrid
-      buildingName={onsiteHome.buildings[1].name}
+      heading={onsiteHome.specialExhibitionsLabel}
       items={moserItems}
       lang={lang}
     />
@@ -96,35 +116,80 @@ const cinematicData = onsiteHome.cinematicReveal
   <SectionWrapper
     index={3}
     bgStep={3}
-    sectionName={onsiteHome.navigatorTeaser.title[lang]}
-    sectionId="navigator-teaser"
+    sectionName={onsiteHome.visitorEssentialsLabel[lang]}
+    sectionId="visitor-essentials"
   >
-    <MuseumNavigatorTeaser
-      title={onsiteHome.navigatorTeaser.title}
-      body={onsiteHome.navigatorTeaser.body}
-      linkLabel={onsiteHome.navigatorTeaser.linkLabel}
-      linkHref={onsiteHome.navigatorTeaser.linkHref}
-      lang={lang}
-    />
+    <div class="visitor-essentials-grid">
+      {/* 1. Wi-Fi — description doubles as the note; body shows only the name */}
+      <EssentialsCard
+        title={onsiteHome.visitorEssentials.wifi.title}
+        description={onsiteHome.visitorEssentials.wifi.description}
+        lang={lang}
+      >
+        <span class="wifi-info__name">{onsiteHome.visitorEssentials.wifi.networkName}</span>
+      </EssentialsCard>
+
+      {/* 2. Getting Around — external link rendered as a primary CTA button */}
+      <EssentialsCard
+        title={onsiteHome.visitorEssentials.gettingAround.title}
+        description={onsiteHome.visitorEssentials.gettingAround.description}
+        lang={lang}
+      >
+        <a
+          class="btn brushed-brass touch-pulse touch-target essentials-card__cta"
+          href={onsiteHome.visitorEssentials.gettingAround.linkHref}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>{onsiteHome.visitorEssentials.gettingAround.linkLabel[lang]}</span>
+          <span class="icon">arrow_forward</span>
+        </a>
+      </EssentialsCard>
+
+      {/* 3. Today at the Museum — live events accordion */}
+      <EssentialsCard
+        title={onsiteHome.visitorEssentials.todaysEvents.title}
+        description={onsiteHome.visitorEssentials.todaysEvents.description}
+        lang={lang}
+      >
+        <TodaysEventsAccordion events={allEvents} lang={lang} />
+      </EssentialsCard>
+
+      {/* 4-8. Venue cards in user-requested order: cafe, restaurant, bar,
+          art shop, design shop. Each reuses StatusAccordion to show today's
+          open/closed state from the planning homepage's offerings schedule. */}
+      {venueCards.map(({ id, card, planningVenue }) => (
+        <EssentialsCard
+          title={card.title}
+          description={card.description}
+          lang={lang}
+        >
+          {planningVenue.schedule && (
+            <StatusAccordion
+              schedule={planningVenue.schedule.map((d: any) => ({
+                ...d,
+                label: d.label[lang],
+              }))}
+              closedLabel={todayClosedLabel}
+              lang={lang}
+            />
+          )}
+        </EssentialsCard>
+      ))}
+
+      {/* 9. Accessibility & Comfort — placeholder */}
+      <EssentialsCard
+        title={onsiteHome.visitorEssentials.accessibility.title}
+        description={onsiteHome.visitorEssentials.accessibility.description}
+        lang={lang}
+      >
+        <p class="essentials-placeholder">{onsiteHome.visitorEssentials.accessibility.placeholder[lang]}</p>
+      </EssentialsCard>
+    </div>
   </SectionWrapper>
 
   <SectionWrapper
     index={4}
-    bgStep={4}
-    sectionName={lang === 'de' ? 'Info' : 'Info'}
-    sectionId="info-box"
-  >
-    <InfoBox
-      wifiSsid={onsiteHome.infoBox.wifiSsid}
-      wifiPassword={onsiteHome.infoBox.wifiPassword}
-      wifiNote={onsiteHome.infoBox.wifiNote}
-      events={allEvents}
-      lang={lang}
-    />
-  </SectionWrapper>
-
-  <SectionWrapper
-    index={5}
     bgStep={1}
     sectionName="FAQ"
     sectionId="faq"
@@ -147,3 +212,40 @@ const cinematicData = onsiteHome.cinematicReveal
     lang={lang}
   />
 </BaseLayout>
+
+<style>
+  /* Visitor Essentials grid — responsive auto-fit of EssentialsCard tiles.
+     Cards wrap naturally: 3 cols on wide desktop, 2 on tablet, 1 on mobile. */
+  .visitor-essentials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+    align-items: stretch;
+  }
+
+  /* CTA button inside Getting Around card — aligned to the start so it
+     doesn't stretch to fill the card body's flex column. */
+  .essentials-card__cta {
+    align-self: flex-start;
+  }
+
+  /* Wi-Fi card body — network name only; the "no password required" note
+     now lives in the card's description field above. */
+  .wifi-info__name {
+    display: inline-block;
+    font-size: var(--type-lg);
+    font-weight: var(--weight-medium);
+    font-family: var(--font-mono, monospace);
+    color: var(--color-text);
+    letter-spacing: 0.02em;
+  }
+
+  /* Placeholder copy for cards whose content is not yet written */
+  .essentials-placeholder {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.5;
+    font-style: italic;
+    margin: 0;
+  }
+</style>

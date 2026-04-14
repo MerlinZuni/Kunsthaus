@@ -2,44 +2,187 @@
   "onsite-home": {
     "id": "onsite-home",
     "hero": {
-      "title": { "de": "AT THE MUSEUM", "en": "AT THE MUSEUM" }
+      "title": {
+        "de": "AT THE MUSEUM",
+        "en": "AT THE MUSEUM"
+      }
     },
     "cinematicReveal": {
-      "tagline": { "de": "Welcome to the Kunsthaus Zurich. It's nice to have you here.", "en": "Welcome to the Kunsthaus Zurich. It's nice to have you here." },
-      "cardTitle": { "de": "Open space for living art", "en": "Open space for living art" },
-      "description": { "de": "Concrete, light, and silence. The Chipperfield Building was designed to disappear behind the art — to make room for looking.<br/><br/>Seven exhibitions wait for you across five floors. There is no wrong way through.", "en": "Concrete, light, and silence. The Chipperfield Building was designed to disappear behind the art — to make room for looking.<br/><br/>Seven exhibitions wait for you across five floors. There is no wrong way through." },
+      "tagline": {
+        "de": "Welcome to the Kunsthaus Zurich. It's nice to have you here.",
+        "en": "Welcome to the Kunsthaus Zurich. It's nice to have you here."
+      },
+      "cardTitle": {
+        "de": "Open space for living art",
+        "en": "Open space for living art"
+      },
+      "description": {
+        "de": "Concrete, light, and silence. The Chipperfield Building was designed to disappear behind the art — to make room for looking.<br/><br/>Seven exhibitions wait for you across five floors. There is no wrong way through.",
+        "en": "Concrete, light, and silence. The Chipperfield Building was designed to disappear behind the art — to make room for looking.<br/><br/>Seven exhibitions wait for you across five floors. There is no wrong way through."
+      },
       "image": "/images/onsite/chipperfield-entrance.jpg"
     },
     "buildings": [
-      { "id": "chipperfield", "name": { "de": "Chipperfield Building", "en": "Chipperfield Building" } },
-      { "id": "moser", "name": { "de": "Moser Building", "en": "Moser Building" } }
+      {
+        "id": "chipperfield",
+        "name": {
+          "de": "Chipperfield Building",
+          "en": "Chipperfield Building"
+        }
+      },
+      {
+        "id": "moser",
+        "name": {
+          "de": "Moser Building",
+          "en": "Moser Building"
+        }
+      }
     ],
-    "navigatorTeaser": {
-      "title": { "de": "Museum Navigator", "en": "Museum Navigator" },
-      "body": { "de": "Finden Sie jedes Werk und jeden Raum. Unser interaktiver Besucher-Guide führt Sie durch beide Gebäude, Etage für Etage.", "en": "Find every work and every room. Our interactive visitor guide walks you through both buildings, floor by floor." },
-      "linkLabel": { "de": "Interactive Visitor Guide öffnen", "en": "Open Interactive Visitor Guide" },
-      "linkHref": "https://www.kunsthaus.ch/en/visit/museum-navigator/"
+    "specialExhibitionsLabel": {
+      "de": "Sonderausstellungen",
+      "en": "Special Exhibitions"
     },
-    "infoBox": {
-      "wifiSsid": "Kunsthaus-Guest",
-      "wifiPassword": "welcome",
-      "wifiNote": { "de": "Kostenloses WLAN im gesamten Haus.", "en": "Free Wi-Fi throughout the museum." }
+    "visitorEssentialsLabel": {
+      "de": "Besucherinfos",
+      "en": "Visitor Essentials"
+    },
+    "visitorEssentials": {
+      "gettingAround": {
+        "title": {
+          "de": "Orientierung",
+          "en": "Getting Around"
+        },
+        "description": {
+          "de": "Finden Sie jedes Werk und jeden Raum mit unserem Guide.",
+          "en": "Find every work and every room with our interactive guide."
+        },
+        "linkLabel": {
+          "de": "Interactive Visitor Guide öffnen",
+          "en": "Open Interactive Visitor Guide"
+        },
+        "linkHref": "https://www.kunsthaus.ch/en/visit/museum-navigator/"
+      },
+      "todaysEvents": {
+        "title": {
+          "de": "Heute im Museum",
+          "en": "Today at the Museum"
+        },
+        "description": {
+          "de": "Führungen, Workshops und Vorträge, die heute stattfinden.",
+          "en": "Guided tours, workshops and talks happening today."
+        }
+      },
+      "wifi": {
+        "title": {
+          "de": "WLAN im Kunsthaus",
+          "en": "Wi-Fi at the Kunsthaus"
+        },
+        "description": {
+          "de": "Kostenlos im gesamten Museum, kein Passwort erforderlich.",
+          "en": "Free across the museum, with no password required."
+        },
+        "networkName": "Kunsthaus-Guest"
+      },
+      "venueCards": {
+        "bar": {
+          "title": {
+            "de": "Kunsthaus Bar",
+            "en": "Kunsthaus Bar"
+          },
+          "description": {
+            "de": "Aperitifs, Cocktails und Barfood im Chipperfield-Gebäude.",
+            "en": "Aperitifs, cocktails and bar food in the Chipperfield Building."
+          }
+        },
+        "restaurant": {
+          "title": {
+            "de": "Restaurant Bei Moudi",
+            "en": "Restaurant Bei Moudi"
+          },
+          "description": {
+            "de": "Mediterrane und orientalische Küche im Moser-Gebäude.",
+            "en": "Mediterranean and Oriental cuisine in the Moser Building."
+          }
+        },
+        "cafe": {
+          "title": {
+            "de": "Café & Miro Garden",
+            "en": "Café & Miro Garden"
+          },
+          "description": {
+            "de": "Kaffee und Snacks im Moser-Gebäude mit Miro-Garten-Zugang.",
+            "en": "Coffee and snacks in the Moser Building with Miro Garden access."
+          }
+        },
+        "art-shop": {
+          "title": {
+            "de": "Art Shop",
+            "en": "Art Shop"
+          },
+          "description": {
+            "de": "Kunstbände, Reproduktionen und Editionen im Moser-Gebäude.",
+            "en": "Art books, reproductions and editions in the Moser Building."
+          }
+        },
+        "design-shop": {
+          "title": {
+            "de": "Design Shop",
+            "en": "Design Shop"
+          },
+          "description": {
+            "de": "Keramik und Designobjekte im Chipperfield-Gebäude.",
+            "en": "Ceramics and design objects in the Chipperfield Building."
+          }
+        }
+      },
+      "accessibility": {
+        "title": {
+          "de": "Barrierefreiheit & Komfort",
+          "en": "Accessibility & Comfort"
+        },
+        "description": {
+          "de": "Barrierefreie Wege, Sitzgelegenheiten und Ruhezonen im Museum.",
+          "en": "Step-free routes, seating and quiet zones throughout the museum."
+        },
+        "placeholder": {
+          "de": "Inhalt folgt in Kürze.",
+          "en": "Content coming soon."
+        }
+      }
     },
     "faq": [
       {
         "id": "coats-bags",
-        "question": { "de": "Wo kann ich Mäntel und Taschen abgeben?", "en": "Where can I leave my coats and bags?" },
-        "answer": { "de": "Komplimentäre Garderobe im Erdgeschoss des Chipperfield-Baus.", "en": "Complimentary cloakroom on the ground floor of the Chipperfield Building." }
+        "question": {
+          "de": "Wo kann ich Mäntel und Taschen abgeben?",
+          "en": "Where can I leave my coats and bags?"
+        },
+        "answer": {
+          "de": "Komplimentäre Garderobe im Erdgeschoss des Chipperfield-Baus.",
+          "en": "Complimentary cloakroom on the ground floor of the Chipperfield Building."
+        }
       },
       {
         "id": "food-drink",
-        "question": { "de": "Darf ich im Museum essen und trinken?", "en": "Am I allowed to eat and drink in the museum?" },
-        "answer": { "de": "Essen und Trinken nur in der Kunsthaus Bar und im Restaurant Bei Moudi.", "en": "Eating and drinking only in the Kunsthaus Bar and Restaurant Bei Moudi." }
+        "question": {
+          "de": "Darf ich im Museum essen und trinken?",
+          "en": "Am I allowed to eat and drink in the museum?"
+        },
+        "answer": {
+          "de": "Essen und Trinken nur in der Kunsthaus Bar und im Restaurant Bei Moudi.",
+          "en": "Eating and drinking only in the Kunsthaus Bar and Restaurant Bei Moudi."
+        }
       },
       {
         "id": "photography",
-        "question": { "de": "Darf ich im Kunsthaus fotografieren?", "en": "Am I allowed to take photographs at the Kunsthaus?" },
-        "answer": { "de": "Fotografieren ohne Blitz erlaubt, ausser in den Ausstellungen Marisol und Kerry James Marshall.", "en": "Photography allowed without flash, except in the Marisol and Kerry James Marshall exhibitions." }
+        "question": {
+          "de": "Darf ich im Kunsthaus fotografieren?",
+          "en": "Am I allowed to take photographs at the Kunsthaus?"
+        },
+        "answer": {
+          "de": "Fotografieren ohne Blitz erlaubt, ausser in den Ausstellungen Marisol und Kerry James Marshall.",
+          "en": "Photography allowed without flash, except in the Marisol and Kerry James Marshall exhibitions."
+        }
       }
     ]
   }

@@ -11,18 +11,18 @@ interface Item {
 }
 
 interface Props {
-  buildingName: { de: string; en: string };
+  heading: { de: string; en: string };
   items: Item[];
   lang: 'en' | 'de';
 }
 
-const { buildingName, items, lang } = Astro.props;
+const { heading, items, lang } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <section class="onsite-grid">
   <header class="onsite-grid__header">
-    <h2 class="onsite-grid__building">{buildingName[lang]}</h2>
+    <h2 class="onsite-grid__heading sub-heading">{heading[lang]}</h2>
   </header>
   <ul class="onsite-grid__list">
     {items.map((item) => {
@@ -54,12 +54,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-bottom: var(--space-6);
   }
 
-  .onsite-grid__building {
-    font-size: var(--type-2xl);
-    color: var(--color-text);
-    font-weight: var(--weight-regular);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+  /* Typography comes from the global .sub-heading utility (see base.css);
+     only zero the h2's default browser margin here to avoid a conflict. */
+  .onsite-grid__heading {
     margin: 0;
   }
 

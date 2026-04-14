@@ -1,0 +1,63 @@
+---
+// EssentialsCard.astro — Unified card used for every tile in the Visitor
+// Essentials grid on /onsite. Title + short description + slot for body.
+// All 6 cards in the grid (Getting Around, Today at the Museum, Wi-Fi,
+// Food & Amenities, Accessibility & Comfort, Museum Shops) share this
+// component so the visual language stays consistent.
+
+interface Props {
+  title: { de: string; en: string };
+  description: { de: string; en: string };
+  lang: 'en' | 'de';
+}
+
+const { title, description, lang } = Astro.props;
+---
+
+<article class="essentials-card">
+  <header class="essentials-card__header">
+    <h3 class="essentials-card__title sub-heading">{title[lang]}</h3>
+    <p class="essentials-card__description">{description[lang]}</p>
+  </header>
+  <div class="essentials-card__body">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .essentials-card {
+    background: color-mix(in srgb, var(--color-text) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    border-radius: var(--btn-radius);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    color: var(--color-text);
+  }
+
+  .essentials-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .essentials-card__title {
+    margin: 0;
+  }
+
+  .essentials-card__description {
+    font-size: var(--type-md);
+    color: var(--color-text);
+    opacity: 0.75;
+    line-height: var(--leading-normal);
+    margin: 0;
+  }
+
+  .essentials-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+</style>

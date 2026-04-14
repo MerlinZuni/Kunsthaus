@@ -165,16 +165,36 @@ const onsiteHome = defineCollection({
       image: z.string(),
     }).optional(),
     buildings: z.array(z.object({ id: z.string(), name: localizedText })),
-    navigatorTeaser: z.object({
-      title: localizedText,
-      body: localizedText,
-      linkLabel: localizedText,
-      linkHref: z.string(),
-    }),
-    infoBox: z.object({
-      wifiSsid: z.string(),
-      wifiPassword: z.string(),
-      wifiNote: localizedText.optional(),
+    specialExhibitionsLabel: localizedText,
+    visitorEssentialsLabel: localizedText,
+    visitorEssentials: z.object({
+      gettingAround: z.object({
+        title: localizedText,
+        description: localizedText,
+        linkLabel: localizedText,
+        linkHref: z.string(),
+      }),
+      todaysEvents: z.object({
+        title: localizedText,
+        description: localizedText,
+      }),
+      wifi: z.object({
+        title: localizedText,
+        description: localizedText,
+        networkName: z.string(),
+      }),
+      venueCards: z.record(
+        z.string(),
+        z.object({
+          title: localizedText,
+          description: localizedText,
+        })
+      ),
+      accessibility: z.object({
+        title: localizedText,
+        description: localizedText,
+        placeholder: localizedText,
+      }),
     }),
     faq: z.array(z.object({
       id: z.string(),
