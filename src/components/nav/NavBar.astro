@@ -280,7 +280,17 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Cleanup handle for window-level listeners attached on previous init.
+  // View Transitions navigations re-run initNavBar against a fresh navbar
+  // DOM; we must remove old scroll/mousemove listeners pointing at orphan
+  // elements before attaching new ones.
+  let navBarCleanup: (() => void) | null = null;
+
   function initNavBar() {
+    // Clean up listeners from a previous init (e.g. before a nav swap)
+    navBarCleanup?.();
+    navBarCleanup = null;
+
     const navbar = document.getElementById('navbar');
     const logoIsland = document.getElementById('logo-island');
     const searchMigrated = document.getElementById('search-migrated');
@@ -349,6 +359,14 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
+    // Register cleanup so the next initNavBar (after an astro:page-load)
+    // can remove these window listeners before they accumulate.
+    navBarCleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('scroll', checkLogoBg);
+    };
+
     // Detect background behind logo and toggle light/dark logo
     const logoImg = navbar.querySelector('.navbar__logo-img') as HTMLElement;
     const logoLink = navbar.querySelector('.navbar__logo') as HTMLElement;
@@ -406,5 +424,13 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     checkLogoBg();
   }
 
-  document.addEventListener('DOMContentLoaded', initNavBar);
+  // Run on first paint and after every Astro View Transitions navigation.
+  // Without astro:page-load the fresh navbar DOM on subsequent pages never
+  // has click handlers attached, making search/hours/hamburger icons dead.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavBar);
+  } else {
+    initNavBar();
+  }
+  document.addEventListener('astro:page-load', initNavBar);
 </script>

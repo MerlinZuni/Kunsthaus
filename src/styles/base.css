@@ -7,6 +7,13 @@
     overflow-x: clip;
   }
 
+  /* Reserve the vertical scrollbar's gutter permanently so that overlays
+     (hamburger/search/hours) locking body+lenis scroll don't cause the
+     position:fixed navbar to re-measure wider and shift horizontally. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   body {
     font-family: var(--font-primary);
     font-size: var(--type-base);

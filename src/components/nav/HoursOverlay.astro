@@ -348,7 +348,15 @@ const scheduleJson = JSON.stringify(schedule);
 <script>
   import { gsap } from 'gsap';
 
+  // Cleanup for document-level listeners attached on previous init.
+  // View Transitions navigations re-run this function; without cleanup
+  // keydown handlers accumulate and reference orphan overlay elements.
+  let hoursOverlayCleanup: (() => void) | null = null;
+
   function initHoursOverlay() {
+    hoursOverlayCleanup?.();
+    hoursOverlayCleanup = null;
+
     const overlay = document.getElementById('hours-overlay');
     const closeBtn = overlay?.querySelector('.hours-overlay__close');
     const inner = overlay?.querySelector('.hours-overlay__inner') as HTMLElement;
@@ -473,14 +481,24 @@ const scheduleJson = JSON.stringify(schedule);
       close(true);
     });
 
-    document.addEventListener('keydown', (e) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
         close();
       }
-    });
+    };
+    document.addEventListener('keydown', onKeyDown);
+    hoursOverlayCleanup = () => {
+      document.removeEventListener('keydown', onKeyDown);
+    };
 
     (window as any).__hoursOverlay = { open, close };
   }
 
-  document.addEventListener('DOMContentLoaded', initHoursOverlay);
+  // Run on first paint and after every Astro View Transitions navigation.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHoursOverlay);
+  } else {
+    initHoursOverlay();
+  }
+  document.addEventListener('astro:page-load', initHoursOverlay);
 </script>

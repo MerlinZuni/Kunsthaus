@@ -378,7 +378,15 @@ const suggestions = [
 <script>
   import { gsap } from 'gsap';
 
+  // Cleanup for document-level listeners attached on previous init.
+  // View Transitions navigations re-run this function; without cleanup
+  // keydown handlers accumulate and reference orphan overlay elements.
+  let searchOverlayCleanup: (() => void) | null = null;
+
   function initSearchOverlay() {
+    searchOverlayCleanup?.();
+    searchOverlayCleanup = null;
+
     const overlay = document.getElementById('search-overlay');
     const closeBtn = overlay?.querySelector('.search-overlay__close');
     const input = overlay?.querySelector('.search-overlay__input') as HTMLInputElement;
@@ -467,11 +475,15 @@ const suggestions = [
     });
 
     // Close on Escape
-    document.addEventListener('keydown', (e) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
         close();
       }
-    });
+    };
+    document.addEventListener('keydown', onKeyDown);
+    searchOverlayCleanup = () => {
+      document.removeEventListener('keydown', onKeyDown);
+    };
 
     // Rotating placeholder text
     const placeholder = document.getElementById('search-placeholder');
@@ -558,5 +570,11 @@ const suggestions = [
     (window as any).__searchOverlay = { open: wrappedOpen, close: wrappedClose };
   }
 
-  document.addEventListener('DOMContentLoaded', initSearchOverlay);
+  // Run on first paint and after every Astro View Transitions navigation.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSearchOverlay);
+  } else {
+    initSearchOverlay();
+  }
+  document.addEventListener('astro:page-load', initSearchOverlay);
 </script>
