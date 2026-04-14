@@ -1,41 +1,85 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-10T14:33:20.840Z",
-  "phase": "02",
-  "phase_name": "static-homepage",
-  "phase_dir": ".planning/phases/02-static-homepage",
-  "plan": null,
-  "task": null,
-  "total_tasks": null,
+  "timestamp": "2026-04-14T10:39:02.889Z",
+  "phase": "03",
+  "phase_name": "dual-mode-routing",
+  "phase_dir": ".planning/phases/03-dual-mode-routing",
+  "plan": 1,
+  "task": 2,
+  "total_tasks": 7,
   "status": "paused",
+  "pause_reason": "context_limit",
   "completed_tasks": [
-    {"id": "02-01", "name": "Content data & CSS infrastructure", "status": "done", "commit": "9e7f4b0"},
-    {"id": "02-04", "name": "Footer & homepage composition", "status": "done", "commit": "ecb6396"},
-    {"id": "02-02", "name": "Navigation bar & hero carousel", "status": "done", "commit": "aacd647"},
-    {"id": "02-03", "name": "Content sections & interactive UI", "status": "done", "commit": "ec2e178"}
+    {
+      "id": 1,
+      "name": "Enable Astro View Transitions in BaseLayout + add mode prop",
+      "status": "done",
+      "commit": "98581d8",
+      "summary": "Imported ClientRouter from astro:transitions, rendered in <head>. Added mode?: 'planning' | 'onsite' prop to BaseLayout with default 'planning'. Bound data-mode={mode} on <html>. Updated index.astro to pass mode='planning' explicitly."
+    }
   ],
-  "remaining_tasks": [],
-  "blockers": [],
-  "human_actions_pending": [
-    {"action": "Add real images to public/images/offerings/ and public/images/education/", "context": "Placeholder gray boxes for all offering and education stacked images", "blocking": false},
-    {"action": "Test on real mobile device", "context": "Exhibition row scroll-trigger activation needs real touch testing", "blocking": false},
-    {"action": "Visual review of dark/onsite mode", "context": "StatusAccordion and all new components have dark mode styles but need visual verification", "blocking": false}
+  "remaining_tasks": [
+    {
+      "id": 2,
+      "name": "Create /onsite stub route",
+      "status": "not_started",
+      "files": ["src/pages/onsite/index.astro"],
+      "commit_message": "feat: add /onsite stub route with data-mode='onsite'"
+    },
+    {
+      "id": 3,
+      "name": "Refactor StickyCTA mode toggle to URL-as-state",
+      "status": "not_started",
+      "files": ["src/components/ui/StickyCTA.astro"],
+      "commit_message": "refactor(sticky-cta): mode toggle becomes route-aware <a href> navigation"
+    },
+    {
+      "id": 4,
+      "name": "Refactor HamburgerOverlay mode toggle to URL-as-state",
+      "status": "not_started",
+      "files": ["src/components/nav/HamburgerOverlay.astro"],
+      "commit_message": "refactor(hamburger-overlay): mode toggle becomes route-aware <a href> navigation",
+      "notes": "Must add click handler that closes overlay before navigation, otherwise View Transitions will animate the overlay itself."
+    },
+    {
+      "id": 5,
+      "name": "Refactor FooterColumns mode toggle to URL-as-state",
+      "status": "not_started",
+      "files": ["src/components/footer/FooterColumns.astro"],
+      "commit_message": "refactor(footer-columns): mode toggle becomes route-aware <a href> navigation"
+    },
+    {
+      "id": 6,
+      "name": "Refactor or remove ModeToggle React island",
+      "status": "not_started",
+      "files": ["src/components/ui/ModeToggle.tsx"],
+      "commit_message": "refactor(mode-toggle): route-aware navigation or removal if unused",
+      "notes": "First grep for ModeToggle usage. If unused, delete. If used, refactor to <a href> navigation."
+    },
+    {
+      "id": 7,
+      "name": "Integration test — full Phase 03-01 flow verification",
+      "status": "not_started",
+      "files": [],
+      "commit_message": "test: phase 03-01 integration verification complete",
+      "notes": "Manual verification against all 10 success criteria in 03-01-PLAN.md. Also: grep -rn 'kunsthaus-mode' src/ must return zero matches outside comments."
+    }
   ],
+  "blockers": [
+    {
+      "description": "Context window at 78% at pause time. Remaining 6 tasks touch 4 large files (500+ lines each). Continuing would risk mid-task exhaustion and inconsistent codebase state.",
+      "type": "technical",
+      "workaround": "Fresh session with /clear resets context. Resume session should cruise through Tasks 2-7 in ~1 hour."
+    }
+  ],
+  "human_actions_pending": [],
   "decisions": [
-    {"decision": "Logo 200px wide with filter:invert(1)", "rationale": "White PNG source, inverted via CSS for dark display", "phase": "02"},
-    {"decision": "Hamburger breakpoint at 1200px", "rationale": "Nav text overlapped logo at 1130px", "phase": "02"},
-    {"decision": "Hero stacking mode: previous slide images persist", "rationale": "Creates layered composition effect across slides", "phase": "02"},
-    {"decision": "Section pin at bottom-bottom, shrink at 300px overlap", "rationale": "User reads all content before stacking effect", "phase": "02"},
-    {"decision": "StatusAccordion reusable component", "rationale": "Dynamic open/closed with schedule, today highlight, dark mode", "phase": "02"},
-    {"decision": "Unified .btn/.btn-link classes", "rationale": "16px 20px padding, type-md, weight-regular, 6px gap, arrow bounce", "phase": "02"},
-    {"decision": "Glass pill toggle with GSAP sliding indicator", "rationale": "Dark glass container, light pill slides between segments", "phase": "02"},
-    {"decision": "Overlay swap without backdrop flash", "rationale": "open(true)/close(true) for seamless content crossfade", "phase": "02"},
-    {"decision": "Language switcher: vertical expanding pill", "rationale": "No duplicate active language, consistent pill design", "phase": "02"},
-    {"decision": "Exhibition tables: 4-column grid", "rationale": "Title, dates, tags, location — consistent across all groups", "phase": "02"},
-    {"decision": "Grid overlay in hero and footer only", "rationale": "Design element, not interfering with content", "phase": "02"},
-    {"decision": "Nav bar always visible", "rationale": "Prevented logo interference", "phase": "02"}
+    {"decision": "Routing Plan A: Astro routes + View Transitions + URL-as-state", "rationale": "Real pages, deep-linkable, back/forward works, animated swap via native View Transitions API. localStorage mode persistence removed entirely.", "phase": "03"},
+    {"decision": "Mode toggle becomes route-aware <a href> navigation across all 4 writers", "rationale": "Single source of truth (URL), server-rendered active state, no JS state synchronization needed.", "phase": "03"},
+    {"decision": "BaseLayout gets mode?: 'planning' | 'onsite' prop, default 'planning', bound to html[data-mode]", "rationale": "Each page declares its mode at render time via layout prop. JS never mutates data-mode anywhere.", "phase": "03"},
+    {"decision": "Astro View Transitions replace the earlier ANIM-04 requirement (GSAP Flip mode transitions)", "rationale": "Native browser API achieves the same smooth palette flip with zero custom animation code. Graceful fallback on unsupported browsers.", "phase": "03"}
   ],
   "uncommitted_files": [],
-  "next_action": "Verify Phase 02, then advance to Phase 03 (Dual-Mode + Animation) — mode switching, GSAP scroll animations, text reveals, QR code parameters.",
-  "context_notes": "Major UI polish session. Hero carousel stacking, section pin-scroll, glass design system, gastronomy StatusAccordions, visitor info with live hours/holidays/pricing, navigation overlays with seamless swap, language switcher, exhibition table 4-column consistency. GitHub Pages auto-deploys via Actions. Dev server at localhost:4321/Kunsthaus/."
+  "next_action": "Start Task 2: Create src/pages/onsite/index.astro as a minimal BaseLayout stub with mode='onsite' and a placeholder heading. Verify /onsite renders with dark palette before moving to Task 3.",
+  "context_notes": "Phase 03 is the pitch differentiator for the Kunsthaus competition. Demo is 2026-04-22 (8 days from handoff). 03-01 is the critical path routing foundation. 03-02 is the shippable baseline (onsite landing). 03-03/04 add depth (KJM detail + audio guide) but are not load-bearing. User can ship after 03-02 if time gets tight. All design decisions are in 03-CONTEXT.md; execution steps are in 03-01-PLAN.md. Task 1 is already committed (98581d8) and pushed. The 4 mode-toggle writers each need the same refactor pattern applied — StickyCTA, HamburgerOverlay, FooterColumns, ModeToggle.tsx. Key anti-pattern: do NOT use window.location.href for navigation — use <a href> tags so Astro intercepts them for View Transitions. Also do not manually set data-mode via JS anywhere anymore."
 }
