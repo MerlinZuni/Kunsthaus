@@ -1,0 +1,255 @@
+---
+// ArtworkSlider.astro — Phase 03-03 one-per-viewport horizontal scroll-snap
+// carousel for the KJM detail page. Prev/next buttons scrollBy the track's
+// clientWidth. Each slide carries a SILENT headphones stub button — no
+// click handler, no event dispatch; 03-04 wires it to the paywall + audio
+// guide.
+
+interface LocalizedText {
+  de: string;
+  en: string;
+}
+
+interface Artwork {
+  id: string;
+  number: number;
+  title: LocalizedText;
+  year: string;
+  collection: string;
+  credit?: string;
+  image: string;
+  description: LocalizedText;
+  audioSrc: string;
+}
+
+interface Props {
+  artworks: Artwork[];
+  lang: 'en' | 'de';
+}
+
+const { artworks, lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section
+  class="artwork-slider"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="Kerry James Marshall artworks"
+>
+  <div class="artwork-slider__controls">
+    <button
+      type="button"
+      class="artwork-slider__nav"
+      data-direction="prev"
+      aria-label="Previous artwork"
+    >‹</button>
+    <button
+      type="button"
+      class="artwork-slider__nav"
+      data-direction="next"
+      aria-label="Next artwork"
+    >›</button>
+  </div>
+  <ul class="artwork-slider__track" data-artwork-track>
+    {artworks.map((art) => (
+      <li class="artwork-slider__slide" aria-label={`${art.number}. ${art.title[lang]}`}>
+        <figure class="artwork-slider__figure">
+          <img src={`${base}${art.image}`} alt={art.title[lang]} loading="lazy" />
+        </figure>
+        <div class="artwork-slider__meta">
+          <p class="artwork-slider__number">No. {String(art.number).padStart(2, '0')}</p>
+          <h3 class="artwork-slider__title">{art.title[lang]}</h3>
+          <p class="artwork-slider__year">{art.year} · {art.collection}</p>
+          {art.credit && <p class="artwork-slider__credit">{art.credit}</p>}
+          <p class="artwork-slider__description">{art.description[lang]}</p>
+          <button
+            type="button"
+            class="artwork-slider__headphones"
+            aria-label={`Play audio guide for ${art.title[lang]}`}
+          >
+            <span class="icon" aria-hidden="true">headphones</span>
+          </button>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+  // Dual-init: DOMContentLoaded + astro:page-load; guard with data-initialized.
+  function initArtworkSlider() {
+    const sliders = document.querySelectorAll<HTMLElement>('.artwork-slider');
+    sliders.forEach((slider) => {
+      if (slider.dataset.initialized === 'true') return;
+      slider.dataset.initialized = 'true';
+
+      const track = slider.querySelector<HTMLElement>('[data-artwork-track]');
+      if (!track) return;
+
+      slider.querySelectorAll<HTMLButtonElement>('[data-direction]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const dir = btn.dataset.direction === 'next' ? 1 : -1;
+          track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+        });
+      });
+    });
+  }
+  initArtworkSlider();
+  document.addEventListener('astro:page-load', initArtworkSlider);
+</script>
+
+<style>
+  .artwork-slider {
+    position: relative;
+    width: 100%;
+  }
+
+  .artwork-slider__controls {
+    position: absolute;
+    top: var(--space-4);
+    right: 0;
+    display: flex;
+    gap: var(--space-2);
+    z-index: 3;
+  }
+
+  .artwork-slider__nav {
+    width: 44px;
+    height: 44px;
+    border: 1px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+    background: transparent;
+    color: var(--color-text);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .artwork-slider__nav:hover,
+  .artwork-slider__nav:focus-visible {
+    background: color-mix(in srgb, var(--color-text) 12%, transparent);
+    border-color: var(--color-text);
+    outline: none;
+  }
+
+  .artwork-slider__track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: var(--space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    scrollbar-width: none;
+  }
+  .artwork-slider__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .artwork-slider__slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-10);
+    align-items: center;
+    min-height: 70vh;
+  }
+
+  .artwork-slider__figure {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+  .artwork-slider__figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .artwork-slider__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    color: var(--color-text);
+  }
+
+  .artwork-slider__number {
+    font-size: var(--type-sm);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin: 0;
+  }
+
+  .artwork-slider__title {
+    font-size: var(--type-2xl);
+    font-weight: var(--weight-bold);
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .artwork-slider__year {
+    font-size: var(--type-sm);
+    opacity: 0.8;
+    margin: 0;
+  }
+
+  .artwork-slider__credit {
+    font-size: var(--type-xs);
+    opacity: 0.55;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .artwork-slider__description {
+    font-size: var(--type-md);
+    line-height: var(--leading-normal);
+    max-width: 55ch;
+    margin: var(--space-2) 0 0;
+  }
+
+  .artwork-slider__headphones {
+    align-self: flex-start;
+    margin-top: var(--space-4);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-text) 50%, transparent);
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
+    color: var(--color-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .artwork-slider__headphones:hover,
+  .artwork-slider__headphones:focus-visible {
+    background: color-mix(in srgb, var(--color-text) 14%, transparent);
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .artwork-slider__headphones .icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-size: 22px;
+  }
+
+  @media (max-width: 767px) {
+    .artwork-slider__slide {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      min-height: auto;
+      padding-top: var(--space-12);
+    }
+    .artwork-slider__title {
+      font-size: var(--type-xl);
+    }
+  }
+</style>
