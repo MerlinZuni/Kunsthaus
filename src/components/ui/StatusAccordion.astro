@@ -179,6 +179,8 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
   function initStatusAccordions() {
     document.querySelectorAll('[data-status-accordion]').forEach(accordion => {
       const el = accordion as HTMLElement;
+      if (el.dataset.initialized === 'true') return;
+      el.dataset.initialized = 'true';
       const trigger = el.querySelector('.status-accordion__trigger');
       const dot = el.querySelector('.status-accordion__dot') as HTMLElement;
       const text = el.querySelector('.status-accordion__text') as HTMLElement;
@@ -265,5 +267,13 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
     });
   }
 
-  document.addEventListener('DOMContentLoaded', initStatusAccordions);
+  // Run on first paint and after every Astro View Transitions navigation.
+  // Without astro:page-load the accordion stays at its server-rendered
+  // placeholder ("...") on any page reached via ClientRouter.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStatusAccordions);
+  } else {
+    initStatusAccordions();
+  }
+  document.addEventListener('astro:page-load', initStatusAccordions);
 </script>
