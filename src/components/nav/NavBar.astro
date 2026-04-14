@@ -252,6 +252,14 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     filter: none;
   }
 
+  /* Specificity override: .navbar--faded .navbar__logo-img (0,4,0) would
+     otherwise beat the plain onsite rule above (0,3,1) and re-apply
+     filter: invert(1), turning the white-on-transparent logo black and
+     invisible on the dark onsite page. This rule (0,5,1) wins. */
+  html[data-mode="onsite"] .navbar--faded .navbar__logo-img {
+    filter: none;
+  }
+
   /* Tablet+: fixed-width centered bar */
   @media (min-width: 768px) {
     .navbar__inner {
