@@ -1,0 +1,147 @@
+---
+// KjmHero.astro — Phase 03-03 full-bleed background video hero for exhibition
+// detail pages. Plain HTML5 video: autoplay muted loop playsinline
+// preload="metadata" poster=... — all five attributes are non-negotiable for
+// iOS autoplay. NO transition:persist (let the element remount on navigation).
+
+interface Props {
+  title: { de: string; en: string };
+  dateLabel: { de: string; en: string };
+  video: { src: string; poster: string };
+  backLabel: { de: string; en: string };
+  backHref: string;
+  lang: 'en' | 'de';
+}
+
+const { title, dateLabel, video, backLabel, backHref, lang } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const videoSrc = `${base}${video.src}`;
+const posterSrc = `${base}${video.poster}`;
+---
+
+<section class="kjm-hero" data-section="kjm-hero">
+  <video
+    class="kjm-hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    poster={posterSrc}
+  >
+    <source src={videoSrc} type="video/mp4" />
+  </video>
+  <div class="kjm-hero__scrim" aria-hidden="true"></div>
+  <a class="kjm-hero__back" href={backHref}>{backLabel[lang]}</a>
+  <div class="kjm-hero__title-block">
+    <p class="kjm-hero__datelabel">{dateLabel[lang]}</p>
+    <h1 class="kjm-hero__title">{title[lang]}</h1>
+  </div>
+</section>
+
+<script>
+  // Reduce-motion: pause the hero video. Dual-init so View Transitions works.
+  function kjmHeroReduceMotionGuard() {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll<HTMLVideoElement>('.kjm-hero__video').forEach((v) => v.pause());
+  }
+  kjmHeroReduceMotionGuard();
+  document.addEventListener('astro:page-load', kjmHeroReduceMotionGuard);
+</script>
+
+<style>
+  .kjm-hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #0a0a0a;
+    color: #ffffff;
+  }
+
+  .kjm-hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .kjm-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.08) 38%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .kjm-hero__back {
+    position: absolute;
+    top: var(--space-8);
+    left: var(--space-8);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: var(--type-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    z-index: 2;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(2px);
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .kjm-hero__back:hover,
+  .kjm-hero__back:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.85);
+    outline: none;
+  }
+
+  .kjm-hero__title-block {
+    position: absolute;
+    left: var(--space-8);
+    right: var(--space-8);
+    bottom: var(--space-12);
+    z-index: 2;
+    color: #ffffff;
+    max-width: 24ch;
+  }
+
+  .kjm-hero__datelabel {
+    font-size: var(--type-sm);
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 var(--space-3);
+  }
+
+  .kjm-hero__title {
+    font-size: var(--type-4xl);
+    font-weight: var(--weight-bold);
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .kjm-hero__back {
+      top: var(--space-6);
+      left: var(--space-6);
+    }
+    .kjm-hero__title-block {
+      left: var(--space-6);
+      right: var(--space-6);
+      bottom: var(--space-10);
+    }
+    .kjm-hero__title {
+      font-size: var(--type-3xl);
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+// src/pages/onsite/kerry-james-marshall.astro — Phase 03-03 KJM exhibition
+// detail page. Composition: KjmHero → CinematicReveal (imagePosition:left)
+// → intro section → ArtworkSlider → ArtistQuote → Videos HSlider → Shop HSlider
+// → Footer + StickyCTA. Task 2 ships the skeleton (hero + cinematic only);
+// Task 6 fills in the remaining sections.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import KjmHero from '../../components/hero/KjmHero.astro';
+import CinematicReveal from '../../components/sections/CinematicReveal.astro';
+import kjmJson from '../../content/onsite/kerry-james-marshall.json';
+
+const lang = 'en' as const;
+const kjm = (kjmJson as any)['kerry-james-marshall'];
+
+// CinematicReveal adapter — same 03-02 trap: component reads data.title,
+// not data.cardTitle. Build the adapter at the page level.
+const cinematicData = {
+  tagline: kjm.cinematicReveal.tagline,
+  title: kjm.cinematicReveal.cardTitle,
+  description: kjm.cinematicReveal.description,
+  image: kjm.cinematicReveal.image,
+};
+
+const backLabel = { de: '← Ihr Besuch', en: '← Your visit' };
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout title="Kerry James Marshall — Kunsthaus Zurich" lang={lang} mode="onsite">
+  <KjmHero
+    title={kjm.title}
+    dateLabel={kjm.dateLabel}
+    video={kjm.heroVideo}
+    backLabel={backLabel}
+    backHref={`${base}/onsite`}
+    lang={lang}
+  />
+
+  <section
+    class="stacking-section cinematic-reveal-section"
+    data-section="kjm-reveal"
+    style="z-index: 20; background: transparent;"
+  >
+    <CinematicReveal
+      contentType="kjm-detail"
+      data={cinematicData}
+      lang={lang}
+      imagePosition={kjm.cinematicReveal.imagePosition || 'left'}
+    />
+  </section>
+
+  <!-- Task 6 adds: intro SectionWrapper, ArtworkSlider, ArtistQuote, 2x HorizontalSlider, Footer, StickyCTA -->
+</BaseLayout>

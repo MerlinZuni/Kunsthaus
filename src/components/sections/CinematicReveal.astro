@@ -14,15 +14,16 @@ interface Props {
     tagline?: { de: string; en: string };
   };
   lang: 'en' | 'de';
+  imagePosition?: 'left' | 'center' | 'right';
 }
 
-const { contentType, data, lang } = Astro.props;
+const { contentType, data, lang, imagePosition = 'center' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const imageSrc = data.image ? `${base}${data.image}` : '';
 ---
 
 {/* Scroll container — tall enough to drive the animation */}
-<div class="cinematic-reveal" data-cinematic-reveal data-content-type={contentType}>
+<div class="cinematic-reveal" data-cinematic-reveal data-content-type={contentType} data-image-position={imagePosition}>
   {/* Sticky viewport — stays fixed while user scrolls through the tall container */}
   <div class="cinematic-reveal__viewport">
     {/* Tagline — visible beneath small image, covered as it expands */}
@@ -277,6 +278,21 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
 
   .cinematic-reveal__cta:hover {
     background: color-mix(in srgb, #272523 90%, transparent);
+  }
+
+  /* Phase 03-03: desktop-only imagePosition variant. Shifts the small
+     pre-expansion image frame to the left/right edge of the viewport.
+     Once GSAP's timeline runs marginLeft:'calc(-50vw + 50%)' the inline
+     style takes over and the image re-centers full-bleed — desired behaviour. */
+  @media (min-width: 768px) {
+    .cinematic-reveal[data-image-position="left"] .cinematic-reveal__frame {
+      margin-left: 0;
+      margin-right: auto;
+    }
+    .cinematic-reveal[data-image-position="right"] .cinematic-reveal__frame {
+      margin-left: auto;
+      margin-right: 0;
+    }
   }
 
   @media (max-width: 767px) {
