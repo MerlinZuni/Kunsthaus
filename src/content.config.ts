@@ -49,34 +49,57 @@ const planningHomepage = defineCollection({
   }),
 });
 
-// On-site exhibition content -- per D-15, D-16, D-19
+// On-site exhibition content -- per Phase 03-03 (rewrites Phase-1 stub schema)
 const onsiteExhibition = defineCollection({
   loader: file("src/content/onsite/kerry-james-marshall.json"),
   schema: z.object({
     id: z.string(),
     title: localizedText,
-    artist: z.string(),
-    dates: z.object({
-      start: z.string(),
-      end: z.string(),
+    dateLabel: localizedText,
+    heroVideo: z.object({
+      src: z.string(),
+      poster: z.string(),
     }),
-    description: localizedText,
-    artworks: z.array(z.object({
-      id: z.string(),
-      title: localizedText,
+    cinematicReveal: z.object({
+      tagline: localizedText,
+      cardTitle: localizedText,
       description: localizedText,
       image: z.string(),
-      room: z.string(),
-      year: z.string().optional(),
-      medium: localizedText.optional(),
-      audioGuide: z.boolean().default(false),
-      membersOnly: z.boolean().default(false),
+      imagePosition: z.enum(['left', 'center', 'right']).optional(),
+    }),
+    intro: z.object({
+      heading: localizedText,
+      body: localizedText,
+    }),
+    artworks: z.array(z.object({
+      id: z.string(),
+      number: z.number().int(),
+      title: localizedText,
+      year: z.string(),
+      collection: z.string(),
+      credit: z.string().optional(),
+      image: z.string(),
+      description: localizedText,
+      audioSrc: z.string(),
     })),
-    practicalInfo: z.object({
-      rooms: z.array(z.string()),
-      audioGuideAvailable: z.boolean(),
-      estimatedDuration: localizedText,
-    }).optional(),
+    artistQuote: z.object({
+      quote: localizedText,
+      attribution: z.string(),
+    }),
+    videos: z.array(z.object({
+      id: z.string(),
+      thumbnail: z.string(),
+      duration: z.string(),
+      quote: localizedText,
+      role: z.enum(['artist', 'audience', 'curator']),
+    })),
+    shop: z.array(z.object({
+      id: z.string(),
+      image: z.string(),
+      title: localizedText,
+      price: z.string(),
+      addToCartLabel: localizedText,
+    })),
   }),
 });
 

@@ -1,72 +1,252 @@
-[
-  {
+{
+  "kerry-james-marshall": {
     "id": "kerry-james-marshall",
     "title": {
       "de": "Kerry James Marshall: Retrospektive",
       "en": "Kerry James Marshall: Retrospective"
     },
-    "artist": "Kerry James Marshall",
-    "dates": {
-      "start": "2026-03-15",
-      "end": "2026-06-22"
+    "dateLabel": {
+      "de": "15. März – 22. Juni 2026",
+      "en": "15 March – 22 June 2026"
     },
-    "description": {
-      "de": "Kerry James Marshall (*1955, Birmingham, Alabama) ist einer der bedeutendsten zeitgen\u00f6ssischen K\u00fcnstler Amerikas. Seine Werke untersuchen die Geschichte und Erfahrung der afroamerikanischen Gemeinschaft durch monumentale Malerei.",
-      "en": "Kerry James Marshall (*1955, Birmingham, Alabama) is one of the most important contemporary American artists. His works examine the history and experience of the African American community through monumental painting."
+    "heroVideo": {
+      "src": "/video/kjm-hero.mp4",
+      "poster": "/video/kjm-hero-poster.png"
+    },
+    "cinematicReveal": {
+      "tagline": {
+        "de": "Ein Maler, der neu definiert, wie westliche Kunst aussehen kann.",
+        "en": "A painter who rewrote what Western art could look like."
+      },
+      "cardTitle": {
+        "de": "Die schwarze Figur, monumental komponiert",
+        "en": "The black figure, monumentally composed"
+      },
+      "description": {
+        "de": "Über vier Jahrzehnte hat Kerry James Marshall darauf bestanden, dass Schwarzsein der grossen Tradition der westlichen Malerei angehört — Historienbilder, Porträts, Innenräume, Landschaften.<br/><br/>Zehn Werke reisen aus Los Angeles, Chicago und New York nach Zürich.",
+        "en": "Across four decades Kerry James Marshall has insisted that Blackness belongs to the grand tradition of Western painting — history painting, portraiture, interiors, landscape.<br/><br/>Ten works travel from Los Angeles, Chicago, and New York to Zurich."
+      },
+      "image": "/images/exhibitions/kjm/kjm-portrait.png",
+      "imagePosition": "left"
+    },
+    "intro": {
+      "heading": {
+        "de": "Eine Ausstellung in zehn Werken",
+        "en": "An exhibition in ten works"
+      },
+      "body": {
+        "de": "Kerry James Marshall (*1955, Birmingham, Alabama) zählt zu den bedeutendsten zeitgenössischen amerikanischen Künstlern. Diese Retrospektive zeichnet seine Laufbahn anhand von zehn Gemälden nach, die aus öffentlichen und privaten Sammlungen in den Vereinigten Staaten stammen.",
+        "en": "Kerry James Marshall (*1955, Birmingham, Alabama) is one of the most important contemporary American artists. This retrospective traces his career through ten paintings drawn from public and private collections across the United States."
+      }
     },
     "artworks": [
       {
-        "id": "better-homes",
-        "title": { "de": "Better Homes, Better Gardens", "en": "Better Homes, Better Gardens" },
-        "description": { "de": "Monumentales Gem\u00e4lde, das das Leben in den Chicagoer Sozialsiedlungen darstellt.", "en": "Monumental painting depicting life in Chicago public housing projects." },
-        "image": "/images/artworks/better-homes.jpg",
-        "room": "Saal 2.3",
-        "year": "1994",
-        "medium": { "de": "Acryl und Collage auf Leinwand", "en": "Acrylic and collage on canvas" },
-        "audioGuide": true,
-        "membersOnly": false
-      },
-      {
         "id": "de-style",
+        "number": 1,
         "title": { "de": "De Style", "en": "De Style" },
-        "description": { "de": "Marshall verbindet afroamerikanische Kultur mit europ\u00e4ischer Kunstgeschichte.", "en": "Marshall connects African American culture with European art history." },
-        "image": "/images/artworks/de-style.jpg",
-        "room": "Saal 2.3",
         "year": "1993",
-        "medium": { "de": "Acryl auf Leinwand", "en": "Acrylic on canvas" },
-        "audioGuide": true,
-        "membersOnly": true
+        "collection": "Los Angeles County Museum of Art",
+        "credit": "Purchased with funds provided by Ruth and Jacob Bloom",
+        "image": "/images/artworks/de-style.jpg",
+        "description": {
+          "de": "Marshall verbindet die Kultur afroamerikanischer Barbershops mit der europäischen De-Stijl-Bewegung.",
+          "en": "Marshall connects African American barbershop culture with the European De Stijl movement — a Los Angeles storefront staged with Mondrian-scale confidence."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "untitled-studio",
-        "title": { "de": "Untitled (Studio)", "en": "Untitled (Studio)" },
-        "description": { "de": "Eine kraftvolle Darstellung des K\u00fcnstlerateliers als Ort der Selbstbehauptung.", "en": "A powerful depiction of the artist's studio as a place of self-assertion." },
-        "image": "/images/artworks/untitled-studio.jpg",
-        "room": "Saal 2.4",
-        "year": "2014",
-        "medium": { "de": "Acryl auf PVC-Platte", "en": "Acrylic on PVC panel" },
-        "audioGuide": false,
-        "membersOnly": false
+        "id": "better-homes",
+        "number": 2,
+        "title": { "de": "Better Homes, Better Gardens", "en": "Better Homes, Better Gardens" },
+        "year": "1994",
+        "collection": "Denver Art Museum",
+        "credit": "Funds from Polly and Mark Addison, the Alliance for Contemporary Art, Caroline Morgan, and Colorado Contemporary Collectors",
+        "image": "/images/artworks/better-homes.jpg",
+        "description": {
+          "de": "Ein Idyll in Chicagos Sozialbauwohnungen: Rosen, Vögel und das Versprechen häuslichen Glücks.",
+          "en": "An idyll set in Chicago's public housing — roses, bluebirds, and the promise of domestic joy answering back to the language of real-estate advertising."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
         "id": "past-times",
+        "number": 3,
         "title": { "de": "Past Times", "en": "Past Times" },
-        "description": { "de": "Idyllische Szene, die stereotype Darstellungen von Freizeit und Zugeh\u00f6rigkeit hinterfragt.", "en": "Idyllic scene questioning stereotypical representations of leisure and belonging." },
-        "image": "/images/artworks/past-times.jpg",
-        "room": "Saal 2.5",
         "year": "1997",
-        "medium": { "de": "Acryl auf Leinwand", "en": "Acrylic on canvas" },
-        "audioGuide": true,
-        "membersOnly": true
+        "collection": "Metropolitan Museum of Art, New York",
+        "credit": "Gift of Sean Combs",
+        "image": "/images/artworks/past-times.jpg",
+        "description": {
+          "de": "Ein Schwarzes Picknick am See, komponiert im Format der Historienmalerei.",
+          "en": "A Black leisure scene staged at lake's edge and composed with the scale and ambition of nineteenth-century history painting."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "untitled-studio",
+        "number": 4,
+        "title": { "de": "Untitled (Studio)", "en": "Untitled (Studio)" },
+        "year": "2014",
+        "collection": "Metropolitan Museum of Art, New York",
+        "credit": "Purchase, The Jacques and Natasha Gelman Foundation Gift",
+        "image": "/images/artworks/untitled-studio.jpg",
+        "description": {
+          "de": "Marshall dreht den Blick: das Atelier selbst als Schauplatz Schwarzer Kunstproduktion.",
+          "en": "Marshall turns the lens on his own world — the studio itself as the site of Black artistic production, models and props arranged with theatrical poise."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "school-of-beauty",
+        "number": 5,
+        "title": { "de": "School of Beauty, School of Culture", "en": "School of Beauty, School of Culture" },
+        "year": "2012",
+        "collection": "Birmingham Museum of Art",
+        "credit": "Museum purchase with funds provided by Elizabeth (Bibby) Smith",
+        "image": "/images/artworks/de-style.jpg",
+        "description": {
+          "de": "Ein anamorphotischer Schönheitssalon, in dem eine Disney-Prinzessin am Boden schwebt.",
+          "en": "An anamorphic blonde princess floats at the feet of a bustling Black salon — the politics of beauty staged in a single perspectival jolt."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "7am-sunday-morning",
+        "number": 6,
+        "title": { "de": "7am Sunday Morning", "en": "7am Sunday Morning" },
+        "year": "2003",
+        "collection": "Yale University Art Gallery",
+        "image": "/images/artworks/past-times.jpg",
+        "description": {
+          "de": "Chicagos South Side im Morgenlicht: eine Panoramaansicht als urbane Elegie.",
+          "en": "A panoramic view of Chicago's South Side at first light — an urban elegy composed like a Flemish cityscape."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "souvenir-i",
+        "number": 7,
+        "title": { "de": "Souvenir I", "en": "Souvenir I" },
+        "year": "1997",
+        "collection": "Museum of Contemporary Art, Chicago",
+        "credit": "Bernice and Kenneth Newberger Fund",
+        "image": "/images/artworks/better-homes.jpg",
+        "description": {
+          "de": "Gedenkbild für die im Civil-Rights-Kampf Verstorbenen der 1960er Jahre.",
+          "en": "A memorial to those lost during the civil rights struggle of the 1960s — glitter, wings, and a living-room shrine to hold the names."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "slow-dance",
+        "number": 8,
+        "title": { "de": "Slow Dance", "en": "Slow Dance" },
+        "year": "1992–1993",
+        "collection": "David and Alfred Smart Museum of Art, University of Chicago",
+        "image": "/images/artworks/untitled-studio.jpg",
+        "description": {
+          "de": "Ein häusliches Liebesbild: Wohnzimmer, Radio, Umarmung — Schwarze Intimität als ernstes Sujet.",
+          "en": "A domestic love scene — living room, radio, an embrace — staking a claim for Black intimacy as a serious subject of painting."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "watts-1963",
+        "number": 9,
+        "title": { "de": "Watts 1963", "en": "Watts 1963" },
+        "year": "1995",
+        "collection": "Private Collection",
+        "image": "/images/artworks/de-style.jpg",
+        "description": {
+          "de": "Ein Rückblick auf Marshalls eigene Kindheit in Los Angeles, zwei Jahre vor den Unruhen von Watts.",
+          "en": "A backward glance at Marshall's own Los Angeles childhood, two years before the Watts uprising rewrote the neighbourhood's public image."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "vignette",
+        "number": 10,
+        "title": { "de": "Vignette", "en": "Vignette" },
+        "year": "2003",
+        "collection": "Defares Collection",
+        "image": "/images/artworks/past-times.jpg",
+        "description": {
+          "de": "Ein Liebespaar schwebt durch einen Rokoko-Garten, umkreist von flatternden Herzchen.",
+          "en": "A Black couple drifts through a Rococo garden, circled by fluttering hearts — Fragonard re-staged with a different cast at its centre."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       }
     ],
-    "practicalInfo": {
-      "rooms": ["Saal 2.3", "Saal 2.4", "Saal 2.5"],
-      "audioGuideAvailable": true,
-      "estimatedDuration": {
-        "de": "Ca. 60\u201390 Minuten",
-        "en": "Approx. 60\u201390 minutes"
+    "artistQuote": {
+      "quote": {
+        "de": "«Ich versuche, die schwarzen Farben, die ich verwende, so vielschichtig zu machen wie jede andere Farbe auf der Palette.»",
+        "en": "«I try to make the black paints that I use as complex as any other colour on the palette.»"
+      },
+      "attribution": "— Kerry James Marshall"
+    },
+    "videos": [
+      {
+        "id": "video-artist",
+        "thumbnail": "/images/exhibitions/kjm/kjm-portrait.png",
+        "duration": "1 Min",
+        "quote": {
+          "de": "«Ich wollte Schwarzsein zum Grundton der Malerei machen.»",
+          "en": "“I wanted Blackness to become the baseline of painting itself.”"
+        },
+        "role": "artist"
+      },
+      {
+        "id": "video-audience",
+        "thumbnail": "/images/exhibitions/kjm/kjm-portrait.png",
+        "duration": "2 Min",
+        "quote": {
+          "de": "«Ich stand vor ‹Past Times› und hatte das Gefühl, meine eigene Familie anzusehen.»",
+          "en": "“I stood in front of ‘Past Times’ and felt like I was looking at my own family.”"
+        },
+        "role": "audience"
+      },
+      {
+        "id": "video-curator",
+        "thumbnail": "/images/exhibitions/kjm/kjm-portrait.png",
+        "duration": "3 Min",
+        "quote": {
+          "de": "«Marshall bringt die Geschichte der Malerei zurück auf ihre eigentliche Aufgabe.»",
+          "en": "“Marshall returns the history of painting to what it was always supposed to do.”"
+        },
+        "role": "curator"
       }
-    }
+    ],
+    "shop": [
+      {
+        "id": "lithograph",
+        "image": "/images/exhibitions/kjm/kjm-portrait.png",
+        "title": {
+          "de": "Limitierte Lithografie",
+          "en": "Limited Edition Lithograph"
+        },
+        "price": "CHF 750.-",
+        "addToCartLabel": { "de": "In den Warenkorb", "en": "Add to cart" }
+      },
+      {
+        "id": "candleholder",
+        "image": "/images/exhibitions/kjm/kjm-portrait.png",
+        "title": {
+          "de": "Kerzenhalter aus Messing",
+          "en": "Brass Candle Holder"
+        },
+        "price": "CHF 120.-",
+        "addToCartLabel": { "de": "In den Warenkorb", "en": "Add to cart" }
+      },
+      {
+        "id": "scented-candle",
+        "image": "/images/exhibitions/kjm/kjm-portrait.png",
+        "title": {
+          "de": "Duftkerze «Studio»",
+          "en": "‘Studio’ Scented Candle"
+        },
+        "price": "CHF 48.-",
+        "addToCartLabel": { "de": "In den Warenkorb", "en": "Add to cart" }
+      }
+    ]
   }
-]
+}
