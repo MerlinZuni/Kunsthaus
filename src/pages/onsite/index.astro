@@ -1,11 +1,20 @@
 ---
-// src/pages/onsite/index.astro -- Phase 03-01 stub route
-// Proves routing foundation: navigating here produces <html data-mode="onsite">
-// with the dark palette cascade. Real on-site landing page content lands in 03-02.
+// src/pages/onsite/index.astro — Phase 03-02 full on-site landing page.
+// Replaces the 03-01 stub with the full composition:
+// OnsiteHero → CinematicReveal → Chipperfield grid → Moser grid → Navigator teaser → InfoBox → FAQ.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import StickyCTA from '../../components/ui/StickyCTA.astro';
 import Footer from '../../components/footer/Footer.astro';
+import OnsiteHero from '../../components/hero/OnsiteHero.astro';
+import CinematicReveal from '../../components/sections/CinematicReveal.astro';
+import SectionWrapper from '../../components/sections/SectionWrapper.astro';
+import OnsiteExhibitionGrid from '../../components/sections/OnsiteExhibitionGrid.astro';
+import MuseumNavigatorTeaser from '../../components/sections/MuseumNavigatorTeaser.astro';
+import InfoBox from '../../components/sections/InfoBox.astro';
+import FAQAccordion from '../../components/ui/FAQAccordion.astro';
 import uiStringsJson from '../../content/shared/ui-strings.json';
+import onsiteHomeJson from '../../content/onsite/home.json';
+import exhibitionsData from '../../content/planning/exhibitions.json';
 
 const lang = 'en' as const;
 const uiStrings = uiStringsJson;
@@ -13,15 +22,115 @@ const getString = (key: string) => {
   const entry = uiStrings.find((s: any) => s.key === key);
   return entry?.value?.[lang] || key;
 };
+
+// Onsite home content — direct JSON import (Zod validation still runs via the collection).
+const onsiteHome = onsiteHomeJson['onsite-home'];
+
+// Exhibition groupings
+const exhibitions = exhibitionsData[0];
+const currentExhibitions = exhibitions.currentExhibitions as any[];
+const upcoming = exhibitions.upcomingExhibitions as any[];
+const marisol = upcoming.find((e: any) => e.id === 'marisol');
+
+const chipperfieldItems = currentExhibitions.filter(
+  (e: any) => e?.location?.building === 'Chipperfield Building'
+);
+const moserItems = [
+  ...currentExhibitions.filter((e: any) => e?.location?.building === 'Moser Building'),
+  ...(marisol ? [marisol] : []),
+];
+
+const allEvents = exhibitions.events as any[];
+
+// Adapt cinematicReveal shape to CinematicReveal.astro's expected `data` prop
+// (which uses `title` rather than `cardTitle`).
+const cinematicData = onsiteHome.cinematicReveal
+  ? {
+      tagline: onsiteHome.cinematicReveal.tagline,
+      title: onsiteHome.cinematicReveal.cardTitle,
+      description: onsiteHome.cinematicReveal.description,
+      image: onsiteHome.cinematicReveal.image,
+    }
+  : null;
 ---
 
 <BaseLayout title="Kunsthaus Zurich — At the Museum" lang={lang} mode="onsite">
-  <section class="onsite-stub">
-    <h1 class="onsite-stub__title">On-site mode — coming in 03-02</h1>
-    <p class="onsite-stub__body">
-      This is a stub route. The full On-site landing page will be built in Phase 03-02.
-    </p>
-  </section>
+  <OnsiteHero title={onsiteHome.hero.title} lang={lang} />
+
+  {cinematicData && (
+    <section
+      class="stacking-section cinematic-reveal-section"
+      data-section="onsite-reveal"
+      style="z-index: 20; background: transparent;"
+    >
+      <CinematicReveal contentType="onsite-home" data={cinematicData} lang={lang} />
+    </section>
+  )}
+
+  <SectionWrapper
+    index={1}
+    bgStep={1}
+    sectionName={onsiteHome.buildings[0].name[lang]}
+    sectionId="chipperfield-grid"
+  >
+    <OnsiteExhibitionGrid
+      buildingName={onsiteHome.buildings[0].name}
+      items={chipperfieldItems}
+      lang={lang}
+    />
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={2}
+    bgStep={2}
+    sectionName={onsiteHome.buildings[1].name[lang]}
+    sectionId="moser-grid"
+  >
+    <OnsiteExhibitionGrid
+      buildingName={onsiteHome.buildings[1].name}
+      items={moserItems}
+      lang={lang}
+    />
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={3}
+    bgStep={3}
+    sectionName={onsiteHome.navigatorTeaser.title[lang]}
+    sectionId="navigator-teaser"
+  >
+    <MuseumNavigatorTeaser
+      title={onsiteHome.navigatorTeaser.title}
+      body={onsiteHome.navigatorTeaser.body}
+      linkLabel={onsiteHome.navigatorTeaser.linkLabel}
+      linkHref={onsiteHome.navigatorTeaser.linkHref}
+      lang={lang}
+    />
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={4}
+    bgStep={4}
+    sectionName={lang === 'de' ? 'Info' : 'Info'}
+    sectionId="info-box"
+  >
+    <InfoBox
+      wifiSsid={onsiteHome.infoBox.wifiSsid}
+      wifiPassword={onsiteHome.infoBox.wifiPassword}
+      wifiNote={onsiteHome.infoBox.wifiNote}
+      events={allEvents}
+      lang={lang}
+    />
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={5}
+    bgStep={1}
+    sectionName="FAQ"
+    sectionId="faq"
+  >
+    <FAQAccordion items={onsiteHome.faq} lang={lang} />
+  </SectionWrapper>
 
   <Footer
     lang={lang}
@@ -38,26 +147,3 @@ const getString = (key: string) => {
     lang={lang}
   />
 </BaseLayout>
-
-<style>
-  .onsite-stub {
-    min-height: 100vh;
-    padding: var(--space-16) var(--space-8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: var(--space-4);
-  }
-
-  .onsite-stub__title {
-    font-size: var(--type-3xl);
-    color: var(--color-text);
-    max-width: 20ch;
-  }
-
-  .onsite-stub__body {
-    color: var(--color-text);
-    opacity: 0.7;
-    max-width: 60ch;
-  }
-</style>
