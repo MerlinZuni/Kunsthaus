@@ -1,9 +1,7 @@
 ---
-// StickyCTA.astro -- D-18, D-19, D-21: Floating buttons (desktop) / sticky bottom bar (mobile)
-// Segmented mode toggle + Tickets button
-// ModeToggle React island for data-mode switching with localStorage persistence
-
-import ModeToggle from './ModeToggle.tsx';
+// StickyCTA.astro -- D-18, D-19, D-21: Floating button (desktop) / sticky bottom bar (mobile)
+// Tickets CTA only. The mode toggle lives in HamburgerOverlay + FooterColumns as
+// route-aware <a href> navigation (Phase 03-01 URL-as-state refactor).
 
 interface Props {
   modeLabels: {
@@ -15,13 +13,7 @@ interface Props {
   ticketsHref?: string;
 }
 
-const { modeLabels, ticketsLabel = 'Buy Tickets', lang, ticketsHref = 'https://www.kunsthaus.ch/tickets' } = Astro.props;
-
-// Build labels object for ModeToggle React island
-const toggleLabels = {
-  planning: { en: 'Plan a visit', de: 'Besuch planen', fr: 'Planifier' },
-  onsite: { en: "I'm here", de: 'Ich bin da', fr: 'Je suis ici' },
-};
+const { ticketsLabel = 'Buy Tickets', ticketsHref = 'https://www.kunsthaus.ch/tickets' } = Astro.props;
 ---
 
 {/* Desktop: floating button bottom-right */}
@@ -51,151 +43,27 @@ const toggleLabels = {
 </div>
 
 <script>
-  import { gsap } from 'gsap';
-
-  function slidePill(toggle: HTMLElement) {
-    const pill = (toggle.querySelector('.sticky-cta__pill') || toggle.querySelector('.footer-col__mode-pill')) as HTMLElement;
-    const active = (toggle.querySelector('.sticky-cta__segment--active') || toggle.querySelector('.footer-col__mode-segment--active')) as HTMLElement;
-    if (!pill || !active) return;
-
-    const toggleRect = toggle.getBoundingClientRect();
-    const activeRect = active.getBoundingClientRect();
-
-    gsap.to(pill, {
-      x: activeRect.left - toggleRect.left - 4,
-      width: activeRect.width,
-      duration: 0.35,
-      ease: 'power3.out',
-    });
-  }
-
-  function initPills() {
-    document.querySelectorAll('.sticky-cta__toggle, .footer-col__mode-toggle').forEach(toggle => {
-      const el = toggle as HTMLElement;
-      const pill = (el.querySelector('.sticky-cta__pill') || el.querySelector('.footer-col__mode-pill')) as HTMLElement;
-      const active = (el.querySelector('.sticky-cta__segment--active') || el.querySelector('.footer-col__mode-segment--active')) as HTMLElement;
-      if (!pill || !active) return;
-
-      // Set initial pill position without animation
-      const toggleRect = el.getBoundingClientRect();
-      const activeRect = active.getBoundingClientRect();
-      gsap.set(pill, {
-        x: activeRect.left - toggleRect.left - 4,
-        width: activeRect.width,
-      });
-    });
-  }
-
   function initStickyCTA() {
-    // Segmented toggle click handler
-    document.querySelectorAll('[data-mode-segment]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const mode = (btn as HTMLElement).dataset.modeSegment;
-        if (!mode) return;
-
-        // Update HTML mode attribute + localStorage
-        document.documentElement.setAttribute('data-mode', mode);
-        localStorage.setItem('kunsthaus-mode', mode);
-
-        // Update all toggle segments across desktop + mobile + footer
-        document.querySelectorAll('[data-mode-segment]').forEach((seg) => {
-          const el = seg as HTMLElement;
-          const isActive = el.dataset.modeSegment === mode;
-          el.classList.toggle('sticky-cta__segment--active', isActive);
-          el.classList.toggle('footer-col__mode-segment--active', isActive);
-          el.setAttribute('aria-checked', isActive ? 'true' : 'false');
-        });
-
-        // Slide pills in all toggles (sticky CTA + footer)
-        document.querySelectorAll('.sticky-cta__toggle, .footer-col__mode-toggle').forEach(toggle => {
-          slidePill(toggle as HTMLElement);
-        });
-      });
-    });
-
-    // Initialize from localStorage
-    const saved = localStorage.getItem('kunsthaus-mode');
-    if (saved) {
-      document.documentElement.setAttribute('data-mode', saved);
-      document.querySelectorAll('[data-mode-segment]').forEach((seg) => {
-        const el = seg as HTMLElement;
-        const isActive = el.dataset.modeSegment === saved;
-        el.classList.toggle('sticky-cta__segment--active', isActive);
-        el.setAttribute('aria-checked', isActive ? 'true' : 'false');
-      });
-    }
-
-    // Initialize pill positions after DOM is ready
-    requestAnimationFrame(initPills);
-
     // Hide sticky CTA when footer is visible
     const footer = document.querySelector('.site-footer');
-    if (footer) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          document.querySelectorAll('.sticky-cta').forEach((el) => {
-            (el as HTMLElement).style.opacity = entry.isIntersecting ? '0' : '1';
-            (el as HTMLElement).style.pointerEvents = entry.isIntersecting ? 'none' : 'auto';
-          });
-        },
-        { threshold: 0.1 }
-      );
-      observer.observe(footer);
-    }
+    if (!footer) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        document.querySelectorAll('.sticky-cta').forEach((el) => {
+          (el as HTMLElement).style.opacity = entry.isIntersecting ? '0' : '1';
+          (el as HTMLElement).style.pointerEvents = entry.isIntersecting ? 'none' : 'auto';
+        });
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(footer);
   }
 
   initStickyCTA();
-  document.addEventListener('astro:after-swap', initStickyCTA);
+  document.addEventListener('astro:page-load', initStickyCTA);
 </script>
 
 <style>
-  /* Segmented toggle */
-  .sticky-cta__toggle {
-    display: flex;
-    position: relative;
-    background: color-mix(in srgb, var(--color-text) 75%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: var(--btn-radius);
-    padding: 4px;
-    gap: 0;
-  }
-
-  .sticky-cta__pill {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    height: calc(100% - 8px);
-    border-radius: var(--btn-radius-inner);
-    background: color-mix(in srgb, var(--color-surface) 85%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    pointer-events: none;
-    z-index: 0;
-    transition: none;
-  }
-
-  .sticky-cta__segment {
-    position: relative;
-    z-index: 1;
-    background: transparent;
-    color: var(--color-surface);
-    border: none;
-    padding: var(--btn-padding-y) var(--btn-padding-x);
-    font-size: var(--type-sm);
-    font-weight: var(--weight-regular);
-    cursor: pointer;
-    white-space: nowrap;
-    border-radius: var(--btn-radius-inner);
-    transition: color 0.3s ease;
-  }
-
-  .sticky-cta__segment--active {
-    color: var(--color-text);
-    font-weight: var(--weight-medium);
-  }
-
   /* Desktop floating buttons */
   .sticky-cta--desktop {
     position: fixed;
