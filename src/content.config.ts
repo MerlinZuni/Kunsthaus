@@ -70,6 +70,7 @@ const onsiteExhibition = defineCollection({
     intro: z.object({
       heading: localizedText,
       body: localizedText,
+      paragraphs: z.array(localizedText).optional(),
     }),
     artworks: z.array(z.object({
       id: z.string(),

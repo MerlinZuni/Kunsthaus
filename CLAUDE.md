@@ -118,7 +118,23 @@ A competition prototype for the Kunsthaus Zürich museum website redesign. A res
 <!-- GSD:conventions-start source:CONVENTIONS.md -->
 ## Conventions
 
-Conventions not yet established. Will populate as patterns emerge during development.
+### Icons
+
+**Use Material Symbols Outlined for all icons.** The font is loaded globally via `src/styles/typography.css` (`@font-face` at `src/assets/fonts/MaterialSymbols/MaterialSymbolsOutlined.woff2`) and the `.icon` utility class is wired to it.
+
+**How to add an icon:**
+```astro
+<span class="icon" aria-hidden="true">glyph_name</span>
+```
+Look up glyph names at https://fonts.google.com/icons. Inside `.btn`, the `.icon` selector already sets `font-size: 18px`, and `.hover-wipe-inverse:hover .icon` picks up a 4px right-translate on hover — no extra CSS needed for typical usage.
+
+**Do NOT hand-draw SVG icons** (no fabricated shopping bags, arrows, carts, etc.). Visual consistency across nav, buttons, overlays, and cards comes from every icon sharing the same font weight, stroke, and optical scale.
+
+**Exceptions — inline SVG is acceptable when:**
+1. The glyph genuinely doesn't exist in Material Symbols (brand marks, bespoke shapes).
+2. You need a Material Symbols **filled** variant and the loaded static WOFF2 subset doesn't support the `FILL` variation axis. Precedent: `src/components/hero/CarouselTabs.astro` uses inline SVG polygons for play/pause because it needs solid triangles.
+
+When you must use inline SVG, give it `class="icon"` so it inherits the same sizing and hover rules.
 <!-- GSD:conventions-end -->
 
 <!-- GSD:architecture-start source:ARCHITECTURE.md -->

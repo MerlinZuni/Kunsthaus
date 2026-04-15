@@ -36,6 +36,21 @@ const posterSrc = `${base}${video.poster}`;
   <div class="kjm-hero__title-block">
     <p class="kjm-hero__datelabel">{dateLabel[lang]}</p>
     <h1 class="kjm-hero__title">{title[lang]}</h1>
+    <button
+      type="button"
+      class="kjm-hero__playpause"
+      data-kjm-playpause
+      data-paused="false"
+      aria-label="Pause background video"
+    >
+      <svg class="kjm-hero__icon kjm-hero__icon--pause" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <rect x="4" y="3" width="4" height="14" rx="1" />
+        <rect x="12" y="3" width="4" height="14" rx="1" />
+      </svg>
+      <svg class="kjm-hero__icon kjm-hero__icon--play" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <polygon points="5,3 17,10 5,17" />
+      </svg>
+    </button>
   </div>
 </section>
 
@@ -47,16 +62,48 @@ const posterSrc = `${base}${video.poster}`;
   }
   kjmHeroReduceMotionGuard();
   document.addEventListener('astro:page-load', kjmHeroReduceMotionGuard);
+
+  function initKjmHeroPlayPause() {
+    document.querySelectorAll<HTMLElement>('.kjm-hero').forEach((hero) => {
+      if (hero.dataset.pauseInit === 'true') return;
+      hero.dataset.pauseInit = 'true';
+      const video = hero.querySelector<HTMLVideoElement>('.kjm-hero__video');
+      const btn = hero.querySelector<HTMLButtonElement>('[data-kjm-playpause]');
+      if (!video || !btn) return;
+      const sync = () => {
+        const paused = video.paused;
+        btn.dataset.paused = String(paused);
+        btn.setAttribute('aria-label', paused ? 'Play background video' : 'Pause background video');
+      };
+      btn.addEventListener('click', () => {
+        if (video.paused) video.play().catch(() => {});
+        else video.pause();
+        sync();
+      });
+      video.addEventListener('play', sync);
+      video.addEventListener('pause', sync);
+      sync();
+    });
+  }
+  initKjmHeroPlayPause();
+  document.addEventListener('astro:page-load', initKjmHeroPlayPause);
 </script>
 
 <style>
   .kjm-hero {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    height: 85vh;
+    min-height: 500px;
     overflow: hidden;
     background: #0a0a0a;
     color: #ffffff;
+  }
+
+  @media (max-width: 767px) {
+    .kjm-hero {
+      height: 100vh;
+    }
   }
 
   .kjm-hero__video {
@@ -83,7 +130,7 @@ const posterSrc = `${base}${video.poster}`;
 
   .kjm-hero__back {
     position: absolute;
-    top: var(--space-8);
+    top: calc(110px + var(--space-3));
     left: var(--space-8);
     color: #ffffff;
     text-decoration: none;
@@ -112,7 +159,35 @@ const posterSrc = `${base}${video.poster}`;
     z-index: 2;
     color: #ffffff;
     max-width: 24ch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
+
+  .kjm-hero__playpause {
+    margin-top: var(--space-5);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .kjm-hero__playpause:hover,
+  .kjm-hero__playpause:focus-visible {
+    background: rgba(0, 0, 0, 0.78);
+    transform: scale(1.05);
+    outline: none;
+  }
+  .kjm-hero__playpause[data-paused="false"] .kjm-hero__icon--play { display: none; }
+  .kjm-hero__playpause[data-paused="true"] .kjm-hero__icon--pause { display: none; }
 
   .kjm-hero__datelabel {
     font-size: var(--type-sm);
@@ -132,16 +207,16 @@ const posterSrc = `${base}${video.poster}`;
 
   @media (max-width: 767px) {
     .kjm-hero__back {
-      top: var(--space-6);
+      top: calc(110px + var(--space-2));
       left: var(--space-6);
     }
     .kjm-hero__title-block {
       left: var(--space-6);
       right: var(--space-6);
-      bottom: var(--space-10);
+      bottom: var(--space-24);
     }
     .kjm-hero__title {
-      font-size: var(--type-3xl);
+      font-size: var(--type-2xl);
     }
   }
 </style>

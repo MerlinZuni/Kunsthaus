@@ -19,25 +19,35 @@
         "en": "A painter who rewrote what Western art could look like."
       },
       "cardTitle": {
-        "de": "Die schwarze Figur, monumental komponiert",
-        "en": "The black figure, monumentally composed"
+        "de": "Die Geschichten",
+        "en": "The Histories"
       },
       "description": {
-        "de": "Über vier Jahrzehnte hat Kerry James Marshall darauf bestanden, dass Schwarzsein der grossen Tradition der westlichen Malerei angehört — Historienbilder, Porträts, Innenräume, Landschaften.<br/><br/>Zehn Werke reisen aus Los Angeles, Chicago und New York nach Zürich.",
-        "en": "Across four decades Kerry James Marshall has insisted that Blackness belongs to the grand tradition of Western painting — history painting, portraiture, interiors, landscape.<br/><br/>Ten works travel from Los Angeles, Chicago, and New York to Zurich."
+        "de": "Erleben Sie diesen Frühling und Sommer die monumentalen Gemälde des US-Künstlers Kerry James Marshall. Seine eindrucksvollen Werke erforschen das Leben und die Geschichte Schwarzer Amerikaner:innen in Bildern voller Farbe, Schmerz, Hoffnung und Vitalität.",
+        "en": "This spring/summer, experience the monumental paintings of US artist Kerry James Marshall. His powerful works explore the lives and histories of Black Americans through images filled with colour, pain, hope and vitality."
       },
       "image": "/images/exhibitions/kjm/kjm-portrait.png",
       "imagePosition": "left"
     },
     "intro": {
       "heading": {
-        "de": "Eine Ausstellung in zehn Werken",
-        "en": "An exhibition in ten works"
+        "de": "Monumentale Erzählungen",
+        "en": "Monumental Narratives"
       },
       "body": {
-        "de": "Kerry James Marshall (*1955, Birmingham, Alabama) zählt zu den bedeutendsten zeitgenössischen amerikanischen Künstlern. Diese Retrospektive zeichnet seine Laufbahn anhand von zehn Gemälden nach, die aus öffentlichen und privaten Sammlungen in den Vereinigten Staaten stammen.",
-        "en": "Kerry James Marshall (*1955, Birmingham, Alabama) is one of the most important contemporary American artists. This retrospective traces his career through ten paintings drawn from public and private collections across the United States."
-      }
+        "de": "Kerry James Marshall (*1955, Birmingham, Alabama) zählt zu den bedeutendsten zeitgenössischen amerikanischen Künstlern. Diese Retrospektive zeichnet seine Laufbahn anhand von Gemälden nach, die aus öffentlichen und privaten Sammlungen in den Vereinigten Staaten stammen.",
+        "en": "Kerry James Marshall (*1955, Birmingham, Alabama) is one of the most important contemporary American artists. This retrospective traces his career through paintings drawn from public and private collections across the United States."
+      },
+      "paragraphs": [
+        {
+          "de": "Marshall lebt in Chicago und gilt als einer der wichtigsten Maler der Gegenwart. Seit den frühen 1980er-Jahren stellt er in grossformatigen Werken Schwarze Figuren ins Zentrum der westlichen Historienmalerei und verwebt kunsthistorische Bezüge mit Popkultur, politischer Geschichte und persönlicher Erinnerung zu dichten Bilderzählungen voller Farbe, Virtuosität und Hoffnung.",
+          "en": "Based in Chicago, Marshall is regarded as one of the most important painters working today. Since the early 1980s his large-scale works have placed Black figures at the centre of Western history painting, fusing art-historical reference with popular culture, political history and personal memory into dense narrative compositions charged with colour, virtuosity and hope."
+        },
+        {
+          "de": "Im Kunsthaus Zürich entsteht die erste grosse Überblicksschau seines Werks im deutschsprachigen Raum — mit Schlüsselwerken aus allen Schaffensphasen sowie neuen Gemälden. Die Ausstellung ist eine Kooperation mit der Royal Academy of Arts, London, und dem Musée d'Art Moderne de Paris, kuratiert von Mark Godfrey mit Cathérine Hug für das Kunsthaus Zürich. Unterstützt von David Zwirner.",
+          "en": "At the Kunsthaus Zürich, this is the first major survey of his work in the German-speaking world, bringing together key paintings from every phase of his career alongside new works. The exhibition is a cooperation with the Royal Academy of Arts, London, and the Musée d'Art Moderne de Paris, curated by Mark Godfrey with Cathérine Hug for the Kunsthaus Zürich. Supported by David Zwirner."
+        }
+      ]
     },
     "artworks": [
       {
@@ -214,17 +224,37 @@
           "en": "“Marshall returns the history of painting to what it was always supposed to do.”"
         },
         "role": "curator"
+      },
+      {
+        "id": "video-audience-2",
+        "thumbnail": "/images/exhibitions/kjm/kjm-portrait.png",
+        "duration": "2 Min",
+        "quote": {
+          "de": "«Die Farben haben mich nicht mehr losgelassen — ich bin drei Mal wiedergekommen.»",
+          "en": "“The colour wouldn't let me go — I came back three times.”"
+        },
+        "role": "audience"
+      },
+      {
+        "id": "video-curator-2",
+        "thumbnail": "/images/exhibitions/kjm/kjm-portrait.png",
+        "duration": "4 Min",
+        "quote": {
+          "de": "«Jedes Werk ist eine Einladung, die Geschichte neu zu lesen.»",
+          "en": "“Every painting is an invitation to re-read history itself.”"
+        },
+        "role": "curator"
       }
     ],
     "shop": [
       {
-        "id": "lithograph",
-        "image": "/images/exhibitions/kjm/kjm-portrait.png",
+        "id": "catalogue",
+        "image": "/images/exhibitions/kjm/shop/kjm-book.jpg",
         "title": {
-          "de": "Limitierte Lithografie",
-          "en": "Limited Edition Lithograph"
+          "de": "Ausstellungskatalog — Geschichte(n)",
+          "en": "Exhibition Catalogue — Histories"
         },
-        "price": "CHF 750.-",
+        "price": "CHF 70.-",
         "addToCartLabel": { "de": "In den Warenkorb", "en": "Add to cart" }
       },
       {

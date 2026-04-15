@@ -96,8 +96,12 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
       const parentSection = reveal.closest('.stacking-section');
       const sectionTitle = parentSection?.querySelector('.section-title') as HTMLElement;
 
+      const parentEl = frame.parentElement as HTMLElement | null;
+      const parentWidth = parentEl?.clientWidth ?? window.innerWidth;
+      const fullBleedMarginLeft = -(window.innerWidth - parentWidth) / 2;
+
       if (reduceMotion) {
-        gsap.set(frame, { maxWidth: 'none', width: '100vw', marginLeft: 'calc(-50vw + 50%)' });
+        gsap.set(frame, { maxWidth: 'none', width: window.innerWidth, marginLeft: fullBleedMarginLeft });
         gsap.set(imageWrap, { clipPath: 'inset(0% 0% 0% 0%)', borderRadius: '0' });
         if (card) gsap.set(card, { opacity: 1, y: 0 });
         return;
@@ -128,11 +132,13 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
         ease: 'power1.inOut',
       }, 0);
 
-      // Frame expands to full browser width (starts slightly later)
+      // Frame expands to full browser width (starts slightly later).
+      // Target values computed in px so GSAP can tween smoothly from
+      // margin:auto's resolved px value — avoids the snap-to-calc() jump.
       tl.to(frame, {
         maxWidth: 'none',
-        width: '100vw',
-        marginLeft: 'calc(-50vw + 50%)',
+        width: window.innerWidth,
+        marginLeft: fullBleedMarginLeft,
         duration: 0.45,
         ease: 'power1.inOut',
       }, 0.15);

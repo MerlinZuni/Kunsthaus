@@ -57,7 +57,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       contentType="kjm-detail"
       data={cinematicData}
       lang={lang}
-      imagePosition={kjm.cinematicReveal.imagePosition || 'left'}
     />
   </section>
 
@@ -68,6 +67,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     sectionId="kjm-intro"
   >
     <p class="kjm-intro__body">{kjm.intro.body[lang]}</p>
+    {kjm.intro.paragraphs && (
+      <div class="kjm-intro__columns">
+        {kjm.intro.paragraphs.map((p: any) => (
+          <p class="kjm-intro__paragraph">{p[lang]}</p>
+        ))}
+      </div>
+    )}
   </SectionWrapper>
 
   <SectionWrapper
@@ -99,7 +105,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     sectionId="kjm-videos"
   >
     <HorizontalSlider
-      heading={{ de: 'Stimmen zur Ausstellung', en: 'Voices on the exhibition' }}
+      heading={{ de: 'Ausstellungsvideos', en: 'Exhibition Videos' }}
       variant="videos"
       lang={lang}
     >
@@ -107,6 +113,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <article class="video-card" data-role={v.role}>
           <div class="video-card__media">
             <img src={`${base}${v.thumbnail}`} alt={v.quote[lang]} loading="lazy" />
+            <button type="button" class="video-card__play" aria-label="Play video">
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <polygon points="5,3 17,10 5,17" />
+              </svg>
+            </button>
             <span class="video-card__duration">{v.duration}</span>
           </div>
           <blockquote class="video-card__quote">{v.quote[lang]}</blockquote>
@@ -123,7 +134,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     sectionId="kjm-shop"
   >
     <HorizontalSlider
-      heading={{ de: 'Shop', en: 'Shop' }}
+      heading={{ de: 'Aus der Ausstellung', en: 'From the Exhibit' }}
       variant="shop"
       lang={lang}
     >
@@ -134,10 +145,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </div>
           <h4 class="shop-card__title">{s.title[lang]}</h4>
           <p class="shop-card__price">{s.price}</p>
-          <button type="button" class="shop-card__cta">{s.addToCartLabel[lang]}</button>
+          <button type="button" class="shop-card__cta btn hover-wipe-inverse touch-pulse touch-target">
+            <span>{s.addToCartLabel[lang]}</span>
+            <span class="icon" aria-hidden="true">shopping_bag</span>
+          </button>
         </article>
       ))}
     </HorizontalSlider>
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={6}
+    bgStep={2}
+    sectionName="Keep Exploring"
+    sectionId="kjm-continue"
+  >
+    <div class="kjm-continue">
+      <a href={`${base}/onsite`} class="btn hover-wipe-inverse touch-pulse touch-target">
+        <span>{lang === 'de' ? 'Besuch fortsetzen' : 'Continue your visit'}</span>
+        <span class="icon" aria-hidden="true">arrow_forward</span>
+      </a>
+    </div>
   </SectionWrapper>
 
   <Footer
@@ -163,6 +191,40 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     max-width: 60ch;
     color: var(--color-text);
     margin: 0;
+  }
+
+  .kjm-continue {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-6) 0;
+  }
+
+  .kjm-intro__columns {
+    margin-top: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .kjm-intro__paragraph {
+    font-size: var(--type-md);
+    line-height: var(--leading-relaxed, 1.7);
+    max-width: 65ch;
+    color: var(--color-text);
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    .kjm-intro__columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+      max-width: 90ch;
+    }
+    .kjm-intro__paragraph {
+      max-width: none;
+    }
   }
 
   /* Video testimonial cards (inline markup fills the HorizontalSlider slot) */
@@ -193,6 +255,33 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     padding: var(--space-1) var(--space-2);
     font-size: var(--type-xs);
     letter-spacing: 0.04em;
+  }
+  .video-card__play {
+    position: absolute;
+    bottom: var(--space-3);
+    left: var(--space-3);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .video-card__play:hover,
+  .video-card__play:focus-visible {
+    background: rgba(0, 0, 0, 0.78);
+    transform: scale(1.05);
+    outline: none;
+  }
+  .video-card__play svg {
+    margin-left: 2px;
   }
   .video-card__quote {
     font-size: var(--type-lg);
@@ -241,19 +330,5 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .shop-card__cta {
     align-self: flex-start;
     margin-top: var(--space-2);
-    padding: var(--space-2) var(--space-4);
-    background: transparent;
-    border: 1px solid color-mix(in srgb, var(--color-text) 60%, transparent);
-    color: var(--color-text);
-    font-size: var(--type-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  .shop-card__cta:hover,
-  .shop-card__cta:focus-visible {
-    background: color-mix(in srgb, var(--color-text) 12%, transparent);
-    outline: none;
   }
 </style>

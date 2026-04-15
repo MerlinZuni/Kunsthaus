@@ -37,29 +37,51 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   aria-roledescription="carousel"
   aria-label="Kerry James Marshall artworks"
 >
-  <div class="artwork-slider__controls">
-    <button
-      type="button"
-      class="artwork-slider__nav"
-      data-direction="prev"
-      aria-label="Previous artwork"
-    >‹</button>
-    <button
-      type="button"
-      class="artwork-slider__nav"
-      data-direction="next"
-      aria-label="Next artwork"
-    >›</button>
-  </div>
-  <ul class="artwork-slider__track" data-artwork-track>
-    {artworks.map((art) => (
-      <li class="artwork-slider__slide" aria-label={`${art.number}. ${art.title[lang]}`}>
+  <ul class="artwork-slider__stage" data-artwork-stage>
+    {artworks.map((art, i) => (
+      <li
+        class={`artwork-slider__slide${i === 0 ? ' is-active' : ''}`}
+        aria-label={`${art.number}. ${art.title[lang]}`}
+        aria-hidden={i === 0 ? 'false' : 'true'}
+        data-artwork-number={String(art.number).padStart(2, '0')}
+        data-index={i}
+      >
         <figure class="artwork-slider__figure">
           <img src={`${base}${art.image}`} alt={art.title[lang]} loading="lazy" />
+          <button
+            type="button"
+            class="artwork-slider__expand"
+            data-action="expand"
+            data-artwork-index={i}
+            aria-label={`Expand ${art.title[lang]}`}
+          >
+            <span class="icon" aria-hidden="true">fullscreen</span>
+          </button>
         </figure>
+        <div class="artwork-slider__meta-top">
+          <div
+            class="artwork-slider__counter"
+            aria-label={`Artwork ${art.number} of ${artworks.length}`}
+          >
+            {String(art.number).padStart(2, '0')}
+          </div>
+          <div class="artwork-slider__controls">
+            <button
+              type="button"
+              class="artwork-slider__nav"
+              data-direction="prev"
+              aria-label="Previous artwork"
+            >‹</button>
+            <button
+              type="button"
+              class="artwork-slider__nav"
+              data-direction="next"
+              aria-label="Next artwork"
+            >›</button>
+          </div>
+        </div>
         <div class="artwork-slider__meta">
-          <p class="artwork-slider__number">No. {String(art.number).padStart(2, '0')}</p>
-          <h3 class="artwork-slider__title">{art.title[lang]}</h3>
+          <h3 class="artwork-slider__title sub-heading">{art.title[lang]}</h3>
           <p class="artwork-slider__year">{art.year} · {art.collection}</p>
           {art.credit && <p class="artwork-slider__credit">{art.credit}</p>}
           <p class="artwork-slider__description">{art.description[lang]}</p>
@@ -74,6 +96,45 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </li>
     ))}
   </ul>
+
+  <div
+    class="artwork-slider__modal"
+    data-artwork-modal
+    role="dialog"
+    aria-modal="true"
+    aria-label="Artwork viewer"
+    hidden
+  >
+    <button
+      type="button"
+      class="artwork-slider__modal-close"
+      data-action="modal-close"
+      aria-label="Close image viewer"
+    >
+      <span class="icon" aria-hidden="true">close</span>
+    </button>
+    <div class="artwork-slider__modal-stage">
+      <img class="artwork-slider__modal-image" data-modal-image alt="" />
+      <div class="artwork-slider__modal-caption">
+        <p class="artwork-slider__modal-number" data-modal-number>01</p>
+        <p class="artwork-slider__modal-title sub-heading" data-modal-title></p>
+      </div>
+      <div class="artwork-slider__modal-controls">
+        <button
+          type="button"
+          class="artwork-slider__modal-nav"
+          data-modal-direction="prev"
+          aria-label="Previous artwork"
+        >‹</button>
+        <button
+          type="button"
+          class="artwork-slider__modal-nav"
+          data-modal-direction="next"
+          aria-label="Next artwork"
+        >›</button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -84,14 +145,167 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       if (slider.dataset.initialized === 'true') return;
       slider.dataset.initialized = 'true';
 
-      const track = slider.querySelector<HTMLElement>('[data-artwork-track]');
-      if (!track) return;
+      const stage = slider.querySelector<HTMLElement>('[data-artwork-stage]');
+      if (!stage) return;
 
-      slider.querySelectorAll<HTMLButtonElement>('[data-direction]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const dir = btn.dataset.direction === 'next' ? 1 : -1;
-          track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+      const slides = Array.from(stage.querySelectorAll<HTMLElement>('.artwork-slider__slide'));
+      if (!slides.length) return;
+
+      let currentIdx = 0;
+
+      const goTo = (idx: number) => {
+        const next = ((idx % slides.length) + slides.length) % slides.length;
+        if (next === currentIdx) return;
+        slides[currentIdx].classList.remove('is-active');
+        slides[currentIdx].setAttribute('aria-hidden', 'true');
+        slides[next].classList.add('is-active');
+        slides[next].setAttribute('aria-hidden', 'false');
+        currentIdx = next;
+      };
+
+      // Nav buttons — wrap at both ends.
+      slider.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-direction]');
+        if (!btn) return;
+        const dir = btn.dataset.direction === 'next' ? 1 : -1;
+        goTo(currentIdx + dir);
+      });
+
+      // Fullscreen modal — singleton per slider. The expand button in each
+      // figure opens the modal; the modal's own prev/next arrows navigate
+      // between images without affecting the main slider until close.
+      const modal = slider.querySelector<HTMLElement>('[data-artwork-modal]');
+      if (modal) {
+        // Portal: move the modal to document.body so it escapes the slider's
+        // parent stacking context (SectionWrapper z-index + navbar scrim) and
+        // renders above the nav, logo island, and sticky CTA.
+        document.body.appendChild(modal);
+
+        const modalImage = modal.querySelector<HTMLImageElement>('[data-modal-image]');
+        const modalNumber = modal.querySelector<HTMLElement>('[data-modal-number]');
+        const modalTitle = modal.querySelector<HTMLElement>('[data-modal-title]');
+        let modalIdx = 0;
+        let lastFocus: HTMLElement | null = null;
+
+        const renderModal = () => {
+          if (!modalImage) return;
+          const slide = slides[modalIdx];
+          const img = slide.querySelector<HTMLImageElement>('.artwork-slider__figure img');
+          if (img) {
+            modalImage.src = img.src;
+            modalImage.alt = img.alt;
+          }
+          if (modalNumber) {
+            modalNumber.textContent =
+              slide.dataset.artworkNumber ?? String(modalIdx + 1).padStart(2, '0');
+          }
+          if (modalTitle) {
+            const title = slide.querySelector<HTMLElement>('.artwork-slider__title');
+            modalTitle.textContent = title?.textContent ?? '';
+          }
+        };
+
+        const lenis = () => (window as any).__lenis as { stop: () => void; start: () => void } | undefined;
+
+        const openModal = (idx: number) => {
+          modalIdx = ((idx % slides.length) + slides.length) % slides.length;
+          renderModal();
+          lastFocus = document.activeElement as HTMLElement;
+          modal.removeAttribute('hidden');
+          document.body.style.overflow = 'hidden';
+          lenis()?.stop();
+          modal
+            .querySelector<HTMLButtonElement>('[data-action="modal-close"]')
+            ?.focus();
+        };
+
+        const closeModal = () => {
+          modal.setAttribute('hidden', '');
+          document.body.style.overflow = '';
+          lenis()?.start();
+          // Sync the main slider to whichever slide the user was viewing.
+          goTo(modalIdx);
+          lastFocus?.focus();
+        };
+
+        const modalGoTo = (dir: number) => {
+          modalIdx = ((modalIdx + dir) % slides.length + slides.length) % slides.length;
+          renderModal();
+        };
+
+        // Open from slider figures.
+        slider.addEventListener('click', (e) => {
+          const expand = (e.target as HTMLElement).closest<HTMLButtonElement>(
+            '[data-action="expand"]'
+          );
+          if (!expand) return;
+          const idx = Number(expand.dataset.artworkIndex ?? '0');
+          openModal(idx);
         });
+
+        // Modal controls. Clicking anywhere that isn't the image or a nav
+        // button closes the modal (including the explicit close button, the
+        // caption, and empty backdrop space).
+        modal.addEventListener('click', (e) => {
+          const target = e.target as HTMLElement;
+          const nav = target.closest<HTMLButtonElement>('[data-modal-direction]');
+          if (nav) {
+            modalGoTo(nav.dataset.modalDirection === 'next' ? 1 : -1);
+            return;
+          }
+          if (target.closest('.artwork-slider__modal-image')) return;
+          closeModal();
+        });
+
+        // Keyboard: Esc to close, arrows to navigate.
+        document.addEventListener('keydown', (e) => {
+          if (modal.hasAttribute('hidden')) return;
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeModal();
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            modalGoTo(1);
+          } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            modalGoTo(-1);
+          }
+        });
+      }
+
+      // Drag / swipe: pointer events on the stage. Works for both mouse and
+      // touch — there's no native scroll to interfere with, so we can use one
+      // handler for both input types. On release, if the horizontal drag
+      // exceeds a threshold we advance in that direction.
+      let pointerDown = false;
+      let startX = 0;
+      let startY = 0;
+      let startedOnControl = false;
+      const ADVANCE_THRESHOLD = 60; // px — any drag past this commits
+
+      stage.addEventListener('pointerdown', (e) => {
+        startedOnControl = !!(e.target as HTMLElement).closest(
+          '[data-direction], a, button'
+        );
+        if (startedOnControl) return;
+        pointerDown = true;
+        startX = e.clientX;
+        startY = e.clientY;
+      });
+
+      stage.addEventListener('pointerup', (e) => {
+        if (!pointerDown) return;
+        pointerDown = false;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        // Ignore near-vertical gestures — likely a page scroll intent.
+        if (Math.abs(dy) > Math.abs(dx)) return;
+        if (Math.abs(dx) < ADVANCE_THRESHOLD) return;
+        goTo(currentIdx + (dx < 0 ? 1 : -1));
+      });
+
+      stage.addEventListener('pointercancel', () => {
+        pointerDown = false;
       });
     });
   }
@@ -105,13 +319,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     width: 100%;
   }
 
+  .artwork-slider__meta-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
   .artwork-slider__controls {
-    position: absolute;
-    top: var(--space-4);
-    right: 0;
     display: flex;
     gap: var(--space-2);
-    z-index: 3;
+  }
+
+  .artwork-slider__counter {
+    width: 44px;
+    height: 44px;
+    border: 1px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+    background: transparent;
+    color: var(--color-text);
+    font-size: var(--type-sm);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
   }
 
   .artwork-slider__nav {
@@ -135,29 +367,50 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     outline: none;
   }
 
-  .artwork-slider__track {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    gap: var(--space-6);
+  .artwork-slider__stage {
+    display: grid;
+    grid-template-areas: "stack";
     list-style: none;
     margin: 0;
     padding: 0;
-    scrollbar-width: none;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
   }
-  .artwork-slider__track::-webkit-scrollbar {
-    display: none;
+  .artwork-slider__stage:active {
+    cursor: grabbing;
   }
 
   .artwork-slider__slide {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
+    grid-area: stack;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-10);
-    align-items: center;
-    min-height: 70vh;
+    grid-template-rows: auto 1fr;
+    gap: var(--space-8);
+    align-items: start;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease;
+  }
+  .artwork-slider__slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  html.reduce-motion .artwork-slider__slide {
+    transition: none;
+  }
+
+  .artwork-slider__figure {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+  .artwork-slider__meta-top {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .artwork-slider__meta {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   .artwork-slider__figure {
@@ -165,6 +418,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     aspect-ratio: 4 / 5;
     overflow: hidden;
     background: color-mix(in srgb, var(--color-text) 8%, transparent);
+    position: relative;
   }
   .artwork-slider__figure img {
     width: 100%;
@@ -173,25 +427,165 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     display: block;
   }
 
+  .artwork-slider__expand {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    z-index: 2;
+  }
+  .artwork-slider__expand:hover,
+  .artwork-slider__expand:focus-visible {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.9);
+    outline: none;
+  }
+  .artwork-slider__expand .icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-size: 22px;
+  }
+
+  /* Modal */
+  .artwork-slider__modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12);
+  }
+  .artwork-slider__modal[hidden] {
+    display: none;
+  }
+
+  .artwork-slider__modal-close {
+    position: fixed;
+    top: var(--space-6);
+    right: var(--space-6);
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+    z-index: 2;
+  }
+  .artwork-slider__modal-close:hover,
+  .artwork-slider__modal-close:focus-visible {
+    opacity: 1;
+    outline: none;
+  }
+  .artwork-slider__modal-close .icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-size: 28px;
+  }
+
+  .artwork-slider__modal-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .artwork-slider__modal-image {
+    max-width: min(90vw, 1400px);
+    max-height: 72vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+  }
+
+  .artwork-slider__modal-caption {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    color: #ffffff;
+    text-align: center;
+  }
+  .artwork-slider__modal-number {
+    margin: 0;
+    font-size: var(--type-sm);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
+  }
+  .artwork-slider__modal-title {
+    margin: 0;
+    color: #ffffff;
+  }
+
+  .artwork-slider__modal-controls {
+    display: flex;
+    gap: var(--space-2);
+  }
+  .artwork-slider__modal-nav {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: transparent;
+    color: #ffffff;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .artwork-slider__modal-nav:hover,
+  .artwork-slider__modal-nav:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #ffffff;
+    outline: none;
+  }
+
+  @media (max-width: 767px) {
+    .artwork-slider__modal {
+      padding: var(--space-4);
+    }
+    .artwork-slider__modal-image {
+      max-width: 100%;
+      max-height: 65vh;
+    }
+    .artwork-slider__modal-close {
+      top: var(--space-4);
+      right: var(--space-4);
+    }
+  }
+
   .artwork-slider__meta {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
     color: var(--color-text);
-  }
-
-  .artwork-slider__number {
-    font-size: var(--type-sm);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    opacity: 0.65;
-    margin: 0;
+    align-self: start;
   }
 
   .artwork-slider__title {
-    font-size: var(--type-2xl);
-    font-weight: var(--weight-bold);
-    line-height: 1.05;
     margin: 0;
   }
 
@@ -244,12 +638,33 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   @media (max-width: 767px) {
     .artwork-slider__slide {
       grid-template-columns: 1fr;
-      gap: var(--space-6);
-      min-height: auto;
-      padding-top: var(--space-12);
+      grid-template-rows: 45svh auto 1fr;
+      gap: var(--space-4);
+      height: 100svh;
+      align-content: start;
     }
-    .artwork-slider__title {
-      font-size: var(--type-xl);
+    .artwork-slider__figure {
+      grid-column: 1;
+      grid-row: 1;
+      aspect-ratio: auto;
+      height: 45svh;
+      max-height: 45svh;
+    }
+    .artwork-slider__figure img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .artwork-slider__meta-top {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .artwork-slider__meta {
+      grid-column: 1;
+      grid-row: 3;
+    }
+    .artwork-slider__description {
+      font-size: var(--type-sm);
     }
   }
 </style>
