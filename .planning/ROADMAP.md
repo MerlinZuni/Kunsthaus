@@ -118,3 +118,15 @@ Industry research on **museum-site search** (common intents: visit planning, col
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
+
+### Phase 999.2: Source real KJM painting images for artworks 5–10 (BACKLOG)
+
+**Goal:** Replace prototype image placeholders for ArtworkSlider slides 5–10 on the KJM detail page with real Kerry James Marshall painting images so every artwork card has its own correct visual.
+
+**Description:** Slides 5–10 (school-of-beauty, 7am-sunday-morning, souvenir-i, slow-dance, vignette, garden-party) currently all reuse the 4 real JPGs that exist for slides 1–4 (de-style, better-homes, past-times, untitled-studio) — documented in 03-VERIFICATION.md as "prototype fidelity". Titles, years, collections, credits, and descriptions in `src/content/onsite/kerry-james-marshall.json` are already correct for all 10 works; only the `image` paths need to point to new files. Once the 6 JPGs are placed at `public/images/artworks/{slide-id}.jpg`, the fix is a ~6-line JSON edit and the slider, counter, and expand-modal all pick up the new assets automatically. Worth doing before the competition pitch if time allows.
+
+**Requirements:** TBD
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when ready)
