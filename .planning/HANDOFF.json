@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-14T19:05:53.853Z",
+  "timestamp": "2026-04-15T13:55:12.078Z",
   "phase": "03",
   "phase_name": "dual-mode-routing",
   "phase_dir": ".planning/phases/03-dual-mode-routing",
@@ -16,27 +16,31 @@
     {"id": 5, "name": "HorizontalSlider center-snap peek carousel", "status": "done", "commit": "4157c28"},
     {"id": 6, "name": "Compose KJM detail page sections (intro, slider, quote, videos, shop)", "status": "done", "commit": "78be094"},
     {"id": 7, "name": "Make KJM card on /onsite click-through to detail page", "status": "done", "commit": "eef0335"},
-    {"id": 8, "name": "Verify build + grep gates; write SUMMARY + VERIFICATION", "status": "done", "commit": "d20a78e"}
+    {"id": 8, "name": "Verify build + grep gates; write SUMMARY + VERIFICATION", "status": "done", "commit": "d20a78e"},
+    {"id": "refinement", "name": "Live UX refinement sweep on KJM detail page", "status": "done", "commit": "fe390b2"}
   ],
   "remaining_tasks": [],
   "blockers": [],
   "human_actions_pending": [
-    {"action": "Browser smoke-test View Transitions smoothness entering /onsite/kerry-james-marshall and returning", "context": "ANIM-04 visual quality — automated checks confirm code paths but transition timing is a perceptual judgment", "blocking": false},
-    {"action": "Verify no-flash hard refresh on /onsite/kerry-james-marshall (dark palette applied before first paint)", "context": "data-mode attribute is set on <html> in BaseLayout — confirm no FOUC", "blocking": false},
-    {"action": "Test iOS Safari video autoplay on KjmHero", "context": "autoplay muted loop playsinline preload=metadata all present in markup; iOS behavior can still surprise", "blocking": false},
-    {"action": "Test mobile horizontal scroll gesture inside ArtworkSlider while page is vertically pinned/stacking", "context": "scroll-snap + SectionWrapper stacking interaction is the main risk for touch", "blocking": false},
-    {"action": "Review HorizontalSlider peek-scale timing and CinematicReveal left-position alignment on the detail page", "context": "IntersectionObserver thresholds and imagePosition='left' prop are new — visual review only", "blocking": false},
-    {"action": "Decide whether to promote 03-04 (paywall + simulated login + audio guide overlay + profile overlay) into a real plan or defer", "context": "ROADMAP SCs 5-8 still open; headphones button on artwork cards is a silent stub waiting for that wiring", "blocking": false}
+    {"action": "Hard refresh /onsite and /onsite/kerry-james-marshall — verify no FOUC (dark palette paints immediately)", "context": "data-mode='onsite' is set on <html> in BaseLayout; perceptual browser check only", "blocking": false},
+    {"action": "iOS Safari real-device test: KJM hero video autoplays muted with poster fallback, new play/pause toggle button works", "context": "video has all 5 required attrs (autoplay muted loop playsinline preload=metadata); iOS autoplay can still surprise; the new playpause button wires video.play()/pause()", "blocking": false},
+    {"action": "Source and wire up 6 real KJM painting images for ArtworkSlider slides 5-10 (tracked as backlog 999.2)", "context": "Slides 5-10 currently reuse 4 real JPGs from slides 1-4. JSON titles/years/descriptions are correct; only `image` paths need updating once real files are placed at public/images/artworks/{slide-id}.jpg", "blocking": false},
+    {"action": "Decide 03-04 (paywall + simulated login + audio guide overlay + profile overlay) vs. Phase 04 (Deploy + Present)", "context": "ROADMAP SCs 5-8 still open. With 3-4 day timeline, Phase 04 (Cloudflare deploy + pitch screenshots) is the higher-ROI path; 03-04 can be a stretch goal. Dual-mode concept already lands without the audio guide stack.", "blocking": false}
   ],
   "decisions": [
-    {"decision": "Hero <video> is plain HTML5 with autoplay muted loop playsinline preload=metadata poster; no transition:persist, no GSAP ScrollTrigger", "rationale": "Static background video only — View Transitions + GSAP on the element caused unreliable autoplay in research", "phase": "03"},
-    {"decision": "Headphones button on artwork cards is a silent stub — rendered/styled, click does nothing, no dispatchEvent", "rationale": "03-04 will wire it to paywall + audio guide; pre-emitting an event would create a dead contract", "phase": "03"},
-    {"decision": "Intro copy lives in its own SectionWrapper between CinematicReveal and ArtworkSlider", "rationale": "Preserves /onsite stacking cadence instead of merging intro into the slider header", "phase": "03"},
-    {"decision": "onsiteExhibition content file uses id-keyed object map wrapper ({ 'kerry-james-marshall': {...} })", "rationale": "Matches the 03-02 home.json deviation for single-file collections", "phase": "03"},
-    {"decision": "Hero assets live at public/video/kjm-hero.{mp4,png} (singular /video/)", "rationale": "Research file incorrectly listed /videos/ — corrected during planning", "phase": "03"},
-    {"decision": "OnsiteExhibitionGrid renders <a> only when item.id === 'kerry-james-marshall'", "rationale": "Only one real detail page exists; other cards should not imply a live link", "phase": "03"}
+    {"decision": "ArtworkSlider rebuilt as CSS-grid crossfade stack (grid-area: stack) instead of horizontal scroll-snap carousel", "rationale": "User wanted the counter/arrows to visually stationary during slide changes. With identical per-slide counter/arrow rows stacked in one cell, the crossfade makes them appear constant — only the number digit differs. Simpler than a singleton overlay + sync JS.", "phase": "03"},
+    {"decision": "Drag/swipe input re-implemented on top of the crossfade using pointer events with a 10% directional threshold", "rationale": "Native scroll-snap was fighting desktop drag release (stuck between slides). With no scroll at all, drag becomes an input gesture that advances index — rock-solid on both mouse and touch.", "phase": "03"},
+    {"decision": "Fullscreen modal is portal'd to document.body on slider init", "rationale": "Modal z-index: 100 was being capped inside SectionWrapper's stacking context, so the close button rendered under the navbar scrim (z-index 59). Portal-to-body escapes the parent stacking context.", "phase": "03"},
+    {"decision": "Mobile slide locked to height: 100svh + grid-template-rows: 45svh auto 1fr + align-content: start", "rationale": "Previous auto-rows + max-height:45svh let image heights vary by natural aspect, which drifted the counter position between slides. Explicit row sizing + fixed slide height makes counter position structurally stable.", "phase": "03"},
+    {"decision": "CinematicReveal GSAP tween targets computed in pixels (fullBleedMarginLeft) at build time", "rationale": "GSAP couldn't interpolate margin:0 auto (browser-resolved px) → marginLeft: calc(-50vw + 50%) string, causing a visible jump at tween start. Computing target in px lets it tween px → px smoothly.", "phase": "03"},
+    {"decision": "Shop CTA uses .btn.hover-wipe-inverse (dark glass), not .brushed-brass", "rationale": "CSS comments label hover-wipe-inverse as 'Primary CTA — dark glass pill' and brushed-brass as just 'Brushed brass button'. User explicitly asked for the primary, not the metallic variant.", "phase": "03"},
+    {"decision": "CLAUDE.md now documents Material Symbols as the icon convention", "rationale": "User wanted a durable project-level rule instead of per-session memory. CLAUDE.md loads automatically for any Claude session on this repo and serves as documentation for humans too.", "phase": "03"}
   ],
-  "uncommitted_files": [],
-  "next_action": "Run the browser smoke-test for /onsite/kerry-james-marshall in desktop + iOS Safari against the items listed in 03-VERIFICATION.md human-verification section, then decide 03-04 vs. Phase 04.",
-  "context_notes": "Phase 03-dual-mode-routing is code-complete: all three plans (03-01 router + dark onsite cascade + URL-as-state toggle, 03-02 /onsite landing with exhibition grid, 03-03 KJM detail page) are shipped and committed on master. Verifier returned 7/7 automated checks PASS and flagged 6 browser-only items as human_needed. ROADMAP SCs 5-8 (paywall, simulated login, audio guide overlay, profile overlay) remain deferred — no 03-04 plan file exists yet. No blockers, no regressions, working tree clean except for untracked .claude/."
+  "uncommitted_files": [
+    ".claude/ (untracked local IDE folder — should probably be gitignored)",
+    "Untitled (untracked IDE leftover — safe to delete)",
+    "public/images/exhibitions/kjm/shop/.gitkeep (untracked — can be committed if desired)"
+  ],
+  "next_action": "Decide 03-04 vs Phase 04. Recommendation: promote to Phase 04 (Deploy + Present) since Phase 03 code-complete delivers the dual-mode concept that wins the competition, and the 3-4 day clock favors shipping a polished deployed prototype over building more overlays. 03-04 can remain a stretch goal.",
+  "context_notes": "Phase 03 is code-complete on all 3 planned plans (03-01/02/03). Today's session was a large live-refinement sweep on the KJM exhibition detail page driven by user browser testing. Committed as fe390b2 and pushed to origin/master. All refinements target perceptual polish: back button z-index fixes, hero play/pause control, ArtworkSlider rewrite to crossfade+portal modal, CinematicReveal jump fix, HorizontalSlider breakpoint tuning, Monumental Narratives two-column editorial layout, 5-item Exhibition Videos slider, real exhibition catalogue in shop, primary CTA consistency, Keep Exploring continue-your-visit button, Material Symbols convention in CLAUDE.md. Remaining work is decision-gated (03-04 vs Phase 04) plus perceptual smoke tests the user wants to run themselves. No blockers, working tree clean except for untracked noise."
 }
