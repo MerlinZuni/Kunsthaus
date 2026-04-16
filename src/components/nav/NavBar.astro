@@ -3,6 +3,7 @@
 // Velocity-aware scroll behavior on desktop, simplified always-visible bar on mobile
 
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import NavProfileButton from './NavProfileButton.astro';
 
 interface Props {
   navItems: Array<{ id: string; label: { de: string; en: string }; href: string }>;
@@ -39,8 +40,9 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
       </button>
     </div>
 
-    {/* Right: Hamburger */}
+    {/* Right: Profile + Hamburger */}
     <div class="navbar__right">
+      <NavProfileButton />
       <button
         class="navbar__icon-btn touch-target touch-pulse"
         aria-label={menuLabel}
@@ -173,10 +175,11 @@ const { navItems, lang, searchLabel, menuLabel } = Astro.props;
     gap: var(--space-1);
   }
 
-  /* Right group: hamburger */
+  /* Right group: profile + hamburger */
   .navbar__right {
     display: flex;
     align-items: center;
+    gap: var(--space-1);
   }
 
   /* Icon buttons — shared style */

@@ -1,0 +1,391 @@
+---
+// ProfileOverlay.astro -- Logged-in profile panel with QR ticket hero,
+// 6 secondary nav items, and log out button.
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang } = Astro.props;
+
+const ticketTitle = lang === 'de' ? 'Tagespass \u2014 Alle Ausstellungen' : 'Day Pass \u2014 All Exhibitions';
+const validLabel = lang === 'de' ? '22. April 2026, 10:00\u201320:00' : '22 April 2026, 10:00\u201320:00';
+const accessLabel = lang === 'de'
+  ? 'Alle laufenden Ausstellungen + Sammlung'
+  : 'All current exhibitions + permanent collection';
+const signedInLabel = lang === 'de' ? 'Angemeldet als Demo User' : 'Signed in as Demo User';
+const logoutLabel = lang === 'de' ? 'Abmelden' : 'Log out';
+const memberLabel = lang === 'de' ? 'Mitglied werden' : 'Become a member';
+const memberPitch = lang === 'de'
+  ? 'Unbegrenzter Zugang, exklusive Events und kostenloser Audioguide.'
+  : 'Unlimited access, exclusive events, and free audio guide.';
+
+const navItems = [
+  { label: { de: 'Mein Audioguide-Verlauf', en: 'My audio guide history' } },
+  { label: { de: 'Favoriten', en: 'Favourites' } },
+  { label: { de: 'Geplante Besuche & Events', en: 'Upcoming visits & events' } },
+  { label: { de: 'Mitgliedschaft', en: 'Membership' } },
+  { label: { de: 'Kontoeinstellungen', en: 'Account settings' } },
+  { label: { de: 'Hilfe & Kontakt', en: 'Help & contact' } },
+];
+---
+
+<div
+  class="profile-overlay"
+  id="profile-overlay"
+  aria-hidden="true"
+  role="dialog"
+  aria-label="Profile"
+>
+  <div class="profile-overlay__inner">
+    <header class="profile-overlay__header">
+      <button type="button" class="profile-overlay__back touch-target" data-profile-close>
+        <span class="icon" aria-hidden="true">arrow_back</span>
+        <span>Profile</span>
+      </button>
+      <button type="button" class="profile-overlay__close-x touch-target" data-profile-close-x aria-label="Close">
+        <span class="icon" aria-hidden="true">close</span>
+      </button>
+    </header>
+
+    <div class="profile-overlay__body" data-lenis-prevent>
+      {/* QR Ticket Hero */}
+      <div class="profile-overlay__ticket">
+        <h3 class="profile-overlay__ticket-title">{ticketTitle}</h3>
+        <div class="profile-overlay__qr">
+          <span class="icon" aria-hidden="true">qr_code_2</span>
+        </div>
+        <p class="profile-overlay__ticket-code">KUNSTHAUS-DEMO-2026-04-22-DAYPASS-001</p>
+        <p class="profile-overlay__ticket-valid">{validLabel}</p>
+        <p class="profile-overlay__ticket-access">{accessLabel}</p>
+      </div>
+
+      {/* Secondary nav */}
+      <nav class="profile-overlay__nav" aria-label="Profile navigation">
+        <ul>
+          {navItems.map(item => (
+            <li class="profile-overlay__nav-item">
+              <a href="#" class="profile-overlay__nav-link">
+                <span>{item.label[lang]}</span>
+                <span class="icon profile-overlay__nav-arrow" aria-hidden="true">arrow_forward</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Upsell card */}
+      <div class="profile-overlay__upsell">
+        <h4 class="profile-overlay__upsell-title">{memberLabel}</h4>
+        <p class="profile-overlay__upsell-pitch">{memberPitch}</p>
+      </div>
+
+      {/* Footer */}
+      <div class="profile-overlay__footer">
+        <p class="profile-overlay__signed-in">{signedInLabel}</p>
+        <button type="button" class="btn profile-overlay__logout touch-target" data-profile-logout>
+          {logoutLabel}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+  }
+
+  .profile-overlay.is-open {
+    visibility: visible;
+  }
+
+  .profile-overlay__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .profile-overlay__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    flex-shrink: 0;
+  }
+
+  .profile-overlay__back {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: var(--space-2);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+  .profile-overlay__back:hover { opacity: 1; }
+  .profile-overlay__back .icon { font-size: 20px; }
+
+  .profile-overlay__close-x {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    opacity: 0.6;
+    padding: var(--space-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+  .profile-overlay__close-x:hover { opacity: 1; }
+  .profile-overlay__close-x .icon { font-size: 22px; }
+
+  .profile-overlay__body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 var(--space-4) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  /* QR Ticket */
+  .profile-overlay__ticket {
+    border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3);
+  }
+
+  .profile-overlay__ticket-title {
+    font-size: var(--type-md);
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .profile-overlay__qr {
+    width: 160px;
+    height: 160px;
+    border: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: var(--space-2) 0;
+  }
+  .profile-overlay__qr .icon {
+    font-size: 120px;
+    color: var(--color-text);
+    opacity: 0.6;
+  }
+
+  .profile-overlay__ticket-code {
+    font-size: var(--type-xs);
+    font-family: monospace;
+    opacity: 0.4;
+    margin: 0;
+    color: var(--color-text);
+    word-break: break-all;
+  }
+
+  .profile-overlay__ticket-valid {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  .profile-overlay__ticket-access {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.55;
+    margin: 0;
+  }
+
+  /* Nav items */
+  .profile-overlay__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .profile-overlay__nav-item {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+  .profile-overlay__nav-item:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .profile-overlay__nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-2);
+    text-decoration: none;
+    color: var(--color-text);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+  .profile-overlay__nav-link:hover { opacity: 1; }
+
+  .profile-overlay__nav-arrow {
+    font-size: 18px;
+    opacity: 0.4;
+  }
+
+  /* Upsell */
+  .profile-overlay__upsell {
+    border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .profile-overlay__upsell-title {
+    font-size: var(--type-sm);
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .profile-overlay__upsell-pitch {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.65;
+    margin: 0;
+    line-height: var(--leading-normal);
+  }
+
+  /* Footer */
+  .profile-overlay__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+  }
+
+  .profile-overlay__signed-in {
+    font-size: var(--type-xs);
+    color: var(--color-text);
+    opacity: 0.45;
+    margin: 0;
+  }
+
+  .profile-overlay__logout {
+    width: 100%;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
+    color: var(--color-text);
+  }
+  .profile-overlay__logout:hover {
+    border-color: var(--color-text);
+  }
+
+  @media (min-width: 768px) {
+    .profile-overlay__body {
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .profile-overlay__header {
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initProfileOverlay() {
+    const overlay = document.getElementById('profile-overlay');
+    if (!overlay || overlay.dataset.initialized === 'true') return;
+    overlay.dataset.initialized = 'true';
+
+    const closeBtns = overlay.querySelectorAll('[data-profile-close], [data-profile-close-x]');
+    const logoutBtn = overlay.querySelector('[data-profile-logout]');
+
+    function open() {
+      if (!overlay) return;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      (window as any).__lenis?.stop?.();
+      gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+    }
+
+    function close() {
+      if (!overlay) return;
+      gsap.to(overlay, {
+        opacity: 0,
+        duration: 0.25,
+        ease: 'power2.in',
+        onComplete: () => {
+          overlay.classList.remove('is-open');
+          overlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          (window as any).__lenis?.start?.();
+        },
+      });
+    }
+
+    closeBtns.forEach(btn => btn.addEventListener('click', close));
+
+    logoutBtn?.addEventListener('click', () => {
+      localStorage.removeItem('kunsthaus-demo-user');
+      (window as any).__demoUser = null;
+      window.dispatchEvent(new CustomEvent('kunsthaus:logout'));
+      close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
+        close();
+      }
+    });
+
+    (window as any).__profileOverlay = { open, close };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProfileOverlay);
+  } else {
+    initProfileOverlay();
+  }
+  document.addEventListener('astro:page-load', () => {
+    const overlay = document.getElementById('profile-overlay');
+    if (overlay) overlay.dataset.initialized = '';
+    initProfileOverlay();
+  });
+</script>

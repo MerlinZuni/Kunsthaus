@@ -102,9 +102,9 @@ const onsiteHref = `${base}/onsite`;
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
             </a>
           </li>
-          <li class="hamburger-overlay__secondary-item">
-            <a href={`${base}/login`} class="hamburger-overlay__secondary-link">
-              <span>{lang === 'de' ? 'Anmelden' : 'Log in'}</span>
+          <li class="hamburger-overlay__secondary-item" data-login-item>
+            <a href={`${base}/login`} class="hamburger-overlay__secondary-link" data-login-link>
+              <span data-login-text>{lang === 'de' ? 'Anmelden' : 'Log in'}</span>
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
             </a>
           </li>
@@ -691,6 +691,52 @@ const onsiteHref = `${base}/onsite`;
         close();
       }
     });
+
+    // --- Login-state awareness ---
+    const loginItem = overlay?.querySelector('[data-login-item]') as HTMLElement;
+    const loginLink = overlay?.querySelector('[data-login-link]') as HTMLAnchorElement;
+    const loginText = overlay?.querySelector('[data-login-text]') as HTMLElement;
+    const lang = document.documentElement.lang || 'en';
+    const loginLabel = lang === 'de' ? 'Anmelden' : 'Log in';
+    const accountLabel = lang === 'de' ? 'Mein Konto' : 'My Account';
+
+    // Login handler for the "Log in" link (second login entry point)
+    function handleLoginClick(e: Event) {
+      e.preventDefault();
+      localStorage.setItem('kunsthaus-demo-user', 'purchased');
+      (window as any).__demoUser = 'purchased';
+      window.dispatchEvent(new CustomEvent('kunsthaus:login'));
+      close(false);
+    }
+
+    function setLoggedInState() {
+      if (!loginText || !loginLink) return;
+      loginText.textContent = accountLabel;
+      loginLink.href = '#';
+      loginLink.removeEventListener('click', handleLoginClick);
+      loginLink.addEventListener('click', (e: Event) => {
+        e.preventDefault();
+        (window as any).__profileOverlay?.open();
+        close(false);
+      });
+    }
+
+    function setLoggedOutState() {
+      if (!loginText || !loginLink) return;
+      loginText.textContent = loginLabel;
+      loginLink.href = '#';
+      loginLink.addEventListener('click', handleLoginClick);
+    }
+
+    // Initial state
+    if (localStorage.getItem('kunsthaus-demo-user')) {
+      setLoggedInState();
+    } else {
+      setLoggedOutState();
+    }
+
+    window.addEventListener('kunsthaus:login', setLoggedInState);
+    window.addEventListener('kunsthaus:logout', setLoggedOutState);
 
     // Expose open/close
     (window as any).__hamburgerOverlay = { open, close };
