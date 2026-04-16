@@ -1,0 +1,613 @@
+---
+// AudioGuideOverlay.astro -- Fullscreen audio guide overlay with Playlist view
+// (base layer) and DetailPlayer bottom-sheet (slides up via GSAP translateY).
+// Persists a single <audio> element across track changes.
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang } = Astro.props;
+
+const closeLabel = lang === 'de' ? 'Audioguide schliessen' : 'Close audio guide';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<div
+  class="audio-overlay"
+  id="audio-overlay"
+  aria-hidden="true"
+  role="dialog"
+  aria-label="Audio guide"
+>
+  <div class="audio-overlay__inner" data-lenis-prevent>
+    {/* --- Playlist view (base layer) --- */}
+    <div class="audio-overlay__playlist" data-audio-playlist>
+      <header class="audio-overlay__header">
+        <button type="button" class="audio-overlay__back touch-target" data-audio-close>
+          <span class="icon" aria-hidden="true">arrow_back</span>
+          <span>{closeLabel}</span>
+        </button>
+      </header>
+      <ul class="audio-overlay__tracks" data-audio-tracks>
+        {/* Tracks injected by JS from data attribute */}
+      </ul>
+    </div>
+
+    {/* --- DetailPlayer view (bottom-sheet) --- */}
+    <div class="audio-overlay__detail" data-audio-detail>
+      <div class="audio-overlay__detail-handle" data-audio-detail-close>
+        <span class="icon" aria-hidden="true">keyboard_arrow_down</span>
+      </div>
+      <div class="audio-overlay__detail-content" data-lenis-prevent>
+        <figure class="audio-overlay__detail-figure">
+          <img class="audio-overlay__detail-image" data-detail-image src="" alt="" />
+        </figure>
+        <h3 class="audio-overlay__detail-title sub-heading" data-detail-title></h3>
+        <p class="audio-overlay__detail-year" data-detail-year></p>
+        <p class="audio-overlay__detail-collection" data-detail-collection></p>
+        <p class="audio-overlay__detail-description" data-detail-description></p>
+
+        {/* Transport controls */}
+        <div class="audio-overlay__transport">
+          <button type="button" class="audio-overlay__transport-btn touch-target" data-transport="prev" aria-label="Previous track">
+            <span class="icon" aria-hidden="true">skip_previous</span>
+          </button>
+          <button type="button" class="audio-overlay__transport-btn audio-overlay__transport-btn--play touch-target" data-transport="play" aria-label="Play">
+            <span class="icon" data-play-icon aria-hidden="true">play_arrow</span>
+          </button>
+          <button type="button" class="audio-overlay__transport-btn touch-target" data-transport="next" aria-label="Next track">
+            <span class="icon" aria-hidden="true">skip_next</span>
+          </button>
+        </div>
+        <div class="audio-overlay__progress">
+          <span class="audio-overlay__time" data-time-current>0:00</span>
+          <input type="range" class="audio-overlay__range" data-audio-range min="0" max="100" value="0" step="0.1" />
+          <span class="audio-overlay__time" data-time-duration>0:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .audio-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+  }
+
+  .audio-overlay.is-open {
+    visibility: visible;
+  }
+
+  .audio-overlay__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* --- Playlist --- */
+  .audio-overlay__playlist {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .audio-overlay__header {
+    display: flex;
+    align-items: center;
+    padding: var(--space-4) var(--space-4);
+    flex-shrink: 0;
+  }
+
+  .audio-overlay__back {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-size: var(--type-sm);
+    font-weight: var(--weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: var(--space-2);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+  }
+  .audio-overlay__back:hover { opacity: 1; }
+  .audio-overlay__back .icon { font-size: 20px; }
+
+  .audio-overlay__tracks {
+    list-style: none;
+    margin: 0;
+    padding: 0 var(--space-4);
+    flex: 1;
+  }
+
+  .audio-overlay__track {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-2);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: var(--color-text);
+  }
+  .audio-overlay__track:hover {
+    background: color-mix(in srgb, var(--color-text) 5%, transparent);
+  }
+  .audio-overlay__track.is-playing {
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+
+  .audio-overlay__track-number {
+    font-size: var(--type-sm);
+    font-variant-numeric: tabular-nums;
+    opacity: 0.5;
+    min-width: 2ch;
+    text-align: right;
+  }
+
+  .audio-overlay__track-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .audio-overlay__track-title {
+    font-size: var(--type-sm);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .audio-overlay__track-year {
+    font-size: var(--type-xs);
+    opacity: 0.55;
+  }
+
+  .audio-overlay__track-play {
+    font-size: 22px;
+    opacity: 0.5;
+  }
+  .audio-overlay__track.is-playing .audio-overlay__track-play {
+    opacity: 1;
+  }
+
+  /* --- Detail Player (bottom-sheet) --- */
+  .audio-overlay__detail {
+    position: absolute;
+    inset: 0;
+    background: var(--color-surface);
+    transform: translateY(100%);
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+  }
+
+  .audio-overlay__detail-handle {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-2) 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    min-height: 48px;
+    align-items: center;
+  }
+  .audio-overlay__detail-handle .icon {
+    font-size: 32px;
+    color: var(--color-text);
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+  .audio-overlay__detail-handle:hover .icon {
+    opacity: 1;
+  }
+
+  .audio-overlay__detail-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 var(--space-6) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .audio-overlay__detail-figure {
+    margin: 0;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+
+  .audio-overlay__detail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .audio-overlay__detail-title {
+    margin: var(--space-2) 0 0;
+    text-align: center;
+    color: var(--color-text);
+  }
+
+  .audio-overlay__detail-year,
+  .audio-overlay__detail-collection {
+    margin: 0;
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.7;
+    text-align: center;
+  }
+
+  .audio-overlay__detail-description {
+    font-size: var(--type-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+    opacity: 0.8;
+    margin: var(--space-2) 0 0;
+    max-width: 50ch;
+    text-align: center;
+  }
+
+  /* Transport */
+  .audio-overlay__transport {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .audio-overlay__transport-btn {
+    width: 48px;
+    height: 48px;
+    border: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .audio-overlay__transport-btn:hover {
+    background: color-mix(in srgb, var(--color-text) 10%, transparent);
+    border-color: var(--color-text);
+  }
+  .audio-overlay__transport-btn .icon { font-size: 24px; }
+
+  .audio-overlay__transport-btn--play {
+    width: 64px;
+    height: 64px;
+    border-color: var(--color-text);
+  }
+  .audio-overlay__transport-btn--play .icon { font-size: 32px; }
+
+  /* Progress */
+  .audio-overlay__progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    max-width: 400px;
+    margin-top: var(--space-3);
+  }
+
+  .audio-overlay__time {
+    font-size: var(--type-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+    opacity: 0.55;
+    min-width: 3.5ch;
+  }
+
+  .audio-overlay__range {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: color-mix(in srgb, var(--color-text) 20%, transparent);
+    outline: none;
+    cursor: pointer;
+  }
+  .audio-overlay__range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-text);
+    cursor: pointer;
+  }
+  .audio-overlay__range::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-text);
+    cursor: pointer;
+    border: none;
+  }
+
+  @media (min-width: 768px) {
+    .audio-overlay__playlist {
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .audio-overlay__detail-content {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+<script define:vars={{ base }}>
+  window.__audioGuideBase = base;
+</script>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initAudioGuideOverlay() {
+    const overlay = document.getElementById('audio-overlay');
+    if (!overlay || overlay.dataset.initialized === 'true') return;
+    overlay.dataset.initialized = 'true';
+
+    const closeBtn = overlay.querySelector('[data-audio-close]');
+    const tracksList = overlay.querySelector('[data-audio-tracks]') as HTMLElement;
+    const detailEl = overlay.querySelector('[data-audio-detail]') as HTMLElement;
+    const detailCloseBtn = overlay.querySelector('[data-audio-detail-close]');
+
+    // Detail elements
+    const detailImage = overlay.querySelector('[data-detail-image]') as HTMLImageElement;
+    const detailTitle = overlay.querySelector('[data-detail-title]') as HTMLElement;
+    const detailYear = overlay.querySelector('[data-detail-year]') as HTMLElement;
+    const detailCollection = overlay.querySelector('[data-detail-collection]') as HTMLElement;
+    const detailDescription = overlay.querySelector('[data-detail-description]') as HTMLElement;
+    const playIcon = overlay.querySelector('[data-play-icon]') as HTMLElement;
+    const rangeEl = overlay.querySelector('[data-audio-range]') as HTMLInputElement;
+    const timeCurrent = overlay.querySelector('[data-time-current]') as HTMLElement;
+    const timeDuration = overlay.querySelector('[data-time-duration]') as HTMLElement;
+
+    const base = (window as any).__audioGuideBase || '';
+
+    // Persistent audio element
+    const audio = new Audio();
+    let tracks: any[] = [];
+    let currentTrackIdx = -1;
+    let isPlaying = false;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function formatTime(s: number): string {
+      if (!isFinite(s) || s < 0) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    function buildPlaylist() {
+      if (!tracksList) return;
+      const lang = document.documentElement.lang || 'en';
+      tracksList.innerHTML = '';
+      tracks.forEach((t, i) => {
+        const li = document.createElement('li');
+        li.className = 'audio-overlay__track';
+        li.dataset.trackIndex = String(i);
+        li.innerHTML = `
+          <span class="audio-overlay__track-number">${String(t.number).padStart(2, '0')}</span>
+          <span class="audio-overlay__track-info">
+            <span class="audio-overlay__track-title">${t.title[lang] || t.title.en}</span>
+            <span class="audio-overlay__track-year">${t.year}</span>
+          </span>
+          <span class="icon audio-overlay__track-play" aria-hidden="true">play_arrow</span>
+        `;
+        li.addEventListener('click', () => openDetailPlayer(i));
+        tracksList.appendChild(li);
+      });
+    }
+
+    function highlightTrack(idx: number) {
+      tracksList?.querySelectorAll('.audio-overlay__track').forEach((el, i) => {
+        el.classList.toggle('is-playing', i === idx);
+      });
+    }
+
+    function loadTrack(idx: number) {
+      const track = tracks[idx];
+      if (!track) return;
+      currentTrackIdx = idx;
+      const lang = document.documentElement.lang || 'en';
+
+      audio.src = track.audioSrc;
+      audio.load();
+
+      if (detailImage) {
+        detailImage.src = `${base}${track.image}`;
+        detailImage.alt = track.title[lang] || track.title.en;
+      }
+      if (detailTitle) detailTitle.textContent = track.title[lang] || track.title.en;
+      if (detailYear) detailYear.textContent = track.year;
+      if (detailCollection) detailCollection.textContent = track.collection || '';
+      if (detailDescription) detailDescription.textContent = track.description?.[lang] || track.description?.en || '';
+
+      highlightTrack(idx);
+      updatePlayIcon();
+    }
+
+    function updatePlayIcon() {
+      if (playIcon) playIcon.textContent = isPlaying ? 'pause' : 'play_arrow';
+    }
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play().catch(() => {});
+        isPlaying = true;
+      } else {
+        audio.pause();
+        isPlaying = false;
+      }
+      updatePlayIcon();
+    }
+
+    function openDetailPlayer(idx: number) {
+      loadTrack(idx);
+      if (reducedMotion) {
+        gsap.set(detailEl, { y: '0%' });
+      } else {
+        gsap.to(detailEl, { y: '0%', duration: 0.4, ease: 'power3.out' });
+      }
+      // Auto-play
+      audio.play().catch(() => {});
+      isPlaying = true;
+      updatePlayIcon();
+    }
+
+    function closeDetailPlayer() {
+      if (reducedMotion) {
+        gsap.set(detailEl, { y: '100%' });
+      } else {
+        gsap.to(detailEl, { y: '100%', duration: 0.35, ease: 'power3.in' });
+      }
+    }
+
+    function open(trackId?: string) {
+      if (!overlay) return;
+      // Load tracks from the KJM data embedded on the page
+      const sliderEl = document.querySelector('.artwork-slider');
+      const pageData = (window as any).__kjmArtworks;
+      if (pageData) {
+        tracks = pageData;
+      }
+      buildPlaylist();
+
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      (window as any).__lenis?.stop?.();
+
+      gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+      // Reset detail player to hidden
+      gsap.set(detailEl, { y: '100%' });
+
+      // If trackId specified, auto-open that track's detail player
+      if (trackId) {
+        const idx = tracks.findIndex((t: any) => t.id === trackId);
+        if (idx >= 0) {
+          setTimeout(() => openDetailPlayer(idx), 200);
+        }
+      }
+    }
+
+    function close() {
+      if (!overlay) return;
+      audio.pause();
+      isPlaying = false;
+      updatePlayIcon();
+      gsap.to(overlay, {
+        opacity: 0,
+        duration: 0.25,
+        ease: 'power2.in',
+        onComplete: () => {
+          overlay.classList.remove('is-open');
+          overlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          (window as any).__lenis?.start?.();
+          // Reset detail player
+          gsap.set(detailEl, { y: '100%' });
+        },
+      });
+    }
+
+    // Transport controls
+    overlay.querySelector('[data-transport="play"]')?.addEventListener('click', togglePlay);
+    overlay.querySelector('[data-transport="prev"]')?.addEventListener('click', () => {
+      if (tracks.length === 0) return;
+      const prev = ((currentTrackIdx - 1) + tracks.length) % tracks.length;
+      openDetailPlayer(prev);
+    });
+    overlay.querySelector('[data-transport="next"]')?.addEventListener('click', () => {
+      if (tracks.length === 0) return;
+      const next = (currentTrackIdx + 1) % tracks.length;
+      openDetailPlayer(next);
+    });
+
+    // Audio time updates
+    audio.addEventListener('timeupdate', () => {
+      if (!rangeEl || !audio.duration) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      rangeEl.value = String(pct);
+      if (timeCurrent) timeCurrent.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      if (timeDuration) timeDuration.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('ended', () => {
+      isPlaying = false;
+      updatePlayIcon();
+      // Auto-advance
+      if (tracks.length > 0) {
+        const next = (currentTrackIdx + 1) % tracks.length;
+        openDetailPlayer(next);
+      }
+    });
+
+    // Seek
+    rangeEl?.addEventListener('input', () => {
+      if (!audio.duration) return;
+      audio.currentTime = (parseFloat(rangeEl.value) / 100) * audio.duration;
+    });
+
+    closeBtn?.addEventListener('click', close);
+    detailCloseBtn?.addEventListener('click', closeDetailPlayer);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
+        // If detail player is visible, close it first
+        const detailY = gsap.getProperty(detailEl, 'y');
+        if (detailY === 0 || detailY === '0%' || detailY === '0') {
+          closeDetailPlayer();
+        } else {
+          close();
+        }
+      }
+    });
+
+    (window as any).__audioGuideOverlay = { open, close };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAudioGuideOverlay);
+  } else {
+    initAudioGuideOverlay();
+  }
+  document.addEventListener('astro:page-load', () => {
+    const overlay = document.getElementById('audio-overlay');
+    if (overlay) overlay.dataset.initialized = '';
+    initAudioGuideOverlay();
+  });
+</script>

@@ -1,0 +1,247 @@
+---
+// PaywallOverlay.astro -- Dismissible paywall modal shown when logged-out user
+// taps the headphones button on an artwork. Contains Buy Tickets + Become a
+// Member CTAs that both trigger simulateLogin().
+
+interface Props {
+  lang: 'en' | 'de';
+}
+
+const { lang } = Astro.props;
+
+const heading = lang === 'de' ? 'Audioguide' : 'Audio guide access';
+const body = lang === 'de'
+  ? 'Der Audioguide ist beim Online-Ticketkauf gratis enthalten. Haben Sie Ihr Ticket an der Kasse gekauft, k\u00f6nnen Sie den Audioguide vor Ort f\u00fcr CHF 4 leihen. Mitglieder des Kunsthauses Z\u00fcrich h\u00f6ren immer kostenlos.'
+  : 'The audio guide is free when you buy your ticket online. If you purchased your ticket at the counter, you can rent the audio guide for CHF 4 on site. Members of Kunsthaus Z\u00fcrich always listen free.';
+const buyLabel = lang === 'de' ? 'Tickets kaufen' : 'Buy tickets';
+const memberLabel = lang === 'de' ? 'Mitglied werden' : 'Become a member';
+---
+
+<div
+  class="paywall-overlay"
+  id="paywall-overlay"
+  aria-hidden="true"
+  role="dialog"
+  aria-label={heading}
+>
+  <div class="paywall-overlay__backdrop" data-paywall-backdrop></div>
+  <div class="paywall-overlay__card" data-lenis-prevent>
+    <button
+      type="button"
+      class="paywall-overlay__close touch-target"
+      aria-label="Close"
+      data-paywall-close
+    >
+      <span class="icon" aria-hidden="true">close</span>
+    </button>
+    <div class="paywall-overlay__content">
+      <span class="icon paywall-overlay__icon" aria-hidden="true">headphones</span>
+      <h2 class="paywall-overlay__heading">{heading}</h2>
+      <p class="paywall-overlay__body">{body}</p>
+      <div class="paywall-overlay__actions">
+        <button type="button" class="btn hover-wipe touch-pulse touch-target paywall-overlay__cta" data-paywall-action="buy">
+          {buyLabel}
+        </button>
+        <button type="button" class="btn paywall-overlay__cta paywall-overlay__cta--secondary touch-target" data-paywall-action="member">
+          {memberLabel}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .paywall-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+  }
+
+  .paywall-overlay.is-open {
+    visibility: visible;
+  }
+
+  .paywall-overlay__backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .paywall-overlay__card {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    width: calc(100% - var(--space-8));
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    padding: var(--space-8) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .paywall-overlay__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    opacity: 0.6;
+    padding: var(--space-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+  .paywall-overlay__close:hover,
+  .paywall-overlay__close:focus-visible {
+    opacity: 1;
+    outline: none;
+  }
+  .paywall-overlay__close .icon {
+    font-size: 22px;
+  }
+
+  .paywall-overlay__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .paywall-overlay__icon {
+    font-size: 40px;
+    color: var(--color-text);
+    opacity: 0.5;
+  }
+
+  .paywall-overlay__heading {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .paywall-overlay__body {
+    font-size: var(--type-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+    opacity: 0.75;
+    margin: 0;
+    max-width: 36ch;
+  }
+
+  .paywall-overlay__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+    margin-top: var(--space-2);
+  }
+
+  .paywall-overlay__cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .paywall-overlay__cta--secondary {
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
+    color: var(--color-text);
+  }
+  .paywall-overlay__cta--secondary:hover {
+    border-color: var(--color-text);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initPaywallOverlay() {
+    const overlay = document.getElementById('paywall-overlay');
+    if (!overlay || overlay.dataset.initialized === 'true') return;
+    overlay.dataset.initialized = 'true';
+
+    const backdrop = overlay.querySelector('[data-paywall-backdrop]');
+    const closeBtn = overlay.querySelector('[data-paywall-close]');
+    const card = overlay.querySelector('.paywall-overlay__card') as HTMLElement;
+    const buyBtn = overlay.querySelector('[data-paywall-action="buy"]');
+    const memberBtn = overlay.querySelector('[data-paywall-action="member"]');
+
+    function simulateLogin() {
+      localStorage.setItem('kunsthaus-demo-user', 'purchased');
+      (window as any).__demoUser = 'purchased';
+      window.dispatchEvent(new CustomEvent('kunsthaus:login'));
+      close();
+    }
+
+    function open(trackId?: string) {
+      if (!overlay) return;
+      (window as any).__paywall._pendingTrackId = trackId || null;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      (window as any).__lenis?.stop?.();
+
+      gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+      if (card) {
+        gsap.fromTo(card,
+          { scale: 0.92, opacity: 0, y: 20 },
+          { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.4)', delay: 0.1 }
+        );
+      }
+    }
+
+    function close() {
+      if (!overlay) return;
+      gsap.to(overlay, {
+        opacity: 0,
+        duration: 0.25,
+        ease: 'power2.in',
+        onComplete: () => {
+          overlay.classList.remove('is-open');
+          overlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          (window as any).__lenis?.start?.();
+        },
+      });
+    }
+
+    backdrop?.addEventListener('click', close);
+    closeBtn?.addEventListener('click', close);
+    buyBtn?.addEventListener('click', simulateLogin);
+    memberBtn?.addEventListener('click', simulateLogin);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('is-open')) {
+        close();
+      }
+    });
+
+    (window as any).__paywall = { open, close, _pendingTrackId: null as string | null };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPaywallOverlay);
+  } else {
+    initPaywallOverlay();
+  }
+  document.addEventListener('astro:page-load', () => {
+    const overlay = document.getElementById('paywall-overlay');
+    if (overlay) overlay.dataset.initialized = '';
+    initPaywallOverlay();
+  });
+</script>
