@@ -45,6 +45,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         aria-hidden={i === 0 ? 'false' : 'true'}
         data-artwork-number={String(art.number).padStart(2, '0')}
         data-index={i}
+        data-track-id={art.id}
       >
         <figure class="artwork-slider__figure">
           <img src={`${base}${art.image}`} alt={art.title[lang]} loading="lazy" />
@@ -162,6 +163,32 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         slides[next].setAttribute('aria-hidden', 'false');
         currentIdx = next;
       };
+
+      // Headphones button — paywall or audio guide depending on login state
+      slider.addEventListener('click', (e) => {
+        const headphonesBtn = (e.target as HTMLElement).closest('.artwork-slider__headphones');
+        if (headphonesBtn) {
+          const slide = headphonesBtn.closest('.artwork-slider__slide') as HTMLElement;
+          const trackId = slide?.dataset.trackId;
+          if (!(window as any).__demoUser) {
+            (window as any).__paywall?.open(trackId);
+          } else {
+            (window as any).__audioGuideOverlay?.open(trackId);
+          }
+          return;
+        }
+      });
+
+      // After login via paywall, auto-open audio guide if a track was pending
+      window.addEventListener('kunsthaus:login', () => {
+        const pendingTrack = (window as any).__paywall?._pendingTrackId;
+        if (pendingTrack) {
+          (window as any).__paywall._pendingTrackId = null;
+          setTimeout(() => {
+            (window as any).__audioGuideOverlay?.open(pendingTrack);
+          }, 400);
+        }
+      });
 
       // Nav buttons — wrap at both ends.
       slider.addEventListener('click', (e) => {

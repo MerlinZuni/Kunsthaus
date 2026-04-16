@@ -21,6 +21,9 @@ import LogoIsland from '../components/nav/LogoIsland.astro';
 import SearchOverlay from '../components/nav/SearchOverlay.astro';
 import HamburgerOverlay from '../components/nav/HamburgerOverlay.astro';
 import HoursOverlay from '../components/nav/HoursOverlay.astro';
+import PaywallOverlay from '../components/nav/PaywallOverlay.astro';
+import AudioGuideOverlay from '../components/nav/AudioGuideOverlay.astro';
+import ProfileOverlay from '../components/nav/ProfileOverlay.astro';
 import navItemsJson from '../content/shared/navigation.json';
 import uiStringsJson from '../content/shared/ui-strings.json';
 import footerJson from '../content/shared/footer.json';
@@ -76,6 +79,16 @@ const footerData = footerJson[0];
       phone={footerData.address.phone}
       lang={lang}
     />
+    <PaywallOverlay lang={lang} />
+    <AudioGuideOverlay lang={lang} />
+    <ProfileOverlay lang={lang} />
+
+    <script is:inline>
+      window.__demoUser = localStorage.getItem('kunsthaus-demo-user') || null;
+      document.addEventListener('astro:page-load', function() {
+        window.__demoUser = localStorage.getItem('kunsthaus-demo-user') || null;
+      });
+    </script>
 
     <main id="main" role="main">
       <slot />
