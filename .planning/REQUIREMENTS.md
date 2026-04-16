@@ -8,7 +8,7 @@
 ### Navigation & Mode System
 
 - [x] **NAV-01**: Responsive main navigation with mobile hamburger menu
-- [ ] **NAV-02**: Dual-mode toggle (Planning / On-site) visible in navigation
+- [x] **NAV-02**: Dual-mode toggle (Planning / On-site) visible in navigation
 - [x] **NAV-03**: Mode-aware navigation that changes content/links based on active mode
 - [ ] **NAV-04**: QR code URL parameters trigger On-site mode for specific exhibits
 - [ ] **NAV-05**: Opt-in geolocation prompt suggests On-site mode when near museum
@@ -85,7 +85,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | NAV-01 | Phase 2 | Complete |
-| NAV-02 | Phase 3 | Pending |
+| NAV-02 | Phase 3 | Complete |
 | NAV-03 | Phase 3 | Complete |
 | NAV-04 | Phase 3 | Pending |
 | NAV-05 | Phase 3 | Pending |

@@ -73,7 +73,7 @@ Plans:
 - [x] 03-01-PLAN.md -- Routing Foundation: Astro View Transitions, URL-as-state mode toggle refactor across 4 writers, /onsite stub route
 - [x] 03-02-PLAN.md -- On-site Landing Page: OnsiteHero, cinematic reveal, OnsiteExhibitionGrid, MuseumNavigatorTeaser, InfoBox with TodaysEventsAccordion, FAQAccordion
 - [x] 03-03-PLAN.md -- KJM Exhibition Detail Page: /onsite/kerry-james-marshall, hero video, cinematic reveal, ArtworkSlider, ArtistQuote, HorizontalSlider (videos + shop)
-- [ ] 03-04-PLAN.md -- Audio Guide + Login System: AudioGuideOverlay (Playlist + DetailPlayer bottom-sheet), PaywallOverlay, simulateLogin, NavProfileButton, ProfileOverlay
+- [x] 03-04-PLAN.md -- Audio Guide + Login System: AudioGuideOverlay (Playlist + DetailPlayer bottom-sheet), PaywallOverlay, simulateLogin, NavProfileButton, ProfileOverlay
 
 ### Phase 4: Deploy + Present
 **Goal**: A live prototype accessible via URL and high-quality screenshots capturing the design highlights for the competition presentation deck
