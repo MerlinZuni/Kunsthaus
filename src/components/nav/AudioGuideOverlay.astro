@@ -142,7 +142,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-4) var(--space-2);
+    padding: var(--space-5) var(--space-3);
     border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
     cursor: pointer;
     transition: background 0.2s ease;
@@ -183,8 +183,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .audio-overlay__track-play {
-    font-size: 22px;
-    opacity: 0.5;
+    font-size: 20px;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+  .audio-overlay__track:hover .audio-overlay__track-play {
+    opacity: 1;
+    border-color: color-mix(in srgb, var(--color-text) 50%, transparent);
   }
   .audio-overlay__track.is-playing .audio-overlay__track-play {
     opacity: 1;
@@ -221,12 +235,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .audio-overlay__detail-content {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 0 var(--space-6) var(--space-8);
     display: flex;
     flex-direction: column;
+    height: calc(100dvh - 48px);
+    overflow: hidden;
+    padding: 0 var(--space-6) var(--space-8);
     align-items: center;
     gap: var(--space-3);
   }
@@ -235,15 +248,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin: 0;
     width: 100%;
     max-width: 400px;
-    aspect-ratio: 4 / 5;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
     background: color-mix(in srgb, var(--color-text) 8%, transparent);
   }
 
   .audio-overlay__detail-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
     display: block;
   }
 
@@ -350,6 +367,25 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     border: none;
   }
 
+  /* Exhibition title */
+  .audio-overlay__exhibition-title {
+    font-size: var(--type-lg);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text);
+    padding: var(--space-4) var(--space-2) var(--space-2);
+    margin: 0;
+  }
+
+  /* Detail player description clamp */
+  .audio-overlay__detail-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   @media (min-width: 768px) {
     .audio-overlay__playlist {
       max-width: 600px;
@@ -412,6 +448,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       if (!tracksList) return;
       const lang = document.documentElement.lang || 'en';
       tracksList.innerHTML = '';
+
+      // Exhibition title header
+      const headerEl = document.createElement('h2');
+      headerEl.className = 'audio-overlay__exhibition-title';
+      headerEl.textContent = (window as any).__audioGuideExhibitionTitle || 'Audio Guide';
+      tracksList.appendChild(headerEl);
+
       tracks.forEach((t, i) => {
         const li = document.createElement('li');
         li.className = 'audio-overlay__track';
@@ -441,7 +484,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       currentTrackIdx = idx;
       const lang = document.documentElement.lang || 'en';
 
-      audio.src = track.audioSrc;
+      audio.src = `${base}${track.audioSrc}`;
       audio.load();
 
       if (detailImage) {
@@ -500,6 +543,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       const pageData = (window as any).__kjmArtworks;
       if (pageData) {
         tracks = pageData;
+      }
+      // Set exhibition title from page data
+      const kjmData = (window as any).__kjmExhibitionData;
+      if (kjmData?.title) {
+        const lang = document.documentElement.lang || 'en';
+        (window as any).__audioGuideExhibitionTitle = kjmData.title[lang] || kjmData.title.en || 'Audio Guide';
       }
       buildPlaylist();
 

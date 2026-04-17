@@ -39,8 +39,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout title="Kerry James Marshall — Kunsthaus Zurich" lang={lang} mode="onsite">
-  <script define:vars={{ artworksJson: JSON.stringify(kjm.artworks) }}>
+  <script define:vars={{ artworksJson: JSON.stringify(kjm.artworks), exhibitionTitleJson: JSON.stringify(kjm.title) }}>
     window.__kjmArtworks = JSON.parse(artworksJson);
+    window.__kjmExhibitionData = { title: JSON.parse(exhibitionTitleJson) };
   </script>
   <KjmHero
     title={kjm.title}
