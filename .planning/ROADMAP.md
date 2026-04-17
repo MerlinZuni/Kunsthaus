@@ -13,7 +13,7 @@ Transform three Figma concepts into a single animated, dual-mode homepage protot
 - [ ] **Phase 1: Foundation** - Astro project, grid system, content layer, CSS architecture with mode theming
 - [ ] **Phase 2: Static Homepage** - Full page structure with all sections rendering from JSON content
 - [ ] **Phase 3: Dual-Mode + Animation** - Mode switching system and all scroll/hover/text animations
-- [ ] **Phase 4: Deploy + Present** - Live on Cloudflare Pages with presentation screenshots
+- [ ] **Phase 4: Deploy + Present** - Live on GitHub Pages with visual polish, language switching, and presentation screenshots
 
 ## Phase Details
 
@@ -76,16 +76,20 @@ Plans:
 - [x] 03-04-PLAN.md -- Audio Guide + Login System: AudioGuideOverlay (Playlist + DetailPlayer bottom-sheet), PaywallOverlay, simulateLogin, NavProfileButton, ProfileOverlay
 
 ### Phase 4: Deploy + Present
-**Goal**: A live prototype accessible via URL and high-quality screenshots capturing the design highlights for the competition presentation deck
+**Goal**: Visual polish, EN/DE language switching, and automated screenshot capture for the competition presentation deck -- all on the existing GitHub Pages deployment
 **Depends on**: Phase 3
 **Requirements**: TECH-05, PRES-01
 **Success Criteria** (what must be TRUE):
-  1. The prototype is live on a Cloudflare Pages URL accessible from any browser
-  2. Screenshots of key design moments (hero, mode switch, scroll animations, mobile view) are exported and ready for the presentation deck
-**Plans**: TBD
+  1. The prototype is live on GitHub Pages accessible from any browser
+  2. Profile icon, profile overlay, and audio guide are polished to presentation quality
+  3. EN/DE language switching works across all pages
+  4. Screenshots of key design moments (hero, on-site landing, KJM detail, mobile views) are captured at 2x retina and wrapped in device frames
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md -- Visual polish: profile icon SVG, profile overlay nav behavior, audio playlist styling, audio playback wiring
+- [ ] 04-02-PLAN.md -- EN/DE language switcher wiring with client-side content swap, FR disabled state
+- [ ] 04-03-PLAN.md -- Playwright screenshot automation at 2x retina with browser chrome and iPhone bezel device frames
 
 ## Progress
 
@@ -97,7 +101,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Foundation | 3/3 | Complete (human_needed) | 2026-04-06 |
 | 2. Static Homepage | 4/4 | Verified (human_needed) | 2026-04-13 |
 | 3. Dual-Mode Routing | 0/4 | Planned (03-01 plan written) | - |
-| 4. Deploy + Present | 0/1 | Not started | - |
+| 4. Deploy + Present | 0/3 | Planned | - |
 
 ## Backlog
 
