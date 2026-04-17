@@ -9,16 +9,16 @@
     },
     "cinematicReveal": {
       "tagline": {
-        "de": "Welcome to the Kunsthaus Zurich. It's nice to have you here.",
-        "en": "Welcome to the Kunsthaus Zurich. It's nice to have you here."
+        "de": "Willkommen im Kunsthaus Zürich.<br/>Schön, dass Sie hier sind.",
+        "en": "Welcome to the Kunsthaus Zurich.<br/>It's nice to have you here."
       },
       "cardTitle": {
         "de": "Open space for living art",
         "en": "Open space for living art"
       },
       "description": {
-        "de": "Concrete, light, and silence. The Chipperfield Building was designed to disappear behind the art — to make room for looking.<br/><br/>Seven exhibitions wait for you across five floors. There is no wrong way through.",
-        "en": "Concrete, light, and silence. The Chipperfield Building was designed to disappear behind the art — to make room for looking.<br/><br/>Seven exhibitions wait for you across five floors. There is no wrong way through."
+        "de": "Willkommen im Kunsthaus Zürich, einem Ort für lebendige Begegnungen mit der Kunst. Wir laden Sie ein, unsere Kombination aus laufenden Ausstellungen und unserer ständigen Sammlung zu geniessen.<br/><br/>Auf dieser Seite finden Sie nützliche Informationen für Ihren Besuch.",
+        "en": "Welcome to the Kunsthaus Zürich, a place for living encounters with art. We invite you to enjoy our combination of ongoing exhibitions and our permanent collection.<br/><br/>On this page you'll find useful information for your visit."
       },
       "image": "/images/onsite/chipperfield-entrance.jpg"
     },
@@ -49,18 +49,18 @@
     "visitorEssentials": {
       "gettingAround": {
         "title": {
-          "de": "Orientierung",
-          "en": "Getting Around"
+          "de": "Besucherguide",
+          "en": "Visitor Guide"
         },
         "description": {
-          "de": "Finden Sie jedes Werk und jeden Raum mit unserem Guide.",
-          "en": "Find every work and every room with our interactive guide."
+          "de": "Navigieren Sie durch das Kunsthaus mit unserer interaktiven Karte & Guide.",
+          "en": "Navigate through the Kunsthaus with our interactive map & guide."
         },
         "linkLabel": {
-          "de": "Interactive Visitor Guide öffnen",
-          "en": "Open Interactive Visitor Guide"
+          "de": "Besucherguide öffnen",
+          "en": "Open Visitor Guide"
         },
-        "linkHref": "https://www.kunsthaus.ch/en/visit/museum-navigator/"
+        "linkHref": "https://visitorguide.kunsthaus.ch/"
       },
       "todaysEvents": {
         "title": {
@@ -182,6 +182,17 @@
         "answer": {
           "de": "Fotografieren ohne Blitz erlaubt, ausser in den Ausstellungen Marisol und Kerry James Marshall.",
           "en": "Photography allowed without flash, except in the Marisol and Kerry James Marshall exhibitions."
+        }
+      },
+      {
+        "id": "accessibility",
+        "question": {
+          "de": "Ist das Museum barrierefrei zugänglich?",
+          "en": "Is the museum accessible for visitors with reduced mobility?"
+        },
+        "answer": {
+          "de": "Barrierefreie Wege, Sitzgelegenheiten und Ruhezonen im gesamten Museum. Beide Gebäude sind stufenlos zugänglich mit Aufzügen zu allen Etagen. Rollstühle und Klapphocker können kostenlos an der Kasse ausgeliehen werden.",
+          "en": "Step-free routes, seating and quiet zones throughout the museum. Both buildings are fully accessible with lifts to all floors. Wheelchairs and folding stools can be borrowed free of charge at the ticket desk."
         }
       }
     ]

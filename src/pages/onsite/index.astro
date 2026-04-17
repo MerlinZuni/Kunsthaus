@@ -136,13 +136,13 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
         lang={lang}
       >
         <a
-          class="btn brushed-brass touch-pulse touch-target essentials-card__cta"
+          class="btn hover-wipe-inverse touch-pulse touch-target essentials-card__cta"
           href={onsiteHome.visitorEssentials.gettingAround.linkHref}
           target="_blank"
           rel="noopener noreferrer"
         >
           <span>{onsiteHome.visitorEssentials.gettingAround.linkLabel[lang]}</span>
-          <span class="icon">arrow_forward</span>
+          <span class="icon">open_in_new</span>
         </a>
       </EssentialsCard>
 
@@ -163,6 +163,7 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
           title={card.title}
           description={card.description}
           lang={lang}
+          variant="transparent"
         >
           {planningVenue.schedule && (
             <StatusAccordion
@@ -172,19 +173,12 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
               }))}
               closedLabel={todayClosedLabel}
               lang={lang}
+              variant="inline"
             />
           )}
         </EssentialsCard>
       ))}
 
-      {/* 9. Accessibility & Comfort — placeholder */}
-      <EssentialsCard
-        title={onsiteHome.visitorEssentials.accessibility.title}
-        description={onsiteHome.visitorEssentials.accessibility.description}
-        lang={lang}
-      >
-        <p class="essentials-placeholder">{onsiteHome.visitorEssentials.accessibility.placeholder[lang]}</p>
-      </EssentialsCard>
     </div>
   </SectionWrapper>
 
@@ -226,7 +220,8 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
   /* CTA button inside Getting Around card — aligned to the start so it
      doesn't stretch to fill the card body's flex column. */
   .essentials-card__cta {
-    align-self: flex-start;
+    align-self: stretch;
+    justify-content: center;
   }
 
   /* Wi-Fi card body — network name only; the "no password required" note

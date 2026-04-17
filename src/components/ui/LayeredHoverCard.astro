@@ -1,0 +1,138 @@
+---
+// LayeredHoverCard.astro — Hover overlay on image with CTA box.
+
+interface Props {
+  image: string;
+  alt: string;
+  href: string;
+  ctaText: string;
+}
+
+const { image, alt, href, ctaText } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const imgSrc = `${base}${image}`;
+---
+
+<a class="layered-hover" href={href} data-layered-hover>
+  <div class="layered-hover__base">
+    <img src={imgSrc} alt={alt} loading="lazy" />
+  </div>
+
+  <div class="layered-hover__overlay" data-overlay>
+    <span class="layered-hover__cta">
+      <span class="layered-hover__cta-text">{ctaText}</span>
+      <span class="icon">arrow_forward</span>
+    </span>
+  </div>
+</a>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initLayeredHover() {
+    document.querySelectorAll<HTMLElement>('[data-layered-hover]').forEach(card => {
+      if (card.dataset.initialized === 'true') return;
+      card.dataset.initialized = 'true';
+
+      const reduceMotion =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.classList.contains('reduce-motion');
+
+      const overlay = card.querySelector<HTMLElement>('[data-overlay]');
+      if (!overlay) return;
+
+      gsap.set(overlay, { opacity: 0 });
+
+      if (reduceMotion || !window.matchMedia('(hover: hover)').matches) return;
+
+      let hoverTl: gsap.core.Timeline | null = null;
+
+      card.addEventListener('mouseenter', () => {
+        if (hoverTl) hoverTl.kill();
+        hoverTl = gsap.timeline();
+        hoverTl.to(overlay, {
+          opacity: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (hoverTl) hoverTl.kill();
+        hoverTl = gsap.timeline();
+        hoverTl.to(overlay, {
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.in',
+        });
+      });
+    });
+  }
+
+  initLayeredHover();
+  document.addEventListener('astro:page-load', initLayeredHover);
+</script>
+
+<style>
+  .layered-hover {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .layered-hover__base {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+
+  .layered-hover__base img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  @media (hover: hover) {
+    .layered-hover:hover .layered-hover__base img {
+      transform: scale(1.05);
+    }
+  }
+
+  .layered-hover__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .layered-hover__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--btn-padding-y) var(--space-6);
+    border-radius: var(--btn-radius);
+    background: color-mix(in srgb, #683900 70%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff;
+  }
+
+  .layered-hover__cta-text {
+    font-size: var(--type-sm);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .layered-hover__cta .icon {
+    font-size: 18px;
+  }
+</style>

@@ -14,36 +14,47 @@ interface Props {
   schedule: ScheduleDay[];
   closedLabel?: string;
   lang?: 'en' | 'de';
+  variant?: 'pill' | 'inline';
 }
 
-const { schedule, closedLabel = 'Closed today', lang = 'en' } = Astro.props;
+const { schedule, closedLabel = 'Closed today', lang = 'en', variant = 'pill' } = Astro.props;
 const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
 ---
 
 <div
-  class="status-accordion"
+  class:list={['status-accordion', { 'status-accordion--inline': variant === 'inline' }]}
   data-status-accordion
+  data-variant={variant}
   data-schedule={JSON.stringify(schedule)}
   data-open-label={openLabel}
   data-closed-label={closedLabel}
 >
-  <button class="status-accordion__trigger" aria-expanded="false">
-    <span class="status-accordion__dot"></span>
-    <span class="status-accordion__text">...</span>
-    <svg class="status-accordion__arrow-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polyline points="6 9 12 15 18 9"/>
-    </svg>
-  </button>
-  <div class="status-accordion__panel" aria-hidden="true">
-    <dl class="status-accordion__list">
-      {schedule.map(day => (
-        <div class:list={['status-accordion__row', { 'status-accordion__row--closed': day.closed }]} data-schedule-day={day.day}>
-          <dt class="status-accordion__label">{day.label}</dt>
-          <dd class="status-accordion__value">{day.closed ? (lang === 'de' ? 'Geschlossen' : 'Closed') : `${day.open} – ${day.close}`}</dd>
-        </div>
-      ))}
-    </dl>
-  </div>
+  {variant === 'inline' ? (
+    <span class="status-accordion__trigger">
+      <span class="status-accordion__dot"></span>
+      <span class="status-accordion__text">...</span>
+    </span>
+  ) : (
+    <>
+      <button class="status-accordion__trigger" aria-expanded="false">
+        <span class="status-accordion__dot"></span>
+        <span class="status-accordion__text">...</span>
+        <svg class="status-accordion__arrow-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="status-accordion__panel" aria-hidden="true">
+        <dl class="status-accordion__list">
+          {schedule.map(day => (
+            <div class:list={['status-accordion__row', { 'status-accordion__row--closed': day.closed }]} data-schedule-day={day.day}>
+              <dt class="status-accordion__label">{day.label}</dt>
+              <dd class="status-accordion__value">{day.closed ? (lang === 'de' ? 'Geschlossen' : 'Closed') : `${day.open} – ${day.close}`}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </>
+  )}
 </div>
 
 <style>
@@ -155,6 +166,20 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
     font-weight: var(--weight-medium);
   }
 
+  /* Inline variant — dot + text only, no pill chrome */
+  .status-accordion--inline {
+    border: none;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .status-accordion--inline .status-accordion__trigger {
+    padding: 0;
+    cursor: default;
+  }
+
   /* Onsite / dark mode */
   html[data-mode="onsite"] .status-accordion__dot--open {
     background: #4ade80;
@@ -186,7 +211,7 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
       const text = el.querySelector('.status-accordion__text') as HTMLElement;
       const panel = el.querySelector('.status-accordion__panel') as HTMLElement;
       const arrow = el.querySelector('.status-accordion__arrow-svg') as HTMLElement;
-      if (!trigger || !dot || !text || !panel || !arrow) return;
+      if (!trigger || !dot || !text) return;
 
       // Parse schedule and compute current status
       const schedule = JSON.parse(el.getAttribute('data-schedule') || '[]');
@@ -217,6 +242,9 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
 
       dot.classList.add(isOpen ? 'status-accordion__dot--open' : 'status-accordion__dot--closed');
       text.textContent = statusText;
+
+      // Inline variant — no accordion behavior
+      if (el.dataset.variant === 'inline') return;
 
       // Highlight today's row
       const todayRow = el.querySelector(`[data-schedule-day="${today}"]`);

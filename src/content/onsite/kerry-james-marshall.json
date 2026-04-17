@@ -15,8 +15,8 @@
     },
     "cinematicReveal": {
       "tagline": {
-        "de": "Ein Maler, der neu definiert, wie westliche Kunst aussehen kann.",
-        "en": "A painter who rewrote what Western art could look like."
+        "de": "Ein Maler, der neu definiert,<br/>wie westliche Kunst aussehen kann.",
+        "en": "A painter who rewrote<br/>what Western art could look like."
       },
       "cardTitle": {
         "de": "Die Geschichten",
@@ -65,55 +65,39 @@
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "better-homes",
+        "id": "untitled-painter",
         "number": 2,
-        "title": { "de": "Better Homes, Better Gardens", "en": "Better Homes, Better Gardens" },
-        "year": "1994",
-        "collection": "Denver Art Museum",
-        "credit": "Funds from Polly and Mark Addison, the Alliance for Contemporary Art, Caroline Morgan, and Colorado Contemporary Collectors",
-        "image": "/images/artworks/better-homes.jpg",
+        "title": { "de": "Untitled (Painter)", "en": "Untitled (Painter)" },
+        "year": "2008",
+        "collection": "Harvard Art Museums/Fogg Museum, Cambridge, MA",
+        "credit": "Richard Norton Memorial Fund",
+        "image": "/images/artworks/untitled-painter.jpg",
         "description": {
-          "de": "Ein Idyll in Chicagos Sozialbauwohnungen: Rosen, Vögel und das Versprechen häuslichen Glücks.",
-          "en": "An idyll set in Chicago's public housing — roses, bluebirds, and the promise of domestic joy answering back to the language of real-estate advertising."
+          "de": "Eine Schwarze Künstlerin vor ihrer Leinwand — Marshall inszeniert den schöpferischen Akt als monumentales Selbstporträt des Malens.",
+          "en": "A Black artist before her canvas — Marshall stages the creative act as a monumental self-portrait of painting itself."
         },
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "past-times",
+        "id": "the-club",
         "number": 3,
-        "title": { "de": "Past Times", "en": "Past Times" },
-        "year": "1997",
-        "collection": "Metropolitan Museum of Art, New York",
-        "credit": "Gift of Sean Combs",
-        "image": "/images/artworks/past-times.jpg",
+        "title": { "de": "The Club", "en": "The Club" },
+        "year": "2011–12",
+        "collection": "Hudgins Family",
+        "image": "/images/artworks/the-club.jpg",
         "description": {
-          "de": "Ein Schwarzes Picknick am See, komponiert im Format der Historienmalerei.",
-          "en": "A Black leisure scene staged at lake's edge and composed with the scale and ambition of nineteenth-century history painting."
-        },
-        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
-      },
-      {
-        "id": "untitled-studio",
-        "number": 4,
-        "title": { "de": "Untitled (Studio)", "en": "Untitled (Studio)" },
-        "year": "2014",
-        "collection": "Metropolitan Museum of Art, New York",
-        "credit": "Purchase, The Jacques and Natasha Gelman Foundation Gift",
-        "image": "/images/artworks/untitled-studio.jpg",
-        "description": {
-          "de": "Marshall dreht den Blick: das Atelier selbst als Schauplatz Schwarzer Kunstproduktion.",
-          "en": "Marshall turns the lens on his own world — the studio itself as the site of Black artistic production, models and props arranged with theatrical poise."
+          "de": "Ein nächtlicher Jazzclub voller Energie — Schwarzes Nachtleben als Sujet grossformatiger Historienmalerei.",
+          "en": "A nocturnal jazz club alive with energy — Black nightlife elevated to the scale and ambition of history painting."
         },
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
         "id": "school-of-beauty",
-        "number": 5,
+        "number": 4,
         "title": { "de": "School of Beauty, School of Culture", "en": "School of Beauty, School of Culture" },
         "year": "2012",
-        "collection": "Birmingham Museum of Art",
-        "credit": "Museum purchase with funds provided by Elizabeth (Bibby) Smith",
-        "image": "/images/artworks/de-style.jpg",
+        "collection": "Birmingham Museum of Art, AL",
+        "image": "/images/artworks/school-of-beauty.jpg",
         "description": {
           "de": "Ein anamorphotischer Schönheitssalon, in dem eine Disney-Prinzessin am Boden schwebt.",
           "en": "An anamorphic blonde princess floats at the feet of a bustling Black salon — the politics of beauty staged in a single perspectival jolt."
@@ -121,68 +105,96 @@
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "7am-sunday-morning",
+        "id": "untitled-policeman",
+        "number": 5,
+        "title": { "de": "Untitled (policeman)", "en": "Untitled (policeman)" },
+        "year": "2015",
+        "collection": "The Museum of Modern Art, New York",
+        "credit": "Gift of Mimi Haas in honour of Marie-Josée Kravis",
+        "image": "/images/artworks/untitled-policeman.jpg",
+        "description": {
+          "de": "Ein Schwarzer Polizist, frontal und würdevoll — Marshall befragt die Darstellung von Autorität und Zugehörigkeit.",
+          "en": "A Black officer rendered with frontal dignity — Marshall interrogates the representation of authority, belonging and the uniform."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "plunge",
         "number": 6,
-        "title": { "de": "7am Sunday Morning", "en": "7am Sunday Morning" },
-        "year": "2003",
-        "collection": "Yale University Art Gallery",
-        "image": "/images/artworks/past-times.jpg",
+        "title": { "de": "Plunge", "en": "Plunge" },
+        "year": "1992",
+        "collection": "Collection of Eleanor Heyman Propp",
+        "image": "/images/artworks/plunge.jpg",
         "description": {
-          "de": "Chicagos South Side im Morgenlicht: eine Panoramaansicht als urbane Elegie.",
-          "en": "A panoramic view of Chicago's South Side at first light — an urban elegy composed like a Flemish cityscape."
+          "de": "Körper im Wasser — ein Sprung ins Schwimmbecken wird zur Metapher für den Eintritt in unbekanntes Terrain.",
+          "en": "Bodies in water — a swimming-pool plunge becomes a metaphor for entering uncharted territory, with echoes of baptism and rebirth."
         },
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "souvenir-i",
+        "id": "portrait-shadow",
         "number": 7,
-        "title": { "de": "Souvenir I", "en": "Souvenir I" },
-        "year": "1997",
-        "collection": "Museum of Contemporary Art, Chicago",
-        "credit": "Bernice and Kenneth Newberger Fund",
-        "image": "/images/artworks/better-homes.jpg",
+        "title": { "de": "A Portrait of the Artist as a Shadow of His Former Self", "en": "A Portrait of the Artist as a Shadow of His Former Self" },
+        "year": "1980",
+        "collection": "Los Angeles County Museum of Art",
+        "credit": "Promised Gift of Steven and Deborah Lebowitz",
+        "image": "/images/artworks/portrait-shadow.jpg",
         "description": {
-          "de": "Gedenkbild für die im Civil-Rights-Kampf Verstorbenen der 1960er Jahre.",
-          "en": "A memorial to those lost during the civil rights struggle of the 1960s — glitter, wings, and a living-room shrine to hold the names."
+          "de": "Marshalls Durchbruchswerk: ein Selbstporträt als reine Schwärze mit Grinsen — radikale Sichtbarkeit aus der Dunkelheit.",
+          "en": "Marshall's breakthrough — a self-portrait as pure blackness with a gleaming grin, radical visibility conjured from darkness itself."
         },
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "slow-dance",
+        "id": "keeping-the-culture",
         "number": 8,
-        "title": { "de": "Slow Dance", "en": "Slow Dance" },
-        "year": "1992–1993",
-        "collection": "David and Alfred Smart Museum of Art, University of Chicago",
-        "image": "/images/artworks/untitled-studio.jpg",
+        "title": { "de": "Keeping the Culture", "en": "Keeping the Culture" },
+        "year": "2010",
+        "collection": "Robert Taylor and Edith Cooper",
+        "image": "/images/artworks/keeping-the-culture.jpg",
         "description": {
-          "de": "Ein häusliches Liebesbild: Wohnzimmer, Radio, Umarmung — Schwarze Intimität als ernstes Sujet.",
-          "en": "A domestic love scene — living room, radio, an embrace — staking a claim for Black intimacy as a serious subject of painting."
+          "de": "Schwarze Figuren in einem Wohnraum voller Kunstwerke — das Sammeln und Bewahren von Kultur als Akt des Widerstands.",
+          "en": "Black figures in a living room dense with artworks — collecting and preserving culture as an act of resistance and continuity."
         },
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "watts-1963",
+        "id": "gulf-stream",
         "number": 9,
-        "title": { "de": "Watts 1963", "en": "Watts 1963" },
-        "year": "1995",
-        "collection": "Private Collection",
-        "image": "/images/artworks/de-style.jpg",
+        "title": { "de": "Gulf Stream", "en": "Gulf Stream" },
+        "year": "2003",
+        "collection": "Walker Art Center, Minneapolis, MN",
+        "credit": "T. B. Walker Acquisition Fund",
+        "image": "/images/artworks/gulf-stream.jpg",
         "description": {
-          "de": "Ein Rückblick auf Marshalls eigene Kindheit in Los Angeles, zwei Jahre vor den Unruhen von Watts.",
-          "en": "A backward glance at Marshall's own Los Angeles childhood, two years before the Watts uprising rewrote the neighbourhood's public image."
+          "de": "Eine Szene auf offener See — Marshall antwortet auf Winslow Homers Klassiker mit einer Schwarzen Perspektive auf Gefahr und Überleben.",
+          "en": "An open-sea scene — Marshall answers Winslow Homer's classic with a Black perspective on peril, survival and the currents of history."
         },
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       },
       {
-        "id": "vignette",
+        "id": "vignette-13",
         "number": 10,
-        "title": { "de": "Vignette", "en": "Vignette" },
-        "year": "2003",
-        "collection": "Defares Collection",
-        "image": "/images/artworks/past-times.jpg",
+        "title": { "de": "Vignette #13", "en": "Vignette #13" },
+        "year": "2008",
+        "collection": "Susan Manilow Collection",
+        "image": "/images/artworks/vignette-13.jpg",
         "description": {
-          "de": "Ein Liebespaar schwebt durch einen Rokoko-Garten, umkreist von flatternden Herzchen.",
+          "de": "Ein Liebespaar schwebt durch einen Rokoko-Garten, umkreist von flatternden Herzchen — Fragonard neu besetzt.",
           "en": "A Black couple drifts through a Rococo garden, circled by fluttering hearts — Fragonard re-staged with a different cast at its centre."
+        },
+        "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
+      },
+      {
+        "id": "haul",
+        "number": 11,
+        "title": { "de": "Haul", "en": "Haul" },
+        "year": "2025",
+        "collection": "",
+        "image": "/images/artworks/haul.jpg",
+        "description": {
+          "de": "Marshalls jüngstes Werk — eine Auseinandersetzung mit Last, Anstrengung und dem, was wir mit uns tragen.",
+          "en": "Marshall's most recent painting — a reckoning with burden, effort and what we carry with us."
         },
         "audioSrc": "/audio/Ballad%20for%20Classical%20Strings.mp3"
       }
@@ -276,6 +288,64 @@
         },
         "price": "CHF 48.-",
         "addToCartLabel": { "de": "In den Warenkorb", "en": "Add to cart" }
+      }
+    ],
+    "events": [
+      {
+        "id": "workshop-postdigital",
+        "title": { "de": "Reframing Histories — Gegenerzählungen mit KI zum Leben erwecken", "en": "Reframing Histories — Bringing Counter-Narratives to Life with AI" },
+        "date": { "de": "Do 23.4. 17:00–20:00", "en": "Thu 23 Apr, 17:00–20:00" },
+        "category": { "de": "Workshop", "en": "Workshop" },
+        "description": { "de": "Kunsthaus Postdigital — Workshop für Erwachsene", "en": "Kunsthaus Postdigital — Workshop for adults" },
+        "image": "/images/events/kjm/workshop-postdigital.jpg"
+      },
+      {
+        "id": "tour-unsichtbarkeit",
+        "title": { "de": "(Un)sichtbarkeit: Menschenbilder in chromatischem Schwarz", "en": "(In)visibility: Human Images in Chromatic Black" },
+        "date": { "de": "Sa 25.4. 10:45–12:15", "en": "Sat 25 Apr, 10:45–12:15" },
+        "category": { "de": "Dialogische Führung", "en": "Guided Tour" },
+        "description": { "de": "Dialogische Führung durch die Ausstellung von Kerry James Marshall", "en": "Dialogic tour through the Kerry James Marshall exhibition" },
+        "image": "/images/events/kjm/tour-portrait.jpg"
+      },
+      {
+        "id": "workshop-kunstlabor",
+        "title": { "de": "Kunstlabor für alle — Ich, Du und die Welt", "en": "Art Lab for All — Me, You and the World" },
+        "date": { "de": "So 3.5. 11:00–16:00", "en": "Sun 3 May, 11:00–16:00" },
+        "category": { "de": "Workshop", "en": "Workshop" },
+        "description": { "de": "Offenes Atelier für Familien und alle Altersgruppen", "en": "Open studio for families and all ages" },
+        "image": "/images/events/kjm/workshop-school-of-beauty.jpg"
+      },
+      {
+        "id": "tour-ideal-intro",
+        "title": { "de": "Kerry James Marshall. The Histories", "en": "Kerry James Marshall. The Histories" },
+        "date": { "de": "Sa 9.5. 11:00–12:00", "en": "Sat 9 May, 11:00–12:00" },
+        "category": { "de": "Führung", "en": "Guided Tour" },
+        "description": { "de": "Der ideale Einstieg in die Ausstellung", "en": "The ideal introduction to the exhibition" },
+        "image": "/images/events/kjm/tour-kjm.jpg"
+      },
+      {
+        "id": "tour-hair-fashion",
+        "title": { "de": "Dialogische Führung: Haar, Mode & Identität", "en": "Dialogic Tour: Hair, Fashion & Identity" },
+        "date": { "de": "Sa 9.5. 16:00–17:15", "en": "Sat 9 May, 16:00–17:15" },
+        "category": { "de": "Dialogische Führung", "en": "Guided Tour" },
+        "description": { "de": "Marshall-Ausstellung trifft African Fashion Night", "en": "Marshall exhibition meets African Fashion Night" },
+        "image": "/images/events/kjm/tour-portrait.jpg"
+      },
+      {
+        "id": "event-afro-hair",
+        "title": { "de": "Poetry of Afro Hair & Culture", "en": "Poetry of Afro Hair & Culture" },
+        "date": { "de": "Sa 9.5. 18:15–19:00", "en": "Sat 9 May, 18:15–19:00" },
+        "category": { "de": "Event", "en": "Event" },
+        "description": { "de": "Kerry James Marshall Show × African Fashion Night", "en": "Kerry James Marshall Show × African Fashion Night" },
+        "image": "/images/events/kjm/workshop-school-of-beauty.jpg"
+      },
+      {
+        "id": "film-je-suis-noires",
+        "title": { "de": "«Je suis Noires»", "en": "\"Je suis Noires\"" },
+        "date": { "de": "Do 25.6. 20:00–21:00", "en": "Thu 25 Jun, 20:00–21:00" },
+        "category": { "de": "Film", "en": "Film" },
+        "description": { "de": "Je suis Noires (2022, 52 Min., DE/FR) von Rachel M'Bon und Juliana Fanjul", "en": "Je suis Noires (2022, 52 min, DE/FR) by Rachel M'Bon and Juliana Fanjul" },
+        "image": "/images/events/kjm/film-je-suis-noires.jpg"
       }
     ]
   }

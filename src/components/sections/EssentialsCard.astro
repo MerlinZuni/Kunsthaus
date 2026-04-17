@@ -9,12 +9,13 @@ interface Props {
   title: { de: string; en: string };
   description: { de: string; en: string };
   lang: 'en' | 'de';
+  variant?: 'default' | 'transparent';
 }
 
-const { title, description, lang } = Astro.props;
+const { title, description, lang, variant = 'default' } = Astro.props;
 ---
 
-<article class="essentials-card">
+<article class:list={['essentials-card', { 'essentials-card--transparent': variant === 'transparent' }]}>
   <header class="essentials-card__header">
     <h3 class="essentials-card__title sub-heading">{title[lang]}</h3>
     <p class="essentials-card__description">{description[lang]}</p>
@@ -52,6 +53,12 @@ const { title, description, lang } = Astro.props;
     opacity: 0.75;
     line-height: var(--leading-normal);
     margin: 0;
+  }
+
+  .essentials-card--transparent {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
   }
 
   .essentials-card__body {

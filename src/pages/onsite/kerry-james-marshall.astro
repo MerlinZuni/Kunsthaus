@@ -77,6 +77,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         ))}
       </div>
     )}
+
+    <article class="kjm-intro__tickets-panel">
+      <div class="kjm-intro__tickets-block">
+        <h4 class="sub-heading">{lang === 'de' ? 'Tickets' : 'Tickets'}</h4>
+        <p class="kjm-intro__tickets-info">
+          {lang === 'de'
+            ? 'Erwachsene CHF 31.– / Ermässigt CHF 22.–* inkl. Sammlung & kleine Ausstellungen.'
+            : 'Adults CHF 31.– / Concessions CHF 22.–* incl. Collection & small exhibitions.'}
+          <br />
+          <span class="kjm-intro__tickets-note">{lang === 'de' ? '*Ermässigter Tarif' : '*Reduced rate'}</span>
+        </p>
+      </div>
+      <div class="kjm-intro__tickets-block">
+        <h4 class="sub-heading">{lang === 'de' ? 'Mitgliedschaft' : 'Membership'}</h4>
+        <p class="kjm-intro__tickets-info">
+          {lang === 'de'
+            ? 'Freier Eintritt plus Einladungen zu allen Eröffnungen und viele weitere Vorteile!'
+            : 'Free admission plus invitations to all openings and many other benefits!'}
+        </p>
+      </div>
+      <a href="/membership" class="btn hover-wipe-inverse touch-pulse touch-target kjm-intro__tickets-cta">
+        <span>{lang === 'de' ? 'Mitglied werden' : 'Become a member'}</span>
+        <span class="icon" aria-hidden="true">arrow_forward</span>
+      </a>
+    </article>
   </SectionWrapper>
 
   <SectionWrapper
@@ -160,6 +185,56 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <SectionWrapper
     index={6}
     bgStep={2}
+    sectionName={lang === 'de' ? 'Veranstaltungen' : 'Exhibit Events'}
+    sectionId="kjm-events"
+  >
+    <div class="kjm-events" data-kjm-events>
+      <h3 class="kjm-events__heading sub-heading">{lang === 'de' ? 'Programm' : 'Programme'}</h3>
+      <ul class="kjm-events__list">
+        {kjm.events.map((ev: any) => (
+          <li class="kjm-events__row" data-image={`${base}${ev.image}`}>
+            <span class="kjm-events__row-title">
+              {ev.title[lang]}
+              <span class="icon kjm-events__row-arrow">arrow_forward</span>
+            </span>
+            <span class="kjm-events__row-date">{ev.date[lang]}</span>
+            <span class="kjm-events__row-tags">
+              <span class="kjm-events__tag">{ev.category[lang]}</span>
+            </span>
+            <img class="kjm-events__row-thumb" src={`${base}${ev.image}`} alt="" loading="lazy" />
+          </li>
+        ))}
+      </ul>
+
+      <div class="kjm-events__preview" aria-hidden="true">
+        <img class="kjm-events__preview-img" src="" alt="" />
+      </div>
+    </div>
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={7}
+    bgStep={3}
+    sectionName="Partners & Credits"
+    sectionId="kjm-supported"
+  >
+    <div class="kjm-supported">
+      <h3 class="kjm-supported__heading sub-heading">{lang === 'de' ? 'Unterstützt von' : 'Supported by'}</h3>
+      <img
+        src={`${base}/images/partners/Swiss-Re-logo.svg`}
+        alt="Swiss Re"
+        class="kjm-supported__logo"
+        loading="lazy"
+      />
+      <p class="kjm-supported__credit">
+        Ill: Kerry James Marshall, Untitled (Beauty Queen), 2014, Private collection, © Kerry James Marshall, Courtesy of the artist and David Zwirner, London.
+      </p>
+    </div>
+  </SectionWrapper>
+
+  <SectionWrapper
+    index={8}
+    bgStep={4}
     sectionName="Keep Exploring"
     sectionId="kjm-continue"
   >
@@ -196,6 +271,176 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin: 0;
   }
 
+  .kjm-supported {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-6);
+    padding: var(--space-8) 0;
+  }
+
+  .kjm-supported__heading {
+    margin: 0;
+  }
+
+  .kjm-supported__logo {
+    height: 64px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+
+  .kjm-supported__credit {
+    font-size: var(--type-sm);
+    color: var(--color-text);
+    opacity: 0.6;
+    max-width: 60ch;
+    line-height: var(--leading-normal);
+    margin: 0;
+  }
+
+  /* Event list — mirrors ExhibitionList pattern */
+  .kjm-events {
+    position: relative;
+  }
+
+  .kjm-events__heading {
+    margin-bottom: var(--space-6);
+  }
+
+  .kjm-events__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .kjm-events__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: var(--space-6);
+    align-items: center;
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    cursor: default;
+    transition: background 0.3s ease;
+  }
+
+  .kjm-events__row:first-child {
+    border-top: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+  }
+
+  .kjm-events__row--active {
+    background: #0e0d0c;
+    margin-left: calc(-1 * var(--space-8));
+    margin-right: calc(-1 * var(--space-8));
+    padding-left: var(--space-8);
+    padding-right: var(--space-8);
+  }
+
+  .kjm-events__row-title {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+  }
+
+  .kjm-events__row-arrow {
+    font-size: 18px;
+    opacity: 0;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: var(--space-2);
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .kjm-events__row--active .kjm-events__row-arrow {
+    opacity: 0.7;
+    transform: translateX(4px);
+  }
+
+  .kjm-events__row-date {
+    font-size: var(--type-md);
+    font-weight: var(--weight-light);
+    color: var(--color-text);
+  }
+
+  .kjm-events__tag {
+    font-size: var(--type-xs);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+    border-radius: 3px;
+    color: var(--color-text);
+    opacity: 0.7;
+  }
+
+  .kjm-events__row-thumb {
+    display: none;
+  }
+
+  .kjm-events__preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    width: 280px;
+    height: 210px;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .kjm-events__preview--visible {
+    opacity: 1;
+  }
+
+  .kjm-events__preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 767px) {
+    .kjm-events__row {
+      position: relative;
+      grid-template-columns: 60% 1fr;
+      gap: var(--space-2);
+      overflow: visible;
+    }
+
+    .kjm-events__row-thumb {
+      display: block;
+      position: absolute;
+      right: -80px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 55%;
+      height: 140%;
+      object-fit: cover;
+      border-radius: 4px 0 0 4px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .kjm-events__row--active .kjm-events__row-thumb {
+      opacity: 1;
+    }
+
+    .kjm-events__row-title,
+    .kjm-events__row-date,
+    .kjm-events__row-tags {
+      grid-column: 1;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
   .kjm-continue {
     display: flex;
     justify-content: center;
@@ -228,6 +473,52 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     .kjm-intro__paragraph {
       max-width: none;
     }
+  }
+
+  .kjm-intro__tickets-panel {
+    margin-top: var(--space-8);
+    background: color-mix(in srgb, var(--color-text) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    border-radius: var(--btn-radius);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    color: var(--color-text);
+  }
+
+  @media (min-width: 768px) {
+    .kjm-intro__tickets-panel {
+      max-width: 90ch;
+    }
+  }
+
+  .kjm-intro__tickets-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .kjm-intro__tickets-block .sub-heading {
+    margin: 0;
+  }
+
+  .kjm-intro__tickets-info {
+    font-size: var(--type-md);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+    opacity: 0.8;
+    margin: 0;
+  }
+
+  .kjm-intro__tickets-note {
+    font-size: var(--type-sm);
+    opacity: 0.6;
+  }
+
+  .kjm-intro__tickets-cta {
+    align-self: flex-start;
+    justify-content: center;
   }
 
   /* Video testimonial cards (inline markup fills the HorizontalSlider slot) */
@@ -335,3 +626,63 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-top: var(--space-2);
   }
 </style>
+
+<script>
+  function initKjmEvents() {
+    const container = document.querySelector('[data-kjm-events]');
+    if (!container) return;
+
+    const preview = container.querySelector('.kjm-events__preview') as HTMLElement;
+    const previewImg = container.querySelector('.kjm-events__preview-img') as HTMLImageElement;
+    const rows = container.querySelectorAll('.kjm-events__row');
+    if (!preview || !previewImg || !rows.length) return;
+
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    if (!isTouch) {
+      rows.forEach((row) => {
+        row.addEventListener('mouseenter', () => {
+          const src = (row as HTMLElement).dataset.image;
+          if (src) {
+            previewImg.src = src;
+            preview.classList.add('kjm-events__preview--visible');
+          }
+          row.classList.add('kjm-events__row--active');
+        });
+        row.addEventListener('mouseleave', () => {
+          preview.classList.remove('kjm-events__preview--visible');
+          row.classList.remove('kjm-events__row--active');
+        });
+        row.addEventListener('mousemove', (e) => {
+          const ev = e as MouseEvent;
+          const rect = container.getBoundingClientRect();
+          preview.style.left = `${ev.clientX - rect.left + 20}px`;
+          preview.style.top = `${ev.clientY - rect.top - 80}px`;
+        });
+      });
+    } else {
+      let activeRow: HTMLElement | null = null;
+      const updateActiveRow = () => {
+        const viewportCenter = window.innerHeight / 2;
+        let closest: HTMLElement | null = null;
+        let closestDist = Infinity;
+        rows.forEach((row) => {
+          const rect = row.getBoundingClientRect();
+          const rowCenter = rect.top + rect.height / 2;
+          const dist = Math.abs(rowCenter - viewportCenter);
+          if (dist < closestDist) { closestDist = dist; closest = row as HTMLElement; }
+        });
+        if (closest && closest !== activeRow) {
+          if (activeRow) activeRow.classList.remove('kjm-events__row--active');
+          closest.classList.add('kjm-events__row--active');
+          activeRow = closest;
+        }
+      };
+      window.addEventListener('scroll', updateActiveRow, { passive: true });
+      updateActiveRow();
+    }
+  }
+
+  initKjmEvents();
+  document.addEventListener('astro:page-load', initKjmEvents);
+</script>
