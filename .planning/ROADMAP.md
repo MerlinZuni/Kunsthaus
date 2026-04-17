@@ -87,7 +87,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Visual polish: profile icon SVG, profile overlay nav behavior, audio playlist styling, audio playback wiring
+- [x] 04-01-PLAN.md -- Visual polish: profile icon SVG, profile overlay nav behavior, audio playlist styling, audio playback wiring
 - [ ] 04-02-PLAN.md -- EN/DE language switcher wiring with client-side content swap, FR disabled state
 - [ ] 04-03-PLAN.md -- Playwright screenshot automation at 2x retina with browser chrome and iPhone bezel device frames
 
