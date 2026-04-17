@@ -26,10 +26,15 @@ const current = languages.find(l => l.code === lang) || languages[0];
   <div class="lang-switcher__panel">
     {languages.map(l => (
       <button
-        class:list={['lang-switcher__option', { 'lang-switcher__option--hidden': l.code === lang }]}
+        class:list={[
+          'lang-switcher__option',
+          { 'lang-switcher__option--hidden': l.code === lang },
+          { 'lang-switcher__option--disabled': l.code === 'fr' }
+        ]}
         data-lang={l.code}
+        {...(l.code === 'fr' ? { disabled: true, title: 'Coming soon' } : {})}
       >
-        {l.label}
+        {l.label}{l.code === 'fr' ? ' (soon)' : ''}
       </button>
     ))}
   </div>
@@ -122,6 +127,12 @@ const current = languages.find(l => l.code === lang) || languages[0];
   .lang-switcher__option:hover {
     opacity: 1;
   }
+
+  .lang-switcher__option--disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 </style>
 
 <script>
@@ -139,6 +150,7 @@ const current = languages.find(l => l.code === lang) || languages[0];
       options.forEach(option => {
         option.addEventListener('click', () => {
           const lang = (option as HTMLElement).dataset.lang;
+          if (lang === 'fr') return; // FR disabled
           if (lang) {
             document.documentElement.setAttribute('lang', lang);
             localStorage.setItem('kunsthaus-lang', lang);
