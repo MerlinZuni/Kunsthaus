@@ -44,12 +44,26 @@ const { ticketsLabel = 'Buy Tickets', ticketsHref = 'https://www.kunsthaus.ch/ti
 
 <script>
   function initStickyCTA() {
+    const ctas = document.querySelectorAll('.sticky-cta');
+
+    function updateVisibility() {
+      const loggedIn = !!localStorage.getItem('kunsthaus-demo-user');
+      ctas.forEach((el) => {
+        (el as HTMLElement).style.display = loggedIn ? 'none' : '';
+      });
+    }
+
+    updateVisibility();
+    window.addEventListener('kunsthaus:login', updateVisibility);
+    window.addEventListener('kunsthaus:logout', updateVisibility);
+
     // Hide sticky CTA when footer is visible
     const footer = document.querySelector('.site-footer');
     if (!footer) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        document.querySelectorAll('.sticky-cta').forEach((el) => {
+        ctas.forEach((el) => {
+          if (localStorage.getItem('kunsthaus-demo-user')) return;
           (el as HTMLElement).style.opacity = entry.isIntersecting ? '0' : '1';
           (el as HTMLElement).style.pointerEvents = entry.isIntersecting ? 'none' : 'auto';
         });

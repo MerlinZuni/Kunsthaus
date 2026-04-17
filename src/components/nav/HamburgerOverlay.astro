@@ -105,32 +105,32 @@ const onsiteHref = `${base}/onsite`;
       <nav class="hamburger-overlay__secondary" aria-label="Secondary navigation">
         <ul>
           <li class="hamburger-overlay__secondary-item">
+            <a href="https://www.kunsthaus.ch/tickets" class="hamburger-overlay__secondary-link">
+              <span data-i18n-de="Ticket kaufen" data-i18n-en="Buy Ticket">{lang === 'de' ? 'Ticket kaufen' : 'Buy Ticket'}</span>
+              <span class="icon hamburger-overlay__secondary-arrow">arrow_forward</span>
+            </a>
+          </li>
+          <li class="hamburger-overlay__secondary-item">
             <a href={`${base}/membership`} class="hamburger-overlay__secondary-link">
               <span data-i18n-de="Mitglied werden" data-i18n-en="Become a member">{lang === 'de' ? 'Mitglied werden' : 'Become a member'}</span>
-              <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
+              <span class="icon hamburger-overlay__secondary-arrow">arrow_forward</span>
             </a>
           </li>
           <li class="hamburger-overlay__secondary-item" data-login-item>
             <a href={`${base}/login`} class="hamburger-overlay__secondary-link" data-login-link>
               <span data-login-text data-i18n-de="Anmelden" data-i18n-en="Log in">{lang === 'de' ? 'Anmelden' : 'Log in'}</span>
-              <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
+              <span class="icon hamburger-overlay__secondary-arrow">arrow_forward</span>
             </a>
           </li>
           <li class="hamburger-overlay__secondary-item">
             <a href={`${base}/shop`} class="hamburger-overlay__secondary-link">
               <span data-i18n-de="Shops & Gastronomie" data-i18n-en="Shops & Gastronomy">{lang === 'de' ? 'Shops & Gastronomie' : 'Shops & Gastronomy'}</span>
-              <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
+              <span class="icon hamburger-overlay__secondary-arrow">arrow_forward</span>
             </a>
           </li>
           <li class="hamburger-overlay__secondary-item">
             <a href="https://visitorguide.kunsthaus.ch/" class="hamburger-overlay__secondary-link" target="_blank" rel="noopener">
               <span data-i18n-de="Besucherführer" data-i18n-en="Visitor Guide">{lang === 'de' ? 'Besucherführer' : 'Visitor Guide'}</span>
-              <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
-            </a>
-          </li>
-          <li class="hamburger-overlay__secondary-item">
-            <a href={`${base}/press`} class="hamburger-overlay__secondary-link">
-              <span data-i18n-de="Presse" data-i18n-en="Press">{lang === 'de' ? 'Presse' : 'Press'}</span>
               <span class="icon hamburger-overlay__secondary-arrow">north_east</span>
             </a>
           </li>
