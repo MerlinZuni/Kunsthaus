@@ -9,12 +9,12 @@ const { searchLabel } = Astro.props;
 
 // Hardcoded suggestions per D-11
 const suggestions = [
-  { label: 'Current Exhibitions', href: '#' },
-  { label: 'Opening Hours', href: '#' },
-  { label: 'Tickets', href: '#' },
-  { label: 'Kerry James Marshall', href: '#' },
-  { label: 'Membership', href: '#' },
-  { label: 'Getting Here', href: '#' },
+  { en: 'Current Exhibitions', de: 'Aktuelle Ausstellungen', href: '#' },
+  { en: 'Opening Hours', de: 'Öffnungszeiten', href: '#' },
+  { en: 'Tickets', de: 'Tickets', href: '#' },
+  { en: 'Kerry James Marshall', de: 'Kerry James Marshall', href: '#' },
+  { en: 'Membership', de: 'Mitgliedschaft', href: '#' },
+  { en: 'Getting Here', de: 'Anfahrt', href: '#' },
 ];
 ---
 
@@ -39,13 +39,21 @@ const suggestions = [
       <a href="/" class="search-overlay__logo">
         <img src="/Kunsthaus/images/logo.png" alt="Kunsthaus Zürich" class="search-overlay__logo-img" />
       </a>
-      <button class="search-overlay__hamburger touch-target" aria-label="Open menu" data-action="open-hamburger">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-      </button>
+      <div class="search-overlay__right">
+        <button class="search-overlay__profile-btn touch-target" aria-label="Profile" data-action="open-profile" style="display: none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M20 21c0-3.87-3.58-7-8-7s-8 3.13-8 7"/>
+          </svg>
+        </button>
+        <button class="search-overlay__hamburger touch-target" aria-label="Open menu" data-action="open-hamburger">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     {/* Body: search field + suggestions */}
@@ -61,23 +69,23 @@ const suggestions = [
             autocomplete="off"
           />
           <span class="search-overlay__placeholder" id="search-placeholder" aria-hidden="true">
-            Search for "<span class="search-overlay__rotating-text" id="search-rotating">exhibitions</span>"
+            <span data-i18n-de="Suchen nach" data-i18n-en="Search for" id="search-prefix">Search for</span> "<span class="search-overlay__rotating-text" id="search-rotating">exhibitions</span>"
           </span>
         </div>
         <button class="search-overlay__go" type="button" aria-label="Search">
-          <span class="search-overlay__go-label">{searchLabel}</span>
+          <span class="search-overlay__go-label" data-i18n-de="Suche" data-i18n-en="Search">{searchLabel}</span>
           <span class="icon">search</span>
         </button>
       </div>
 
       {/* Suggestions */}
       <nav class="search-overlay__suggestions" aria-label="Suggested searches">
-        <h2 class="search-overlay__heading sub-heading">Popular Searches</h2>
+        <h2 class="search-overlay__heading sub-heading" data-i18n-de="Beliebte Suchanfragen" data-i18n-en="Popular Searches">Popular Searches</h2>
         <ul>
           {suggestions.map((s, i) => (
             <li class="search-overlay__item" data-search-item={i}>
               <a href={s.href} class="search-overlay__item-link btn-link touch-pulse">
-                <span>{s.label}</span>
+                <span data-i18n-de={s.de} data-i18n-en={s.en}>{s.en}</span>
                 <span class="icon">arrow_forward</span>
               </a>
             </li>
@@ -119,12 +127,14 @@ const suggestions = [
     padding: var(--space-1) var(--space-2);
   }
 
-  .search-overlay__left {
+  .search-overlay__left,
+  .search-overlay__right {
     display: flex;
     align-items: center;
     gap: var(--space-1);
   }
 
+  .search-overlay__profile-btn,
   .search-overlay__hamburger,
   .search-overlay__hours-btn {
     background: none;
@@ -488,7 +498,10 @@ const suggestions = [
     // Rotating placeholder text
     const placeholder = document.getElementById('search-placeholder');
     const rotatingEl = document.getElementById('search-rotating');
-    const phrases = ['exhibitions', 'upcoming events', 'member benefits', 'a map of the Kunsthaus', 'something to eat or drink', 'educational resources', 'family/holiday activities', 'a specific artist'];
+    const phrasesEn = ['exhibitions', 'upcoming events', 'member benefits', 'a map of the Kunsthaus', 'something to eat or drink', 'educational resources', 'family/holiday activities', 'a specific artist'];
+    const phrasesDe = ['Ausstellungen', 'kommende Events', 'Mitgliedervorteile', 'einen Lageplan', 'etwas zu essen oder trinken', 'Bildungsangebote', 'Familien-/Ferienaktivitäten', 'einen bestimmten Künstler'];
+    function getPhrases() { return document.documentElement.lang === 'de' ? phrasesDe : phrasesEn; }
+    let phrases = getPhrases();
     let phraseIndex = 0;
     let rotateInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -541,6 +554,7 @@ const suggestions = [
       if (input) input.value = '';
       if (placeholder) placeholder.style.display = '';
       if (rotatingEl) {
+        phrases = getPhrases();
         phraseIndex = 0;
         rotatingEl.textContent = phrases[0];
         rotatingEl.classList.remove('is-exiting', 'is-entering');

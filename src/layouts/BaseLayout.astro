@@ -184,5 +184,38 @@ const footerData = footerJson[0];
         if (e.matches) lenis.destroy();
       });
     </script>
+    <script>
+      function syncOverlayProfileButtons() {
+        const isLoggedIn = !!localStorage.getItem('kunsthaus-demo-user');
+        const btns = document.querySelectorAll(
+          '.hamburger-overlay__profile-btn, .search-overlay__profile-btn, .hours-overlay__profile-btn'
+        );
+        btns.forEach(btn => {
+          (btn as HTMLElement).style.display = isLoggedIn ? 'flex' : 'none';
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.hamburger-overlay, .search-overlay, .hours-overlay').forEach(o => {
+              if (o.classList.contains('is-open')) {
+                o.classList.remove('is-open');
+                o.setAttribute('aria-hidden', 'true');
+              }
+            });
+            document.body.style.overflow = '';
+            (window as any).__lenis?.start?.();
+            setTimeout(() => (window as any).__profileOverlay?.open(), 100);
+          });
+        });
+      }
+      function initOverlayProfileSync() {
+        syncOverlayProfileButtons();
+        window.addEventListener('kunsthaus:login', syncOverlayProfileButtons);
+        window.addEventListener('kunsthaus:logout', syncOverlayProfileButtons);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initOverlayProfileSync);
+      } else {
+        initOverlayProfileSync();
+      }
+      document.addEventListener('astro:page-load', initOverlayProfileSync);
+    </script>
   </body>
 </html>

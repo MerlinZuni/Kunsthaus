@@ -49,6 +49,12 @@ const scheduleJson = JSON.stringify(schedule);
           </button>
         </div>
         <div class="hours-overlay__right">
+          <button class="hours-overlay__icon-btn hours-overlay__profile-btn touch-target" aria-label="Profile" data-action="open-profile" style="display: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M20 21c0-3.87-3.58-7-8-7s-8 3.13-8 7"/>
+            </svg>
+          </button>
           <button class="hours-overlay__icon-btn touch-target" aria-label="Open menu" data-action="open-hamburger">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
               <line x1="3" y1="6" x2="21" y2="6"/>
@@ -77,12 +83,12 @@ const scheduleJson = JSON.stringify(schedule);
                 data-hours-item={i}
               >
                 <span class="hours-overlay__day">
-                  {entry.day[lang]}
+                  <span data-i18n-de={entry.day.de} data-i18n-en={entry.day.en}>{entry.day[lang]}</span>
                   {entry.note?.[lang] && (
-                    <span class="hours-overlay__occasion">{entry.note[lang]}</span>
+                    <span class="hours-overlay__occasion" data-i18n-de={entry.note?.de} data-i18n-en={entry.note?.en}>{entry.note[lang]}</span>
                   )}
                 </span>
-                <span class="hours-overlay__hours">{entry.hours[lang]}</span>
+                <span class="hours-overlay__hours" data-i18n-de={entry.hours.de} data-i18n-en={entry.hours.en}>{entry.hours[lang]}</span>
               </li>
             ))}
           </ul>
@@ -94,7 +100,7 @@ const scheduleJson = JSON.stringify(schedule);
 
         {/* Column 2: Holiday hours — flat list, no expand */}
         <div class="hours-overlay__col" data-hours-col="holiday">
-          <h2 class="hours-overlay__col-heading sub-heading">{holidayHeading}</h2>
+          <h2 class="hours-overlay__col-heading sub-heading" data-i18n-de="Feiertage" data-i18n-en="Public Holidays">{holidayHeading}</h2>
           <ul class="hours-overlay__schedule">
             {holidaySchedule.map((entry, i) => (
               <li
@@ -102,12 +108,12 @@ const scheduleJson = JSON.stringify(schedule);
                 data-hours-holiday={i}
               >
                 <span class="hours-overlay__day">
-                  {entry.date[lang]}
+                  <span data-i18n-de={entry.date.de} data-i18n-en={entry.date.en}>{entry.date[lang]}</span>
                   {entry.occasion[lang] && (
-                    <span class="hours-overlay__occasion">{entry.occasion[lang]}</span>
+                    <span class="hours-overlay__occasion" data-i18n-de={entry.occasion.de} data-i18n-en={entry.occasion.en}>{entry.occasion[lang]}</span>
                   )}
                 </span>
-                <span class="hours-overlay__hours">{entry.hours[lang]}</span>
+                <span class="hours-overlay__hours" data-i18n-de={entry.hours.de} data-i18n-en={entry.hours.en}>{entry.hours[lang]}</span>
               </li>
             ))}
           </ul>
@@ -170,6 +176,7 @@ const scheduleJson = JSON.stringify(schedule);
   .hours-overlay__right {
     display: flex;
     align-items: center;
+    gap: var(--space-1);
   }
 
   /* Icon buttons — mirrors .navbar__icon-btn exactly */
@@ -367,7 +374,7 @@ const scheduleJson = JSON.stringify(schedule);
     function computeStatus() {
       if (!overlay || !statusEl) return;
       const schedule = JSON.parse(overlay.getAttribute('data-schedule') || '[]');
-      const lang = overlay.getAttribute('data-lang') || 'en';
+      const lang = document.documentElement.lang || 'en';
 
       const now = new Date();
       // getDay(): 0=Sun,1=Mon...6=Sat → map to footer.json index (0=Mon...6=Sun)
@@ -409,6 +416,7 @@ const scheduleJson = JSON.stringify(schedule);
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
       (window as any).__lenis?.stop?.();
+      computeStatus();
 
       if (!swap) {
         gsap.to(overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' });
