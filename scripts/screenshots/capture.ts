@@ -85,7 +85,7 @@ async function main() {
   // 4b: Mobile hamburger menu
   const hamburgerBtn = mobilePage.locator('[data-action="hamburger"]');
   if (await hamburgerBtn.isVisible()) {
-    await hamburgerBtn.click();
+    await hamburgerBtn.click({ force: true });
     await mobilePage.waitForTimeout(800);
     await mobilePage.screenshot({
       path: join(RAW_DIR, '04-mobile-hamburger-mobile.png'),
