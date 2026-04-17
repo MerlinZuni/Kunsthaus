@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-04-17T08:11:21.549Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-04-17T08:22:51.474Z"
 last_activity: 2026-04-17
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 14
-  completed_plans: 12
-  percent: 86
+  completed_plans: 13
+  percent: 93
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 ## Current Position
 
 Phase: 04 (Deploy + Present) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-04-17
 
@@ -64,6 +64,7 @@ Progress: [██░░░░░░░░] 25%
 | Phase 03 P03 | 6min | 8 tasks | 9 files |
 | Phase 03-04 P04 | 6min | 3 tasks | 10 files |
 | Phase 04-deploy-present P01 | 3min | 2 tasks | 4 files |
+| Phase 04-deploy-present P02 | 9min | 2 tasks | 17 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,7 @@ Recent decisions affecting current work:
 - [Phase 02]: Global reduce-motion CSS override in base.css kills all animations/transitions
 - [Phase 03-04]: Login state propagated via CustomEvent kunsthaus:login/logout across all overlay components
 - [Phase 04-deploy-present]: Profile icon uses inline SVG for nav consistency; exhibition title via window global
+- [Phase 04-deploy-present]: i18n via data-i18n-de/en attributes + MutationObserver on html[lang] for reactive client-side language swap
 
 ### Pending Todos
 
@@ -111,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-17T08:11:21.528Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-04-17T08:22:51.453Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
