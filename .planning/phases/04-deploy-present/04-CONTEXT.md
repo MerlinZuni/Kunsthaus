@@ -50,12 +50,17 @@ Get the prototype presentation-ready on the existing GitHub Pages deployment and
 - **D-18:** Desktop screenshots wrapped in minimal browser chrome frame showing the GitHub Pages URL in the address bar.
 - **D-19:** Mobile screenshots wrapped in iPhone bezel mockup frame.
 
+### Language Switcher
+- **D-20:** Wire up the EN/DE language switcher so selecting DE actually swaps rendered content to German. The JSON content already has both DE and EN translations (Phase 1, D-12). This is finishing existing infrastructure, not building a new feature.
+- **D-21:** FR remains a placeholder — no French content exists. FR option can stay in the dropdown but should be visually disabled or show a "coming soon" state.
+
 ### Claude's Discretion
 - Playwright script structure and navigation timing (wait for animations to settle)
 - Browser chrome and iPhone frame styling/source
 - Exact scroll positions for capturing scroll-driven effects
 - Screenshot output directory structure
 - Which specific mobile screens to capture (hamburger menu, sticky bar, stacking sections)
+- Language switching mechanism (URL parameter, localStorage, or page reload approach)
 
 </decisions>
 
@@ -77,6 +82,11 @@ Get the prototype presentation-ready on the existing GitHub Pages deployment and
 ### Styling & Theming
 - `src/styles/typography.css` — Icon font-face and .icon utility class
 - `src/styles/tokens.css` — CSS custom properties including dark mode overrides
+
+### Language / i18n
+- `src/content/planning/` — Planning mode content with DE+EN fields
+- `src/content/onsite/` — On-site mode content with DE+EN fields
+- `src/content/shared/` — Shared content with DE+EN fields
 
 ### Project Specs
 - `.planning/REQUIREMENTS.md` — TECH-05 (deployment) and PRES-01 (screenshots)
