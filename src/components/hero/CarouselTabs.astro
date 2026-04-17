@@ -17,13 +17,13 @@ const { slides, lang, pauseLabel, playLabel } = Astro.props;
 const firstSlide = slides[0];
 ---
 
-<script is:inline define:vars={{ slideData: slides.map(s => ({ subtitle: s.subtitle?.[lang] || '', ctaLabel: s.cta?.label?.[lang] || '', ctaHref: s.cta?.href || '#' })) }}>
+<script is:inline define:vars={{ slideData: slides.map(s => ({ subtitle_en: s.subtitle?.en || '', subtitle_de: s.subtitle?.de || '', ctaLabel: s.cta?.label?.[lang] || '', ctaHref: s.cta?.href || '#' })) }}>
   window.__carouselSlideData = slideData;
 </script>
 
 <nav class="carousel-tabs" aria-label="Exhibition slides">
   {/* Mobile label */}
-  <span class="carousel-tabs__label">{lang === 'de' ? 'Ausstellungen' : 'Exhibitions'}</span>
+  <span class="carousel-tabs__label" data-i18n-de="Ausstellungen" data-i18n-en="Exhibitions">{lang === 'de' ? 'Ausstellungen' : 'Exhibitions'}</span>
 
   {/* Row 1: Subtitle */}
   <p class="carousel-tabs__subtitle sub-heading" id="carousel-subtitle">{firstSlide?.subtitle?.[lang] || ''}</p>
@@ -36,7 +36,7 @@ const firstSlide = slides[0];
         data-tab={i}
         aria-label={`Go to slide ${i + 1}: ${slide.title[lang]}`}
       >
-        <span class="carousel-tabs__title">{slide.title[lang]}</span>
+        <span class="carousel-tabs__title" data-i18n-de={slide.title.de} data-i18n-en={slide.title.en}>{slide.title[lang]}</span>
         <div class="carousel-tabs__progress">
           <div class="carousel-tabs__tab-fill" data-tab-fill={i} />
         </div>

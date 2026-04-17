@@ -30,7 +30,7 @@ const { title, body, items, lang, columns = 3 } = Astro.props;
 <div class="standard-grid">
   {body && (
     <div class="standard-grid__header">
-      <p class="standard-grid__body">{body[lang]}</p>
+      <p class="standard-grid__body" data-i18n-de={body.de} data-i18n-en={body.en}>{body[lang]}</p>
     </div>
   )}
 

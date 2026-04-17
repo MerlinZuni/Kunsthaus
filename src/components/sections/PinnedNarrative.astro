@@ -75,7 +75,9 @@ const isExhibition = contentType === 'exhibitions';
                 <StatusAccordion
                   schedule={item.schedule.map(d => ({
                     ...d,
-                    label: d.label[lang]
+                    label: d.label[lang],
+                    labelDe: d.label.de,
+                    labelEn: d.label.en
                   }))}
                   closedLabel={lang === 'de' ? 'Heute geschlossen' : 'Closed today'}
                   lang={lang}
@@ -85,7 +87,7 @@ const isExhibition = contentType === 'exhibitions';
                 <div class="pinned-narrative__card-actions">
                   {item.link && (
                     <a href={item.link} class="pinned-narrative__card-link btn-link touch-pulse" target={item.link.startsWith('http') ? '_blank' : undefined} rel={item.link.startsWith('http') ? 'noopener' : undefined}>
-                      <span>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
+                      <span data-i18n-de={item.linkLabel?.de || 'Mehr erfahren'} data-i18n-en={item.linkLabel?.en || 'Learn more'}>{item.linkLabel ? item.linkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
                       <span class="icon">arrow_forward</span>
                     </a>
                   )}
@@ -99,7 +101,7 @@ const isExhibition = contentType === 'exhibitions';
               )}
               {item.secondaryLink && (
                 <a href={item.secondaryLink} class="pinned-narrative__card-link btn-link touch-pulse" target="_blank" rel="noopener">
-                  <span>{item.secondaryLinkLabel ? item.secondaryLinkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
+                  <span data-i18n-de={item.secondaryLinkLabel?.de || 'Mehr erfahren'} data-i18n-en={item.secondaryLinkLabel?.en || 'Learn more'}>{item.secondaryLinkLabel ? item.secondaryLinkLabel[lang] : (lang === 'de' ? 'Mehr erfahren' : 'Learn more')}</span>
                   <span class="icon">arrow_forward</span>
                 </a>
               )}

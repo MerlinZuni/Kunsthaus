@@ -201,7 +201,9 @@ const playLabel = getString('carousel-play');
     if (slideCount <= 1) return;
 
     const SLIDE_DURATION = 5; // seconds per slide
-    const WELCOME_TEXT = 'Welcome to the Kunsthaus';
+    function getWelcomeText() { return document.documentElement.lang === 'de' ? 'Willkommen im Kunsthaus' : 'Welcome to the Kunsthaus'; }
+    function getSubtitle(data: any) { return document.documentElement.lang === 'de' ? (data.subtitle_de || data.subtitle) : (data.subtitle_en || data.subtitle); }
+    let WELCOME_TEXT = getWelcomeText();
     let currentIndex = -1; // -1 = empty/welcome state
     let isPaused = false;
 
@@ -333,7 +335,7 @@ const playLabel = getString('carousel-play');
           },
         });
       }
-      if (liveRegion) liveRegion.textContent = 'Welcome to the Kunsthaus';
+      if (liveRegion) liveRegion.textContent = getWelcomeText();
 
       // Fade in facade
       if (facade) gsap.to(facade, { opacity: 1, duration: 1.2, ease: 'power2.inOut' });
@@ -446,7 +448,7 @@ const playLabel = getString('carousel-play');
       // Update subtitle
       const data = slideData[index];
       if (data && subtitleEl) {
-        subtitleEl.textContent = data.subtitle;
+        subtitleEl.textContent = getSubtitle(data);
       }
 
       // Update live region

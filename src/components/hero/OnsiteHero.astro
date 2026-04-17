@@ -18,10 +18,13 @@ const { title, lang } = Astro.props;
   <GridOverlay client:only="react" />
 
   <div class="onsite-hero__text">
-    <h1 class="onsite-hero__title">
-      <span>AT</span>
-      <span>THE</span>
-      <span>MUSEUM</span>
+    <h1 class="onsite-hero__title"
+        data-i18n-de={title.de.split(' ').map(w => `<span>${w}</span>`).join('')}
+        data-i18n-en={title.en.split(' ').map(w => `<span>${w}</span>`).join('')}
+        data-i18n-html>
+      {title[lang].split(' ').map((word) => (
+        <span>{word}</span>
+      ))}
     </h1>
   </div>
 </section>

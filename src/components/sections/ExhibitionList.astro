@@ -37,7 +37,7 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
               <span class="exhibition-list__tag">{tag}</span>
             ))}
           </span>
-          <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
+          <span class="exhibition-list__row-location" data-i18n-de={`${item.location.building.de}, ${item.location.floor.de}`} data-i18n-en={`${item.location.building.en}, ${item.location.floor.en}`}>{item.location.building[lang]}, {item.location.floor[lang]}</span>
           <img class="exhibition-list__row-thumb" src={`${base}${item.image}`} alt="" loading="lazy" />
         </li>
       ))}
@@ -56,10 +56,10 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
           <span class="exhibition-list__row-meta" data-i18n-de={item.dateLabel.de} data-i18n-en={item.dateLabel.en}>{item.dateLabel[lang]}</span>
           <span class="exhibition-list__row-tags">
             {item.tags.includes('members-preview') && (
-              <span class="exhibition-list__tag">{memberLabel}</span>
+              <span class="exhibition-list__tag" data-i18n-de="Mitglieder-Preview" data-i18n-en="Members Preview">{memberLabel}</span>
             )}
           </span>
-          <span class="exhibition-list__row-location">{item.location?.building ? `${item.location.building}, ${item.location.floor}` : ''}</span>
+          <span class="exhibition-list__row-location" data-i18n-de={item.location?.building ? `${item.location.building.de}, ${item.location.floor.de}` : ''} data-i18n-en={item.location?.building ? `${item.location.building.en}, ${item.location.floor.en}` : ''}>{item.location?.building ? `${item.location.building[lang]}, ${item.location.floor[lang]}` : ''}</span>
           <img class="exhibition-list__row-thumb" src={`${base}${item.image}`} alt="" loading="lazy" />
         </li>
       ))}
@@ -75,16 +75,16 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
       {data.collection.map((item) => (
         <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
           <span class="exhibition-list__row-title" data-i18n-de={item.title.de} data-i18n-en={item.title.en}>{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
-          <span class="exhibition-list__row-meta">{item.period}</span>
+          <span class="exhibition-list__row-meta" data-i18n-de={item.period.de} data-i18n-en={item.period.en}>{item.period[lang]}</span>
           <span class="exhibition-list__row-tags"></span>
-          <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>
+          <span class="exhibition-list__row-location" data-i18n-de={`${item.location.building.de}, ${item.location.floor.de}`} data-i18n-en={`${item.location.building.en}, ${item.location.floor.en}`}>{item.location.building[lang]}, {item.location.floor[lang]}</span>
           <img class="exhibition-list__row-thumb" src={`${base}${item.image}`} alt="" loading="lazy" />
         </li>
       ))}
     </ul>
     <div class="exhibition-list__member-cta">
       <a href="/exhibitions" class="exhibition-list__member-link btn hover-wipe-inverse touch-pulse touch-target">
-        <span>{memberCta}</span>
+        <span data-i18n-de="Alle kommenden Ausstellungen" data-i18n-en="See all upcoming exhibitions">{memberCta}</span>
         <span class="icon">arrow_forward</span>
       </a>
     </div>
@@ -200,7 +200,7 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
 
   .exhibition-list__row {
     display: grid;
-    grid-template-columns: 2fr 1fr minmax(120px, auto) 1fr;
+    grid-template-columns: 35% 20% minmax(120px, auto) 1fr;
     gap: var(--space-6);
     align-items: center;
     padding: var(--space-6) 0;
@@ -270,6 +270,8 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
     align-items: center;
     gap: var(--space-3);
     justify-content: flex-end;
+    white-space: nowrap;
+    text-align: right;
   }
 
   /* Row thumbnail — mobile only */

@@ -53,7 +53,7 @@ const onsiteHref = `${base}/onsite`;
     <h3 class="footer-col__heading sub-heading">KUNSTHAUS ZURICH</h3>
     <address class="footer-col__address">
       <p>{footerData.address.street}</p>
-      <p>{footerData.address.zip} {footerData.address.city[lang]}</p>
+      <p><span data-i18n-de={`${footerData.address.zip} ${footerData.address.city.de}`} data-i18n-en={`${footerData.address.zip} ${footerData.address.city.en}`}>{footerData.address.zip} {footerData.address.city[lang]}</span></p>
     </address>
     <div class="footer-col__links">
       <a href={footerData.address.mapsUrl} class="footer-col__link footer-col__link--icon" target="_blank" rel="noopener">
@@ -73,12 +73,12 @@ const onsiteHref = `${base}/onsite`;
 
   {/* Column 2: Hours */}
   <div class="footer-col">
-    <p class="footer-col__open-status">{footerData.openStatus[lang]}</p>
+    <p class="footer-col__open-status" data-i18n-de={footerData.openStatus.de} data-i18n-en={footerData.openStatus.en}>{footerData.openStatus[lang]}</p>
     <ul class="footer-col__schedule">
       {footerData.schedule.map((entry) => (
         <li class:list={['footer-col__schedule-item', { 'footer-col__schedule-item--closed': entry.closed }]}>
-          <span class="footer-col__day">{entry.day[lang]}</span>
-          <span class="footer-col__hours">{entry.hours[lang]}</span>
+          <span class="footer-col__day" data-i18n-de={entry.day.de} data-i18n-en={entry.day.en}>{entry.day[lang]}</span>
+          <span class="footer-col__hours" data-i18n-de={entry.hours.de} data-i18n-en={entry.hours.en}>{entry.hours[lang]}</span>
         </li>
       ))}
     </ul>
@@ -86,29 +86,29 @@ const onsiteHref = `${base}/onsite`;
 
   {/* Column 3: Quick Links + Media */}
   <div class="footer-col">
-    <h3 class="footer-col__heading sub-heading">{quickLinksHeading}</h3>
+    <h3 class="footer-col__heading sub-heading" data-i18n-de="SCHNELLZUGRIFF" data-i18n-en="QUICK LINKS">{quickLinksHeading}</h3>
     <ul class="footer-col__link-list">
       {footerData.quickLinks.map((link) => (
-        <li><a href={link.href} class="footer-col__link touch-pulse">{link.label[lang]}</a></li>
+        <li><a href={link.href} class="footer-col__link touch-pulse" data-i18n-de={link.label.de} data-i18n-en={link.label.en}>{link.label[lang]}</a></li>
       ))}
     </ul>
-    <h3 class="footer-col__heading sub-heading footer-col__heading--spaced">{mediaHeading}</h3>
+    <h3 class="footer-col__heading sub-heading footer-col__heading--spaced" data-i18n-de="MEDIEN" data-i18n-en="MEDIA">{mediaHeading}</h3>
     <ul class="footer-col__link-list">
       {footerData.media.map((link) => (
-        <li><a href={link.href} class="footer-col__link touch-pulse">{link.label[lang]}</a></li>
+        <li><a href={link.href} class="footer-col__link touch-pulse" data-i18n-de={link.label.de} data-i18n-en={link.label.en}>{link.label[lang]}</a></li>
       ))}
     </ul>
   </div>
 
   {/* Column 4: Newsletter */}
   <div class="footer-col">
-    <h3 class="footer-col__heading sub-heading">{newsletterHeading}</h3>
-    <p class="footer-col__text">{footerData.newsletter.description[lang]}</p>
+    <h3 class="footer-col__heading sub-heading" data-i18n-de="NEWSLETTER" data-i18n-en="NEWSLETTER">{newsletterHeading}</h3>
+    <p class="footer-col__text" data-i18n-de={footerData.newsletter.description.de} data-i18n-en={footerData.newsletter.description.en}>{footerData.newsletter.description[lang]}</p>
     <a
       href={footerData.newsletter.href}
       class="footer-col__subscribe btn hover-wipe-inverse touch-pulse touch-target"
     >
-      <span>{footerData.newsletter.linkLabel[lang]}</span>
+      <span data-i18n-de={footerData.newsletter.linkLabel.de} data-i18n-en={footerData.newsletter.linkLabel.en}>{footerData.newsletter.linkLabel[lang]}</span>
       <span class="icon">arrow_forward</span>
     </a>
 
@@ -121,7 +121,7 @@ const onsiteHref = `${base}/onsite`;
         role="radio"
         aria-checked={!isOnsite}
       >
-        {lang === 'de' ? 'Besuch planen' : 'Plan a Visit'}
+        <span data-i18n-de="Besuch planen" data-i18n-en="Plan a Visit">{lang === 'de' ? 'Besuch planen' : 'Plan a Visit'}</span>
       </a>
       <a
         class:list={['footer-col__mode-segment', { 'footer-col__mode-segment--active': isOnsite }]}
@@ -130,7 +130,7 @@ const onsiteHref = `${base}/onsite`;
         role="radio"
         aria-checked={isOnsite}
       >
-        {lang === 'de' ? 'Ich bin da' : "I'm Here"}
+        <span data-i18n-de="Im Kunsthaus" data-i18n-en="At Kunsthaus">{lang === 'de' ? 'Im Kunsthaus' : 'At Kunsthaus'}</span>
       </a>
     </div>
   </div>

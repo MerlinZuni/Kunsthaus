@@ -3,7 +3,7 @@
     "id": "onsite-home",
     "hero": {
       "title": {
-        "de": "AT THE MUSEUM",
+        "de": "IM MUSEUM",
         "en": "AT THE MUSEUM"
       }
     },
@@ -13,7 +13,7 @@
         "en": "Welcome to the Kunsthaus Zurich.<br/>It's nice to have you here."
       },
       "cardTitle": {
-        "de": "Open space for living art",
+        "de": "Offener Raum für lebendige Kunst",
         "en": "Open space for living art"
       },
       "description": {
@@ -26,14 +26,14 @@
       {
         "id": "chipperfield",
         "name": {
-          "de": "Chipperfield Building",
+          "de": "Chipperfield-Bau",
           "en": "Chipperfield Building"
         }
       },
       {
         "id": "moser",
         "name": {
-          "de": "Moser Building",
+          "de": "Moser-Bau",
           "en": "Moser Building"
         }
       }

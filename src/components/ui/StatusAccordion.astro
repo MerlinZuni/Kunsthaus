@@ -5,6 +5,8 @@
 interface ScheduleDay {
   day: number; // 0=Sun, 1=Mon, 2=Tue, etc.
   label: string;
+  labelDe?: string;
+  labelEn?: string;
   open?: string; // "8:00"
   close?: string; // "21:00"
   closed?: boolean;
@@ -19,6 +21,16 @@ interface Props {
 
 const { schedule, closedLabel = 'Closed today', lang = 'en', variant = 'pill' } = Astro.props;
 const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
+
+function to12h(time: string) {
+  const [h, m] = time.split(':').map(Number);
+  const suffix = h >= 12 ? 'pm' : 'am';
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return m ? `${h12}:${String(m).padStart(2, '0')}${suffix}` : `${h12}${suffix}`;
+}
+function fmtRange(open: string, close: string) {
+  return lang === 'de' ? `${open} – ${close}` : `${to12h(open)} – ${to12h(close)}`;
+}
 ---
 
 <div
@@ -28,6 +40,10 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
   data-schedule={JSON.stringify(schedule)}
   data-open-label={openLabel}
   data-closed-label={closedLabel}
+  data-open-label-de="Heute geöffnet bis"
+  data-open-label-en="Open today until"
+  data-closed-label-de="Heute geschlossen"
+  data-closed-label-en="Closed today"
 >
   {variant === 'inline' ? (
     <span class="status-accordion__trigger">
@@ -47,8 +63,8 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
         <dl class="status-accordion__list">
           {schedule.map(day => (
             <div class:list={['status-accordion__row', { 'status-accordion__row--closed': day.closed }]} data-schedule-day={day.day}>
-              <dt class="status-accordion__label">{day.label}</dt>
-              <dd class="status-accordion__value">{day.closed ? (lang === 'de' ? 'Geschlossen' : 'Closed') : `${day.open} – ${day.close}`}</dd>
+              <dt class="status-accordion__label" {...(day.labelDe ? { 'data-i18n-de': day.labelDe, 'data-i18n-en': day.labelEn } : {})}>{day.label}</dt>
+              <dd class="status-accordion__value" {...(day.closed ? { 'data-i18n-de': 'Geschlossen', 'data-i18n-en': 'Closed' } : { 'data-i18n-de': `${day.open} – ${day.close}`, 'data-i18n-en': `${to12h(day.open!)} – ${to12h(day.close!)}` })}>{day.closed ? (lang === 'de' ? 'Geschlossen' : 'Closed') : fmtRange(day.open!, day.close!)}</dd>
             </div>
           ))}
         </dl>
@@ -201,6 +217,17 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
 <script>
   import { gsap } from 'gsap';
 
+  function fmt12h(time: string) {
+    const [h, m] = time.split(':').map(Number);
+    const suffix = h >= 12 ? 'pm' : 'am';
+    const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    return m ? `${h12}:${String(m).padStart(2, '0')}${suffix}` : `${h12}${suffix}`;
+  }
+
+  function fmtTime(time: string, lang: string) {
+    return lang === 'en' ? fmt12h(time) : time;
+  }
+
   function initStatusAccordions() {
     document.querySelectorAll('[data-status-accordion]').forEach(accordion => {
       const el = accordion as HTMLElement;
@@ -215,8 +242,9 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
 
       // Parse schedule and compute current status
       const schedule = JSON.parse(el.getAttribute('data-schedule') || '[]');
-      const openLabel = el.getAttribute('data-open-label') || 'Open today until';
-      const closedLabel = el.getAttribute('data-closed-label') || 'Closed today';
+      const currentLang = document.documentElement.lang || 'en';
+      const openLabel = el.getAttribute(`data-open-label-${currentLang}`) || el.getAttribute('data-open-label') || 'Open today until';
+      const closedLabel = el.getAttribute(`data-closed-label-${currentLang}`) || el.getAttribute('data-closed-label') || 'Closed today';
 
       const now = new Date();
       const today = now.getDay();
@@ -236,7 +264,7 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
 
         if (nowMinutes >= openMinutes && nowMinutes < closeMinutes) {
           isOpen = true;
-          statusText = `${openLabel} ${todaySchedule.close}`;
+          statusText = `${openLabel} ${fmtTime(todaySchedule.close, currentLang)}`;
         }
       }
 
@@ -294,6 +322,39 @@ const openLabel = lang === 'de' ? 'Heute geöffnet bis' : 'Open today until';
       });
     });
   }
+
+  function refreshStatusText() {
+    document.querySelectorAll('[data-status-accordion]').forEach(accordion => {
+      const el = accordion as HTMLElement;
+      const text = el.querySelector('.status-accordion__text') as HTMLElement;
+      if (!text) return;
+      const schedule = JSON.parse(el.getAttribute('data-schedule') || '[]');
+      const lang = document.documentElement.lang || 'en';
+      const openLabel = el.getAttribute(`data-open-label-${lang}`) || 'Open today until';
+      const closedLabel = el.getAttribute(`data-closed-label-${lang}`) || 'Closed today';
+      const now = new Date();
+      const today = now.getDay();
+      const todaySchedule = schedule.find((d: any) => d.day === today);
+      let statusText = closedLabel;
+      if (todaySchedule && !todaySchedule.closed && todaySchedule.open && todaySchedule.close) {
+        const [openH, openM] = todaySchedule.open.split(':').map(Number);
+        const [closeH, closeM] = todaySchedule.close.split(':').map(Number);
+        const nowMinutes = now.getHours() * 60 + now.getMinutes();
+        if (nowMinutes >= (openH * 60 + (openM || 0)) && nowMinutes < (closeH * 60 + (closeM || 0))) {
+          statusText = `${openLabel} ${fmtTime(todaySchedule.close, lang)}`;
+        }
+      }
+      text.textContent = statusText;
+    });
+  }
+
+  // Re-run status text on language change
+  const langObserver = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      if (m.attributeName === 'lang') refreshStatusText();
+    }
+  });
+  langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
 
   // Run on first paint and after every Astro View Transitions navigation.
   // Without astro:page-load the accordion stays at its server-rendered

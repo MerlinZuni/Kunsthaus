@@ -12,64 +12,64 @@
       {
         "id": "old-masters",
         "title": { "de": "Alte Meister", "en": "Old Masters" },
-        "period": "13th–18th Century",
-        "location": { "building": "Moser Building", "floor": "1st Floor" },
+        "period": { "de": "13.–18. Jahrhundert", "en": "13th–18th Century" },
+        "location": { "building": { "de": "Moser-Bau", "en": "Moser Building" }, "floor": { "de": "1. OG", "en": "1st Floor" } },
         "image": "/images/collection/old-masters.jpg"
       },
       {
         "id": "impressionism",
         "title": { "de": "Impressionismus", "en": "Impressionism" },
-        "period": "19th Century",
-        "location": { "building": "Chipperfield Building", "floor": "2nd Floor" },
+        "period": { "de": "19. Jahrhundert", "en": "19th Century" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "2. OG", "en": "2nd Floor" } },
         "image": "/images/collection/impressionism.jpg"
       },
       {
         "id": "swiss-art",
         "title": { "de": "Schweizer Kunst", "en": "Swiss Art" },
-        "period": "18th–20th Century",
-        "location": { "building": "Moser Building", "floor": "2nd Floor" },
+        "period": { "de": "18.–20. Jahrhundert", "en": "18th–20th Century" },
+        "location": { "building": { "de": "Moser-Bau", "en": "Moser Building" }, "floor": { "de": "2. OG", "en": "2nd Floor" } },
         "image": "/images/collection/swiss-art.png"
       },
       {
         "id": "classical-modern",
         "title": { "de": "Klassische Moderne", "en": "Classical Modern" },
-        "period": "Early 20th Century",
-        "location": { "building": "Chipperfield Building", "floor": "1st Floor" },
+        "period": { "de": "Frühes 20. Jahrhundert", "en": "Early 20th Century" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "1. OG", "en": "1st Floor" } },
         "image": "/images/collection/classical-modern.jpg"
       },
       {
         "id": "private-collections",
         "title": { "de": "Privatsammlungen", "en": "Private Collections" },
-        "period": "Various",
-        "location": { "building": "Chipperfield Building", "floor": "Ground Floor" },
+        "period": { "de": "Diverse", "en": "Various" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "EG", "en": "Ground Floor" } },
         "image": "/images/collection/giacometti.jpg"
       },
       {
         "id": "art-after-1945",
         "title": { "de": "Kunst ab 1945", "en": "Art after 1945" },
-        "period": "1945–Present",
-        "location": { "building": "Chipperfield Building", "floor": "1st Floor" },
+        "period": { "de": "1945–Gegenwart", "en": "1945–Present" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "1. OG", "en": "1st Floor" } },
         "image": "/images/collection/art-after-1945.png"
       },
       {
         "id": "contemporary",
         "title": { "de": "Zeitgenössische Kunst", "en": "Contemporary Art" },
-        "period": "Contemporary",
-        "location": { "building": "Chipperfield Building", "floor": "Ground Floor" },
+        "period": { "de": "Zeitgenössisch", "en": "Contemporary" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "EG", "en": "Ground Floor" } },
         "image": "/images/collection/contemporary.jpg"
       },
       {
         "id": "prints-drawings",
         "title": { "de": "Grafische Sammlung", "en": "Prints and Drawings" },
-        "period": "15th Century–Present",
-        "location": { "building": "Moser Building", "floor": "Ground Floor" },
+        "period": { "de": "15. Jahrhundert–Gegenwart", "en": "15th Century–Present" },
+        "location": { "building": { "de": "Moser-Bau", "en": "Moser Building" }, "floor": { "de": "EG", "en": "Ground Floor" } },
         "image": "/images/collection/prints-drawings.jpg"
       },
       {
         "id": "recollect",
         "title": { "de": "ReCollect!", "en": "ReCollect!" },
-        "period": "Contemporary Interventions",
-        "location": { "building": "Both Buildings", "floor": "Various" },
+        "period": { "de": "Zeitgenössische Interventionen", "en": "Contemporary Interventions" },
+        "location": { "building": { "de": "Beide Gebäude", "en": "Both Buildings" }, "floor": { "de": "Diverse", "en": "Various" } },
         "image": "/images/collection/recollect.png"
       }
     ],
@@ -79,7 +79,7 @@
         "title": { "de": "Kerry James Marshall. The Histories", "en": "Kerry James Marshall. The Histories" },
         "dates": { "start": "2026-02-14", "end": "2026-08-16" },
         "dateLabel": { "de": "Bis 16.08.2026", "en": "Until 16.08.2026" },
-        "location": { "building": "Chipperfield Building", "floor": "1st Floor" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "1. OG", "en": "1st Floor" } },
         "image": "/images/exhibitions/kerry-james-marshall-1.jpg",
         "tags": []
       },
@@ -88,7 +88,7 @@
         "title": { "de": "Félicien Rops: Laboratorium der Lüste", "en": "Félicien Rops: Laboratory of Desires" },
         "dates": { "start": "2026-01-20", "end": "2026-05-31" },
         "dateLabel": { "de": "Bis 31.05.2026", "en": "Until 31.05.2026" },
-        "location": { "building": "Moser Building", "floor": "Ground Floor" },
+        "location": { "building": { "de": "Moser-Bau", "en": "Moser Building" }, "floor": { "de": "EG", "en": "Ground Floor" } },
         "image": "/images/exhibitions/felicien-rops.jpg",
         "tags": []
       },
@@ -97,7 +97,7 @@
         "title": { "de": "Wolfgang Laib und die Sammlung", "en": "Wolfgang Laib and the Collection" },
         "dates": { "start": "2026-03-01", "end": "2026-10-31" },
         "dateLabel": { "de": "Bis Herbst 2026", "en": "Until Fall 2026" },
-        "location": { "building": "Chipperfield Building", "floor": "2nd Floor" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "2. OG", "en": "2nd Floor" } },
         "image": "/images/exhibitions/wolfgang-laib.jpg",
         "tags": ["ReCollect!"]
       },
@@ -106,7 +106,7 @@
         "title": { "de": "Wu Tsang: La montaña invertida", "en": "Wu Tsang: La montaña invertida" },
         "dates": { "start": "2026-02-01", "end": "2026-09-30" },
         "dateLabel": { "de": "Bis Sommer 2026", "en": "Until Summer 2026" },
-        "location": { "building": "Chipperfield Building", "floor": "Dome Hall" },
+        "location": { "building": { "de": "Chipperfield-Bau", "en": "Chipperfield Building" }, "floor": { "de": "Kuppelhalle", "en": "Dome Hall" } },
         "image": "/images/exhibitions/wu-tsang.jpg",
         "tags": ["ReCollect!"]
       }
@@ -117,7 +117,7 @@
         "title": { "de": "Marisol", "en": "Marisol" },
         "dates": { "start": "2026-04-17", "end": "2026-08-23" },
         "dateLabel": { "de": "17.04 – 23.08.2026", "en": "17 Apr – 23 Aug 2026" },
-        "location": { "building": "Moser Building", "floor": "1st Floor" },
+        "location": { "building": { "de": "Moser-Bau", "en": "Moser Building" }, "floor": { "de": "1. OG", "en": "1st Floor" } },
         "image": "/images/exhibitions/marisol.jpg",
         "tags": []
       },

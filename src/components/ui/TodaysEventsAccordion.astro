@@ -187,7 +187,7 @@ const { events, lang = 'en' } = Astro.props;
       const list = el.querySelector('.todays-events__list') as HTMLElement | null;
       if (!trigger || !dot || !text || !panel || !arrow || !list) return;
 
-      const lang = (el.getAttribute('data-lang') || 'en') as 'en' | 'de';
+      const lang = (document.documentElement.lang || 'en') as 'en' | 'de';
       const allEvents: EventItem[] = JSON.parse(el.getAttribute('data-events') || '[]');
 
       const now = new Date();
@@ -309,6 +309,20 @@ const { events, lang = 'en' } = Astro.props;
       });
     });
   }
+
+  function reinitTodaysEvents() {
+    document.querySelectorAll<HTMLElement>('[data-todays-events]').forEach(el => {
+      el.dataset.initialized = '';
+    });
+    initTodaysEvents();
+  }
+
+  const todaysLangObserver = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      if (m.attributeName === 'lang') reinitTodaysEvents();
+    }
+  });
+  todaysLangObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
 
   document.addEventListener('DOMContentLoaded', initTodaysEvents);
   document.addEventListener('astro:page-load', initTodaysEvents);

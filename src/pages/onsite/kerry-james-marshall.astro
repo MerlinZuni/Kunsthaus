@@ -110,6 +110,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     bgStep={2}
     sectionName="Works"
     sectionId="kjm-artworks"
+    sectionNameDe="Werke"
   >
     <ArtworkSlider artworks={kjm.artworks} lang={lang} />
   </SectionWrapper>
@@ -119,6 +120,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     bgStep={3}
     sectionName="In the artist's words"
     sectionId="kjm-quote"
+    sectionNameDe="In den Worten des Künstlers"
   >
     <ArtistQuote
       quote={kjm.artistQuote.quote}
@@ -132,6 +134,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     bgStep={4}
     sectionName="Voices"
     sectionId="kjm-videos"
+    sectionNameDe="Stimmen"
   >
     <HorizontalSlider
       heading={{ de: 'Ausstellungsvideos', en: 'Exhibition Videos' }}
@@ -199,9 +202,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
               {ev.title[lang]}
               <span class="icon kjm-events__row-arrow">arrow_forward</span>
             </span>
-            <span class="kjm-events__row-date" data-i18n-de={ev.date.de} data-i18n-en={ev.date.en}>{ev.date[lang]}</span>
-            <span class="kjm-events__row-tags">
-              <span class="kjm-events__tag" data-i18n-de={ev.category.de} data-i18n-en={ev.category.en}>{ev.category[lang]}</span>
+            <span class="kjm-events__row-meta">
+              <span data-i18n-de={ev.date.de.split(' ').slice(0, 2).join(' ')} data-i18n-en={ev.date.en.split(',')[0]}>{ev.date[lang].split(lang === 'de' ? ' ' : ',')[0]}{lang === 'de' ? ' ' + ev.date[lang].split(' ')[1] : ''}</span>
+              <span class="kjm-events__row-time">{ev.date[lang].includes(',') ? ev.date[lang].split(', ')[1] || ev.date[lang].split(' ').slice(2).join(' ') : ev.date[lang].split(' ').slice(2).join(' ')}</span>
+            </span>
+            <span class="kjm-events__row-info">
+              <span data-i18n-de={ev.category.de} data-i18n-en={ev.category.en}>{ev.category[lang]}</span>
             </span>
             <img class="kjm-events__row-thumb" src={`${base}${ev.image}`} alt="" loading="lazy" />
           </li>
@@ -219,6 +225,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     bgStep={3}
     sectionName="Partners & Credits"
     sectionId="kjm-supported"
+    sectionNameDe="Partner & Credits"
   >
     <div class="kjm-supported">
       <h3 class="kjm-supported__heading sub-heading" data-i18n-de="Unterstützt von" data-i18n-en="Supported by">{lang === 'de' ? 'Unterstützt von' : 'Supported by'}</h3>
@@ -239,6 +246,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     bgStep={4}
     sectionName="Keep Exploring"
     sectionId="kjm-continue"
+    sectionNameDe="Weiter entdecken"
   >
     <div class="kjm-continue">
       <a href={`${base}/onsite`} class="btn hover-wipe-inverse touch-pulse touch-target">
@@ -318,8 +326,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   .kjm-events__row {
     display: grid;
-    grid-template-columns: 2fr 1fr auto;
-    gap: var(--space-6);
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-8);
     align-items: center;
     padding: var(--space-6) 0;
     border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
@@ -341,7 +349,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   .kjm-events__row-title {
     font-size: var(--type-md);
-    font-weight: var(--weight-regular);
+    font-weight: var(--weight-light);
     line-height: var(--leading-normal);
     color: var(--color-text);
   }
@@ -360,22 +368,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     transform: translateX(4px);
   }
 
-  .kjm-events__row-date {
+  .kjm-events__row-meta {
     font-size: var(--type-md);
-    font-weight: var(--weight-light);
+    font-weight: var(--weight-regular);
     color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
   }
 
-  .kjm-events__tag {
-    font-size: var(--type-xs);
-    font-weight: var(--weight-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 2px 8px;
-    border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
-    border-radius: 3px;
+  .kjm-events__row-time {
+    opacity: 0.5;
+  }
+
+  .kjm-events__row-info {
+    font-size: var(--type-md);
+    font-weight: var(--weight-regular);
     color: var(--color-text);
-    opacity: 0.7;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    align-items: flex-end;
   }
 
   .kjm-events__row-thumb {
@@ -435,8 +448,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     }
 
     .kjm-events__row-title,
-    .kjm-events__row-date,
-    .kjm-events__row-tags {
+    .kjm-events__row-meta,
+    .kjm-events__row-info {
       grid-column: 1;
       position: relative;
       z-index: 1;

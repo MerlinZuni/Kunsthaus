@@ -85,7 +85,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <h3 class="artwork-slider__title sub-heading">{art.title[lang]}</h3>
           <p class="artwork-slider__year">{art.year} · {art.collection}</p>
           {art.credit && <p class="artwork-slider__credit">{art.credit}</p>}
-          <p class="artwork-slider__description">{art.description[lang]}</p>
+          <p class="artwork-slider__description" data-i18n-de={art.description.de} data-i18n-en={art.description.en}>{art.description[lang]}</p>
           <button
             type="button"
             class="artwork-slider__headphones"

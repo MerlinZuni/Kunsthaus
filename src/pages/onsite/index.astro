@@ -36,10 +36,10 @@ const upcoming = exhibitions.upcomingExhibitions as any[];
 const marisol = upcoming.find((e: any) => e.id === 'marisol');
 
 const chipperfieldItems = currentExhibitions.filter(
-  (e: any) => e?.location?.building === 'Chipperfield Building'
+  (e: any) => e?.location?.building?.en === 'Chipperfield Building'
 );
 const moserItems = [
-  ...currentExhibitions.filter((e: any) => e?.location?.building === 'Moser Building'),
+  ...currentExhibitions.filter((e: any) => e?.location?.building?.en === 'Moser Building'),
   ...(marisol ? [marisol] : []),
 ];
 

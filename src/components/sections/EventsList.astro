@@ -15,20 +15,20 @@ const data = exhibitionsJson[0];
   <ul class="events-list__items">
     {data.events.map((event) => (
       <li class="events-list__row" data-image={event.image ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${event.image}` : ''}>
-        <span class="events-list__row-title">{event.title[lang]}</span>
+        <span class="events-list__row-title" data-i18n-de={event.title.de} data-i18n-en={event.title.en}>{event.title[lang]}</span>
         <span class="events-list__row-meta">
-          <span>{event.dateLabel[lang]}</span>
+          <span data-i18n-de={event.dateLabel.de} data-i18n-en={event.dateLabel.en}>{event.dateLabel[lang]}</span>
           <span class="events-list__row-time">{event.time}</span>
         </span>
         <span class="events-list__row-info">
-          <span>{event.type[lang]}</span>
+          <span data-i18n-de={event.type.de} data-i18n-en={event.type.en}>{event.type[lang]}</span>
           {event.places !== null && (
-            <span class="events-list__row-places">
+            <span class="events-list__row-places" data-i18n-de={`${event.places} Plätze frei`} data-i18n-en={`${event.places} places left`}>
               {lang === 'de' ? `${event.places} Plätze frei` : `${event.places} places left`}
             </span>
           )}
           {event.tags.includes('members-only') && (
-            <span class="events-list__tag">
+            <span class="events-list__tag" data-i18n-de="Nur Mitglieder" data-i18n-en="Members Only">
               <span class="icon" style="font-size: 16px;">lock</span>
               {lang === 'de' ? 'Nur Mitglieder' : 'Members Only'}
             </span>

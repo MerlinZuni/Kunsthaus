@@ -51,8 +51,8 @@
       },
       {
         "id": "slide-photography-now",
-        "title": { "de": "Photography Now", "en": "Photography Now" },
-        "subtitle": { "de": "Zeitgen\u00f6ssische Fotografie heute", "en": "Contemporary photography today" },
+        "title": { "de": "Fotografie Jetzt", "en": "Photography Now" },
+        "subtitle": { "de": "Zeitgenössische Fotografie heute", "en": "Contemporary photography today" },
         "cta": { "label": { "de": "Ausstellung entdecken", "en": "Explore exhibition" }, "href": "/exhibitions/photography-now" },
         "images": [
           { "src": "/images/exhibitions/photography-now-1.jpg", "alt": { "de": "Photography Now Werk", "en": "Photography Now artwork" }, "gridCol": "1/6", "gridRow": "3/7" },
@@ -178,7 +178,7 @@
       },
       {
         "id": "photography-now",
-        "title": { "de": "Photography Now", "en": "Photography Now" },
+        "title": { "de": "Fotografie Jetzt", "en": "Photography Now" },
         "description": { "de": "Zeitgen\u00f6ssische Fotografie von aufstrebenden und etablierten K\u00fcnstlern aus der ganzen Welt.", "en": "Contemporary photography from emerging and established artists around the world." },
         "image": "/images/exhibitions/photography-now.jpg",
         "date": "10.05.2026 \u2013 30.09.2026",
@@ -195,7 +195,11 @@
       "en": "Our Offerings"
     },
     "storytelling": {
-      "title": { "de": "Dine, Shop & Discover", "en": "Dine, Shop & Discover" },
+      "title": { "de": "Geniessen, Shoppen & Entdecken", "en": "Dine, Shop & Discover" },
+      "tagline": {
+        "de": "Wo Kunst auf Genuss trifft, Kultur auf Komfort,<br/>und jeder Besuch eine Geschichte erzählt.",
+        "en": "Where art meets appetite, culture meets comfort,<br/>and every visit tells a story."
+      },
       "description": { "de": "Gönnen Sie sich eine Pause zwischen den Ausstellungen. Mediterrane Küche, Cocktails, Kaffee im Miro-Garten und zwei einzigartige Shops – alles an einem Museum. Mitglieder geniessen 10 % Rabatt auf Speisen, Getränke und im Shop.", "en": "Take a break between exhibitions. Mediterranean cuisine, cocktails, coffee in the Miro Garden, and two unique shops – all at one museum. Members enjoy 10% off all dining and shopping." },
       "cta": { "label": { "de": "Mitglied werden", "en": "Become a member" }, "href": "/membership" },
       "image": "/images/offerings/kunsthaus-bar-hero.jpg"
@@ -327,6 +331,10 @@
     },
     "storytelling": {
       "title": { "de": "Mehr als ein Museum", "en": "More Than a Museum" },
+      "tagline": {
+        "de": "Jeder Besuch ist eine Chance, etwas Neues zu sehen<br/>und etwas Unerwartetes zu lernen.",
+        "en": "Every visit is a chance to see something new<br/>and to learn something unexpected."
+      },
       "description": { "de": "Workshops, F\u00fchrungen, Familientage und exklusive Previews \u2013 das Kunsthaus lebt. Mitglieder geniessen freien Eintritt, Einladungen zu Er\u00f6ffnungen, bis zu 20 % Rabatt in Shops und Restaurants sowie das Kunsthaus-Magazin frei Haus.", "en": "Workshops, guided tours, family days and exclusive previews \u2013 the Kunsthaus is alive. Members enjoy free admission, opening invitations, up to 20% off in shops and restaurants, and the Kunsthaus magazine delivered to your door." },
       "cta": { "label": { "de": "Mitglied werden ab CHF 135", "en": "Join from CHF 135" }, "href": "/membership" },
       "image": "/images/education/engage-hero.jpg"
