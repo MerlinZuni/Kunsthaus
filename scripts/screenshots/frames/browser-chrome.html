@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+  .frame { background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); overflow: hidden; display: inline-block; }
+  .titlebar { background: #e8e8e8; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .dots { display: flex; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot--red { background: #ff5f56; }
+  .dot--yellow { background: #ffbd2e; }
+  .dot--green { background: #27c93f; }
+  .address { flex: 1; background: #fff; border-radius: 6px; padding: 6px 16px; font-family: -apple-system, system-ui, sans-serif; font-size: 14px; color: #666; text-align: center; }
+  .viewport img { display: block; width: 100%; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="titlebar">
+      <div class="dots">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+      </div>
+      <div class="address">merlinzuni.github.io/Kunsthaus</div>
+    </div>
+    <div class="viewport">
+      <img id="screenshot" src="" alt="Screenshot" />
+    </div>
+  </div>
+</body>
+</html>

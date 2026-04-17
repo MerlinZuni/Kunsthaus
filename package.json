@@ -9,7 +9,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "screenshots": "npx tsx scripts/screenshots/capture.ts",
+    "screenshots:frame": "npx tsx scripts/screenshots/device-frames.ts",
+    "screenshots:all": "npm run screenshots && npm run screenshots:frame"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.3",
@@ -23,6 +26,7 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1"
   }

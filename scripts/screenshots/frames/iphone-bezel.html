@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+  .phone { position: relative; background: #1a1a1a; border-radius: 48px; padding: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  .notch { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: 120px; height: 32px; background: #1a1a1a; border-radius: 0 0 20px 20px; z-index: 2; }
+  .screen { border-radius: 36px; overflow: hidden; position: relative; }
+  .screen img { display: block; width: 100%; }
+  .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 3px; }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+      <img id="screenshot" src="" alt="Screenshot" />
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</body>
+</html>
