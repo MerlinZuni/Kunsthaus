@@ -39,13 +39,21 @@ const navItems = [
 >
   <div class="profile-overlay__inner">
     <header class="profile-overlay__header">
-      <button type="button" class="profile-overlay__back touch-target" data-profile-close>
-        <span class="icon" aria-hidden="true">arrow_back</span>
-        <span>Profile</span>
-      </button>
-      <button type="button" class="profile-overlay__close-x touch-target" data-profile-close-x aria-label="Close">
-        <span class="icon" aria-hidden="true">close</span>
-      </button>
+      <div class="profile-overlay__header-left">
+        <button type="button" class="profile-overlay__back touch-target" data-profile-close>
+          <span class="icon" aria-hidden="true">arrow_back</span>
+          <span>Profile</span>
+        </button>
+      </div>
+      <div class="profile-overlay__header-right">
+        <button type="button" class="profile-overlay__close-x navbar__icon-btn touch-target touch-pulse" data-profile-close-x aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
     </header>
 
     <div class="profile-overlay__body" data-lenis-prevent>
@@ -155,7 +163,13 @@ const navItems = [
     transition: opacity 0.2s ease;
   }
   .profile-overlay__close-x:hover { opacity: 1; }
-  .profile-overlay__close-x .icon { font-size: 22px; }
+  .profile-overlay__close-x svg { display: block; }
+
+  .profile-overlay__header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
 
   .profile-overlay__body {
     flex: 1;
@@ -338,6 +352,10 @@ const navItems = [
 
     function open() {
       if (!overlay) return;
+      // Hide the profile button so the close-X replaces it visually
+      const profileBtn = document.getElementById('nav-profile-btn');
+      if (profileBtn) profileBtn.style.display = 'none';
+
       overlay.classList.add('is-open');
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
@@ -356,6 +374,11 @@ const navItems = [
           overlay.setAttribute('aria-hidden', 'true');
           document.body.style.overflow = '';
           (window as any).__lenis?.start?.();
+          // Restore the profile button if user is still logged in
+          const profileBtn = document.getElementById('nav-profile-btn');
+          if (profileBtn && localStorage.getItem('kunsthaus-demo-user')) {
+            profileBtn.style.display = 'flex';
+          }
         },
       });
     }
