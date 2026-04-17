@@ -95,6 +95,62 @@ const footerData = footerJson[0];
     </main>
 
     <script>
+      // Global i18n swap: swap textContent/innerHTML based on data-i18n-{lang} attributes
+      function applyLanguage(lang: string) {
+        if (lang !== 'en' && lang !== 'de') return;
+        document.querySelectorAll('[data-i18n-de]').forEach(el => {
+          const value = el.getAttribute(`data-i18n-${lang}`);
+          if (value !== null) {
+            if (el.hasAttribute('data-i18n-html')) {
+              el.innerHTML = value;
+            } else {
+              // Preserve child elements (like icons) by only replacing text nodes
+              const childElements = Array.from(el.children);
+              if (childElements.length > 0) {
+                // Find the first text node and update it
+                for (const node of Array.from(el.childNodes)) {
+                  if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+                    node.textContent = value;
+                    break;
+                  }
+                }
+                // If no text node found, set textContent on first text-bearing child or prepend
+                if (!Array.from(el.childNodes).some(n => n.nodeType === Node.TEXT_NODE && n.textContent?.trim())) {
+                  el.insertBefore(document.createTextNode(value), el.firstChild);
+                }
+              } else {
+                el.textContent = value;
+              }
+            }
+          }
+        });
+      }
+
+      // Observe lang attribute changes on <html>
+      const i18nObserver = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          if (m.attributeName === 'lang') {
+            const lang = document.documentElement.lang || 'en';
+            applyLanguage(lang);
+          }
+        }
+      });
+      i18nObserver.observe(document.documentElement, { attributeFilter: ['lang'] });
+
+      // On page load (including View Transitions), restore saved language
+      function restoreLanguage() {
+        const saved = localStorage.getItem('kunsthaus-lang');
+        if (saved && saved !== 'en') {
+          document.documentElement.setAttribute('lang', saved);
+          applyLanguage(saved);
+        }
+      }
+
+      document.addEventListener('astro:page-load', restoreLanguage);
+      if (document.readyState !== 'loading') restoreLanguage();
+    </script>
+
+    <script>
       import Lenis from 'lenis';
       import 'lenis/dist/lenis.css';
       import { gsap } from 'gsap';

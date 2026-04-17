@@ -17,8 +17,8 @@ const { title, description, lang, variant = 'default' } = Astro.props;
 
 <article class:list={['essentials-card', { 'essentials-card--transparent': variant === 'transparent' }]}>
   <header class="essentials-card__header">
-    <h3 class="essentials-card__title sub-heading">{title[lang]}</h3>
-    <p class="essentials-card__description">{description[lang]}</p>
+    <h3 class="essentials-card__title sub-heading" data-i18n-de={title.de} data-i18n-en={title.en}>{title[lang]}</h3>
+    <p class="essentials-card__description" data-i18n-de={description.de} data-i18n-en={description.en}>{description[lang]}</p>
   </header>
   <div class="essentials-card__body">
     <slot />

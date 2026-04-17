@@ -64,12 +64,12 @@ const isExhibition = contentType === 'exhibitions';
               </div>
             )}
             <div class="pinned-narrative__card-content">
-              <h3 class="pinned-narrative__card-title sub-heading">{item.title[lang]}</h3>
+              <h3 class="pinned-narrative__card-title sub-heading" data-i18n-de={item.title.de} data-i18n-en={item.title.en}>{item.title[lang]}</h3>
               {item.date && (
                 <span class="pinned-narrative__card-date">{item.date}</span>
               )}
               {item.description && (
-                <p class="pinned-narrative__card-desc">{item.description[lang]}</p>
+                <p class="pinned-narrative__card-desc" data-i18n-de={item.description.de} data-i18n-en={item.description.en}>{item.description[lang]}</p>
               )}
               {item.schedule && (
                 <StatusAccordion

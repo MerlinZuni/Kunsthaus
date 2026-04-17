@@ -7,9 +7,11 @@ interface Props {
   bgStep: 1 | 2 | 3 | 4;
   sectionName: string;
   sectionId: string;
+  /** Optional DE translation for client-side language switching */
+  sectionNameDe?: string;
 }
 
-const { index, bgStep, sectionName, sectionId } = Astro.props;
+const { index, bgStep, sectionName, sectionId, sectionNameDe } = Astro.props;
 const zIndex = 20 + index;
 ---
 
@@ -26,7 +28,7 @@ const zIndex = 20 + index;
   <div class="section-inner">
     <div class="section-layout">
       <div class="section-title-col">
-        <h2 class="section-title">{sectionName}</h2>
+        <h2 class="section-title" {...(sectionNameDe ? { 'data-i18n-de': sectionNameDe, 'data-i18n-en': sectionName } : {})}>{sectionName}</h2>
       </div>
       <div class="section-content-col">
         <slot />

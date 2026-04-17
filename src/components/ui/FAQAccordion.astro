@@ -28,7 +28,7 @@ const { items, lang = 'en' } = Astro.props;
         id={`faq-trigger-${item.id}`}
         type="button"
       >
-        <span class="faq-accordion__question">{item.question[lang]}</span>
+        <span class="faq-accordion__question" data-i18n-de={item.question.de} data-i18n-en={item.question.en}>{item.question[lang]}</span>
         <svg class="faq-accordion__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="6 9 12 15 18 9"/>
         </svg>
@@ -40,7 +40,7 @@ const { items, lang = 'en' } = Astro.props;
         aria-labelledby={`faq-trigger-${item.id}`}
         aria-hidden="true"
       >
-        <p class="faq-accordion__answer" set:html={item.answer[lang]}></p>
+        <p class="faq-accordion__answer" data-i18n-de={item.answer.de} data-i18n-en={item.answer.en} data-i18n-html set:html={item.answer[lang]}></p>
       </div>
     </div>
   ))}

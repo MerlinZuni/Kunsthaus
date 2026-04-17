@@ -92,6 +92,7 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
     bgStep={1}
     sectionName={onsiteHome.buildings[0].name[lang]}
     sectionId="chipperfield-grid"
+    sectionNameDe={onsiteHome.buildings[0].name.de}
   >
     <OnsiteExhibitionGrid
       heading={onsiteHome.specialExhibitionsLabel}
@@ -105,6 +106,7 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
     bgStep={2}
     sectionName={onsiteHome.buildings[1].name[lang]}
     sectionId="moser-grid"
+    sectionNameDe={onsiteHome.buildings[1].name.de}
   >
     <OnsiteExhibitionGrid
       heading={onsiteHome.specialExhibitionsLabel}
@@ -118,6 +120,7 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
     bgStep={3}
     sectionName={onsiteHome.visitorEssentialsLabel[lang]}
     sectionId="visitor-essentials"
+    sectionNameDe={onsiteHome.visitorEssentialsLabel.de}
   >
     <div class="visitor-essentials-grid">
       {/* 1. Wi-Fi — description doubles as the note; body shows only the name */}
@@ -141,7 +144,7 @@ const todayClosedLabel = lang === 'de' ? 'Heute geschlossen' : 'Closed today';
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span>{onsiteHome.visitorEssentials.gettingAround.linkLabel[lang]}</span>
+          <span data-i18n-de={onsiteHome.visitorEssentials.gettingAround.linkLabel.de} data-i18n-en={onsiteHome.visitorEssentials.gettingAround.linkLabel.en}>{onsiteHome.visitorEssentials.gettingAround.linkLabel[lang]}</span>
           <span class="icon">open_in_new</span>
         </a>
       </EssentialsCard>

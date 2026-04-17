@@ -19,19 +19,19 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
 <div class="exhibition-list">
   {/* Intro */}
   <div class="exhibition-list__intro">
-    <p class="exhibition-list__description">{data.intro.description[lang]}</p>
+    <p class="exhibition-list__description" data-i18n-de={data.intro.description.de} data-i18n-en={data.intro.description.en}>{data.intro.description[lang]}</p>
   </div>
 
   {/* Group 1: Current Exhibitions */}
   <div class="exhibition-list__group">
-    <h3 class="exhibition-list__group-title sub-heading">
+    <h3 class="exhibition-list__group-title sub-heading" data-i18n-de="Aktuelle Ausstellungen" data-i18n-en="Current Exhibitions">
       {lang === 'de' ? 'Aktuelle Ausstellungen' : 'Current Exhibitions'}
     </h3>
     <ul class="exhibition-list__items">
       {data.currentExhibitions.map((item) => (
         <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
-          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
-          <span class="exhibition-list__row-meta">{item.dateLabel[lang]}</span>
+          <span class="exhibition-list__row-title" data-i18n-de={item.title.de} data-i18n-en={item.title.en}>{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
+          <span class="exhibition-list__row-meta" data-i18n-de={item.dateLabel.de} data-i18n-en={item.dateLabel.en}>{item.dateLabel[lang]}</span>
           <span class="exhibition-list__row-tags">
             {item.tags.map((tag) => (
               <span class="exhibition-list__tag">{tag}</span>
@@ -46,14 +46,14 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
 
   {/* Group 2: Upcoming Exhibitions */}
   <div class="exhibition-list__group">
-    <h3 class="exhibition-list__group-title sub-heading">
+    <h3 class="exhibition-list__group-title sub-heading" data-i18n-de="Vorschau" data-i18n-en="Upcoming Exhibitions">
       {lang === 'de' ? 'Vorschau' : 'Upcoming Exhibitions'}
     </h3>
     <ul class="exhibition-list__items">
       {data.upcomingExhibitions.map((item) => (
         <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
-          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
-          <span class="exhibition-list__row-meta">{item.dateLabel[lang]}</span>
+          <span class="exhibition-list__row-title" data-i18n-de={item.title.de} data-i18n-en={item.title.en}>{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
+          <span class="exhibition-list__row-meta" data-i18n-de={item.dateLabel.de} data-i18n-en={item.dateLabel.en}>{item.dateLabel[lang]}</span>
           <span class="exhibition-list__row-tags">
             {item.tags.includes('members-preview') && (
               <span class="exhibition-list__tag">{memberLabel}</span>
@@ -68,13 +68,13 @@ const memberCta = lang === 'de' ? 'Alle kommenden Ausstellungen' : 'See all upco
 
   {/* Group 3: Collection */}
   <div class="exhibition-list__group">
-    <h3 class="exhibition-list__group-title sub-heading">
+    <h3 class="exhibition-list__group-title sub-heading" data-i18n-de="Sammlung" data-i18n-en="Collection">
       {lang === 'de' ? 'Sammlung' : 'Collection'}
     </h3>
     <ul class="exhibition-list__items">
       {data.collection.map((item) => (
         <li class="exhibition-list__row" data-image={`${base}${item.image}`}>
-          <span class="exhibition-list__row-title">{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
+          <span class="exhibition-list__row-title" data-i18n-de={item.title.de} data-i18n-en={item.title.en}>{item.title[lang]} <span class="icon exhibition-list__row-arrow">arrow_forward</span></span>
           <span class="exhibition-list__row-meta">{item.period}</span>
           <span class="exhibition-list__row-tags"></span>
           <span class="exhibition-list__row-location">{item.location.building}, {item.location.floor}</span>

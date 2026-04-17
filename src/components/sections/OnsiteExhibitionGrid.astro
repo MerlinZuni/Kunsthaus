@@ -23,7 +23,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <section class="onsite-grid">
   <header class="onsite-grid__header">
-    <h2 class="onsite-grid__heading sub-heading">{heading[lang]}</h2>
+    <h2 class="onsite-grid__heading sub-heading" data-i18n-de={heading.de} data-i18n-en={heading.en}>{heading[lang]}</h2>
   </header>
   <ul class="onsite-grid__list">
     {items.map((item) => {
@@ -42,7 +42,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
                 ctaText={lang === 'de' ? 'Entdecken' : 'Explore'}
               />
               <div class="onsite-grid__meta">
-                <h3 class="onsite-grid__title">{item.title[lang]}</h3>
+                <h3 class="onsite-grid__title" data-i18n-de={item.title.de} data-i18n-en={item.title.en}>{item.title[lang]}</h3>
                 {floor && <p class="onsite-grid__floor">{floor}</p>}
               </div>
             </div>
@@ -52,7 +52,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
                 <img src={imgSrc} alt={item.title[lang]} loading="lazy" />
               </div>
               <div class="onsite-grid__meta">
-                <h3 class="onsite-grid__title">{item.title[lang]}</h3>
+                <h3 class="onsite-grid__title" data-i18n-de={item.title.de} data-i18n-en={item.title.en}>{item.title[lang]}</h3>
                 {floor && <p class="onsite-grid__floor">{floor}</p>}
               </div>
             </div>

@@ -11,7 +11,7 @@ const { quote, attribution, lang } = Astro.props;
 ---
 
 <figure class="artist-quote">
-  <blockquote class="artist-quote__text">{quote[lang]}</blockquote>
+  <blockquote class="artist-quote__text" data-i18n-de={quote.de} data-i18n-en={quote.en}>{quote[lang]}</blockquote>
   <figcaption class="artist-quote__attribution">{attribution}</figcaption>
 </figure>
 

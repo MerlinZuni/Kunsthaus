@@ -16,7 +16,7 @@ const { heading, variant = 'default', lang } = Astro.props;
 ---
 
 <section class="h-slider" data-h-slider data-variant={variant}>
-  {heading && <h3 class="h-slider__heading">{heading[lang]}</h3>}
+  {heading && <h3 class="h-slider__heading" data-i18n-de={heading.de} data-i18n-en={heading.en}>{heading[lang]}</h3>}
   <div class="h-slider__track" data-h-slider-track>
     <slot />
   </div>

@@ -47,7 +47,7 @@ const grays = ['#b0b0b0', '#8a8a8a', '#c8c8c8', '#9e9e9e', '#d4d4d4'];
 
   {/* CTA button */}
   <a href={cta.href} class="hero-slide__cta btn hover-wipe-inverse touch-pulse touch-target">
-    <span>{cta.label[lang]}</span>
+    <span data-i18n-de={cta.label.de} data-i18n-en={cta.label.en}>{cta.label[lang]}</span>
     <span class="icon">arrow_forward</span>
   </a>
 </div>

@@ -69,37 +69,37 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     bgStep={1}
     sectionName={kjm.intro.heading[lang]}
     sectionId="kjm-intro"
+    sectionNameDe={kjm.intro.heading.de}
   >
-    <p class="kjm-intro__body">{kjm.intro.body[lang]}</p>
+    <p class="kjm-intro__body" data-i18n-de={kjm.intro.body.de} data-i18n-en={kjm.intro.body.en}>{kjm.intro.body[lang]}</p>
     {kjm.intro.paragraphs && (
       <div class="kjm-intro__columns">
         {kjm.intro.paragraphs.map((p: any) => (
-          <p class="kjm-intro__paragraph">{p[lang]}</p>
+          <p class="kjm-intro__paragraph" data-i18n-de={p.de} data-i18n-en={p.en}>{p[lang]}</p>
         ))}
       </div>
     )}
 
     <article class="kjm-intro__tickets-panel">
       <div class="kjm-intro__tickets-block">
-        <h4 class="sub-heading">{lang === 'de' ? 'Tickets' : 'Tickets'}</h4>
-        <p class="kjm-intro__tickets-info">
+        <h4 class="sub-heading">Tickets</h4>
+        <p class="kjm-intro__tickets-info" data-i18n-de="Erwachsene CHF 31.– / Ermässigt CHF 22.–* inkl. Sammlung & kleine Ausstellungen." data-i18n-en="Adults CHF 31.– / Concessions CHF 22.–* incl. Collection & small exhibitions.">
           {lang === 'de'
             ? 'Erwachsene CHF 31.– / Ermässigt CHF 22.–* inkl. Sammlung & kleine Ausstellungen.'
             : 'Adults CHF 31.– / Concessions CHF 22.–* incl. Collection & small exhibitions.'}
-          <br />
-          <span class="kjm-intro__tickets-note">{lang === 'de' ? '*Ermässigter Tarif' : '*Reduced rate'}</span>
         </p>
+        <span class="kjm-intro__tickets-note" data-i18n-de="*Ermässigter Tarif" data-i18n-en="*Reduced rate">{lang === 'de' ? '*Ermässigter Tarif' : '*Reduced rate'}</span>
       </div>
       <div class="kjm-intro__tickets-block">
-        <h4 class="sub-heading">{lang === 'de' ? 'Mitgliedschaft' : 'Membership'}</h4>
-        <p class="kjm-intro__tickets-info">
+        <h4 class="sub-heading" data-i18n-de="Mitgliedschaft" data-i18n-en="Membership">{lang === 'de' ? 'Mitgliedschaft' : 'Membership'}</h4>
+        <p class="kjm-intro__tickets-info" data-i18n-de="Freier Eintritt plus Einladungen zu allen Eröffnungen und viele weitere Vorteile!" data-i18n-en="Free admission plus invitations to all openings and many other benefits!">
           {lang === 'de'
             ? 'Freier Eintritt plus Einladungen zu allen Eröffnungen und viele weitere Vorteile!'
             : 'Free admission plus invitations to all openings and many other benefits!'}
         </p>
       </div>
       <a href="/membership" class="btn hover-wipe-inverse touch-pulse touch-target kjm-intro__tickets-cta">
-        <span>{lang === 'de' ? 'Mitglied werden' : 'Become a member'}</span>
+        <span data-i18n-de="Mitglied werden" data-i18n-en="Become a member">{lang === 'de' ? 'Mitglied werden' : 'Become a member'}</span>
         <span class="icon" aria-hidden="true">arrow_forward</span>
       </a>
     </article>
@@ -149,7 +149,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             </button>
             <span class="video-card__duration">{v.duration}</span>
           </div>
-          <blockquote class="video-card__quote">{v.quote[lang]}</blockquote>
+          <blockquote class="video-card__quote" data-i18n-de={v.quote.de} data-i18n-en={v.quote.en}>{v.quote[lang]}</blockquote>
           <p class="video-card__role">{v.role}</p>
         </article>
       ))}
@@ -172,10 +172,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <div class="shop-card__media">
             <img src={`${base}${s.image}`} alt={s.title[lang]} loading="lazy" />
           </div>
-          <h4 class="shop-card__title">{s.title[lang]}</h4>
+          <h4 class="shop-card__title" data-i18n-de={s.title.de} data-i18n-en={s.title.en}>{s.title[lang]}</h4>
           <p class="shop-card__price">{s.price}</p>
           <button type="button" class="shop-card__cta btn hover-wipe-inverse touch-pulse touch-target">
-            <span>{s.addToCartLabel[lang]}</span>
+            <span data-i18n-de={s.addToCartLabel.de} data-i18n-en={s.addToCartLabel.en}>{s.addToCartLabel[lang]}</span>
             <span class="icon" aria-hidden="true">shopping_bag</span>
           </button>
         </article>
@@ -187,20 +187,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     index={6}
     bgStep={2}
     sectionName={lang === 'de' ? 'Veranstaltungen' : 'Exhibit Events'}
+    sectionNameDe="Veranstaltungen"
     sectionId="kjm-events"
   >
     <div class="kjm-events" data-kjm-events>
-      <h3 class="kjm-events__heading sub-heading">{lang === 'de' ? 'Programm' : 'Programme'}</h3>
+      <h3 class="kjm-events__heading sub-heading" data-i18n-de="Programm" data-i18n-en="Programme">{lang === 'de' ? 'Programm' : 'Programme'}</h3>
       <ul class="kjm-events__list">
         {kjm.events.map((ev: any) => (
           <li class="kjm-events__row" data-image={`${base}${ev.image}`}>
-            <span class="kjm-events__row-title">
+            <span class="kjm-events__row-title" data-i18n-de={ev.title.de} data-i18n-en={ev.title.en}>
               {ev.title[lang]}
               <span class="icon kjm-events__row-arrow">arrow_forward</span>
             </span>
-            <span class="kjm-events__row-date">{ev.date[lang]}</span>
+            <span class="kjm-events__row-date" data-i18n-de={ev.date.de} data-i18n-en={ev.date.en}>{ev.date[lang]}</span>
             <span class="kjm-events__row-tags">
-              <span class="kjm-events__tag">{ev.category[lang]}</span>
+              <span class="kjm-events__tag" data-i18n-de={ev.category.de} data-i18n-en={ev.category.en}>{ev.category[lang]}</span>
             </span>
             <img class="kjm-events__row-thumb" src={`${base}${ev.image}`} alt="" loading="lazy" />
           </li>
@@ -220,7 +221,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     sectionId="kjm-supported"
   >
     <div class="kjm-supported">
-      <h3 class="kjm-supported__heading sub-heading">{lang === 'de' ? 'Unterstützt von' : 'Supported by'}</h3>
+      <h3 class="kjm-supported__heading sub-heading" data-i18n-de="Unterstützt von" data-i18n-en="Supported by">{lang === 'de' ? 'Unterstützt von' : 'Supported by'}</h3>
       <img
         src={`${base}/images/partners/Swiss-Re-logo.svg`}
         alt="Swiss Re"
@@ -241,7 +242,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   >
     <div class="kjm-continue">
       <a href={`${base}/onsite`} class="btn hover-wipe-inverse touch-pulse touch-target">
-        <span>{lang === 'de' ? 'Besuch fortsetzen' : 'Continue your visit'}</span>
+        <span data-i18n-de="Besuch fortsetzen" data-i18n-en="Continue your visit">{lang === 'de' ? 'Besuch fortsetzen' : 'Continue your visit'}</span>
         <span class="icon" aria-hidden="true">arrow_forward</span>
       </a>
     </div>

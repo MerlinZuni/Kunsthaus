@@ -27,7 +27,7 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
   {/* Sticky viewport — stays fixed while user scrolls through the tall container */}
   <div class="cinematic-reveal__viewport">
     {/* Tagline — visible beneath small image, covered as it expands */}
-    <p class="cinematic-reveal__tagline" set:html={data.tagline?.[lang] || (contentType === 'offerings'
+    <p class="cinematic-reveal__tagline" {...(data.tagline ? { 'data-i18n-de': data.tagline.de, 'data-i18n-en': data.tagline.en, 'data-i18n-html': '' } : {})} set:html={data.tagline?.[lang] || (contentType === 'offerings'
       ? 'Where art meets appetite, culture meets comfort,<br/>and every visit tells a story.'
       : 'Every visit is a chance to see something new<br/>and to learn something unexpected.')} />
 
@@ -51,14 +51,14 @@ const imageSrc = data.image ? `${base}${data.image}` : '';
       {/* Content card — inside frame, positioned relative to image */}
       <div class="cinematic-reveal__card">
         {data.title && (
-          <h3 class="cinematic-reveal__title">{data.title[lang]}</h3>
+          <h3 class="cinematic-reveal__title" {...(data.title ? { 'data-i18n-de': data.title.de, 'data-i18n-en': data.title.en } : {})}>{data.title[lang]}</h3>
         )}
         {data.description && (
-          <p class="cinematic-reveal__description" set:html={data.description[lang]} />
+          <p class="cinematic-reveal__description" data-i18n-de={data.description.de} data-i18n-en={data.description.en} data-i18n-html set:html={data.description[lang]} />
         )}
         {data.cta && (
           <a href={data.cta.href} class="cinematic-reveal__cta btn hover-wipe-inverse touch-pulse touch-target">
-            <span>{typeof data.cta.label === 'object' ? data.cta.label[lang] : data.cta.label}</span>
+            <span {...(typeof data.cta.label === 'object' ? { 'data-i18n-de': data.cta.label.de, 'data-i18n-en': data.cta.label.en } : {})}>{typeof data.cta.label === 'object' ? data.cta.label[lang] : data.cta.label}</span>
             <span class="icon">arrow_forward</span>
           </a>
         )}

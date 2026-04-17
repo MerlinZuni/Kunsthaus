@@ -32,10 +32,10 @@ const posterSrc = `${base}${video.poster}`;
     <source src={videoSrc} type="video/mp4" />
   </video>
   <div class="kjm-hero__scrim" aria-hidden="true"></div>
-  <a class="kjm-hero__back" href={backHref}>{backLabel[lang]}</a>
+  <a class="kjm-hero__back" href={backHref} data-i18n-de={backLabel.de} data-i18n-en={backLabel.en}>{backLabel[lang]}</a>
   <div class="kjm-hero__title-block">
-    <p class="kjm-hero__datelabel">{dateLabel[lang]}</p>
-    <h1 class="kjm-hero__title">{title[lang]}</h1>
+    <p class="kjm-hero__datelabel" data-i18n-de={dateLabel.de} data-i18n-en={dateLabel.en}>{dateLabel[lang]}</p>
+    <h1 class="kjm-hero__title" data-i18n-de={title.de} data-i18n-en={title.en}>{title[lang]}</h1>
     <button
       type="button"
       class="kjm-hero__playpause"
