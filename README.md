@@ -6,7 +6,7 @@
 
 While working on a pitch competition as Sr. UX/UI designer for the Agency Liip, I developed this prototype for the Kunsthaus Zurich museum website redesign. My role in the pitch was creative lead. I took initial design concepts from designers and brought them together while aligning the interface design with the digital strategy developed for the pitch. A responsive, interactive homepage demonstrating a dual-mode concept: **Planning mode** (remote visitors exploring what's on offer) and **On-site mode** (visitors physically at the museum diving deeper into exhibits).
 
-The design strategy was created by: [Sônia Kewan (https://www.linkedin.com/in/s%C3%B4nia-kewan-23b915177/)], and Joël Neugebauer.
+The design strategy was created by: [Sônia Kewan] (https://www.linkedin.com/in/s%C3%B4nia-kewan-23b915177/), and Joël Neugebauer.
 
 Initial concepts of the design were contributed by a team of designers: [Charlotte Burckhardt (https://www.linkedin.com/in/charlotte-burckhardt-976833287/)], [Jacqueline Brügger (https://www.linkedin.com/in/jacqueline-br%C3%BCgger-a462471b6/)], [Nadine Schneuwly (https://www.linkedin.com/in/nadineschneuwly/)], and [Nicolas Lanthemann (https://www.linkedin.com/in/vanderlanth/)].
 
