@@ -11,9 +11,9 @@ Joël Neugebauer, </br>
 Sônia Kewan (https://www.linkedin.com/in/s%C3%B4nia-kewan-23b915177/)
 
 Design concept contributions by: 
-Charlotte Burckhardt (https://www.linkedin.com/in/charlotte-burckhardt-976833287/),
-Jacqueline Brügger (https://www.linkedin.com/in/jacqueline-br%C3%BCgger-a462471b6/), 
-Nadine Schneuwly (https://www.linkedin.com/in/nadineschneuwly/),
+Charlotte Burckhardt (https://www.linkedin.com/in/charlotte-burckhardt-976833287/),</br>
+Jacqueline Brügger (https://www.linkedin.com/in/jacqueline-br%C3%BCgger-a462471b6/),</br> 
+Nadine Schneuwly (https://www.linkedin.com/in/nadineschneuwly/),</br>
 Nicolas Lanthemann (https://www.linkedin.com/in/vanderlanth/).
 
 ## Current State
