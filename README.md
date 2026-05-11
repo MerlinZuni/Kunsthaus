@@ -1,4 +1,4 @@
-# Kunsthaus Zurich — Website Redesign Concept
+# Kunsthaus Zurich | Website Redesign Concept
 
 > **Live Preview:** [https://merlinzuni.github.io/Kunsthaus/](https://merlinzuni.github.io/Kunsthaus/)
 
@@ -18,7 +18,7 @@ Nicolas Lanthemann (https://www.linkedin.com/in/vanderlanth/).
 
 ## Current State
 
-**Phase 2 — Static Homepage (Wave 1 complete)**
+**Phase 2 | Static Homepage (Wave 1 complete)**
 
 What's built:
 - Hero section with scattered exhibition images, monumental typography, and carousel navigation
@@ -37,11 +37,11 @@ What's next (Wave 2):
 
 ## Tech Stack
 
-- **Astro 6** — Static site framework, zero JS by default
-- **GSAP + ScrollTrigger** — Animation engine (Phase 3)
-- **Lenis** — Smooth scrolling
-- **Vanilla CSS** — Custom properties, @layer cascade, headless-ready
-- **JSON Content Collections** — CMS-ready data layer
+- **Astro 6**  Static site framework, zero JS by default
+- **GSAP + ScrollTrigger**  Animation engine (Phase 3)
+- **Lenis**  Smooth scrolling
+- **Vanilla CSS**  Custom properties, @layer cascade, headless-ready
+- **JSON Content Collections**  CMS-ready data layer
 
 ## Running Locally
 
